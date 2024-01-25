@@ -47,18 +47,24 @@ while gameRunning:
     # Récupère et utilise les inputs, tout en checkant si le jeu doit s'arrêter.
     gameRunning = InputsManager.CheckInputs()
 
-    # Applique la gravité à tous les objets.
+    # Applique les calculs physiques à tous les objets.
     for objectType in pooler:
         for gameObject in pooler[objectType]:
-            if gameObject.mass != 0: Physics.ApplyGravity(gameObject)
+            if gameObject.mass != 0:
+                Physics.ApplyPhysics(gameObject)
 
     # Affiche à l'écran tous les objets.
+    screen.fill((255, 255, 255))    # Efface la frame précédente.
+
     for objectType in pooler:
         for gameObject in pooler[objectType]:
             screen.blit(gameObject.surface, gameObject.position.Tuple())
 
     pygame.display.flip()   # Nécessaire pour mettre à jour les visuels.
-    pygame.time.delay(Constants.deltaTime)    # On laisse un peu de temps avant la prochaine frame.
+
+
+    # On laisse un peu de temps avant la prochaine frame.
+    pygame.time.delay(Constants.deltaTime)
 
 """ Fin de UDPATE ================================================================================================== """
 
