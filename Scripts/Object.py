@@ -7,6 +7,10 @@ import pygame
 """ ================================================================================================================ """
 
 
+
+""" ================================================================================================================ """
+
+
 class GameObject:
     """ This class contain every recurent informations for objects in the game
         - active (bool): If the object needs to appear or should not.
@@ -36,6 +40,7 @@ class GameObject:
                 - _velocity (couple (int, int)): object's speed on x and y.
                 - _active (bool): If the object should be visible or not
         """
+        self.active = _active
         self.active = _active
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
