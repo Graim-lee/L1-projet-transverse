@@ -1,62 +1,94 @@
+"""
+    This file declares every classes of object for the OOP
+"""
 import pygame
 
+
+""" ================================================================================================================ """
+
+
 class GameObject:
-    """ Cette classe contient toutes les infos 'récurrentes' des objets du jeu.
-        - position (Vector2): la position (les coordonnées) de l'objet.
-        - surface (Surface): la Surface de pygame (la texture) de l'objet.
-        - active (bool): si l'objet doit être simulé ou s'il est actuellement désactivé.
-        - mass (float): la masse de l'objet (0 si pas affecté par la gravité).
-        - velocity (Vector2): le vecteur vitesse de l'objet.
-        - gravity (float): la gravité actuelle de l'objet (utile pour calculer sa gravité à chaque frame).
+    """ This class contain every recurent informations for objects in the game
+        - active (bool): If the object needs to appear or should not.
+        - position (Vector2): object's coordinates
+        - size (Vector2): objtc's size(in pixels).
+        - surface (Surface): object's suface in pygame (texture)
+
+        - mass (float): object's mass (0 if it is not affected by gravity).
+        - velocity (Vector2): speed vector.
+        - gravity (float): object's gravity (used to caculate its gravity at each frame).
+        - layer (int): number to categorize objects. Usefull to decide whether objects need collision or not
+        - notCollidable (list[int]): list of every layers the object should not collide
+                                    (i.e.: if notCollidable = [1,2], then the object will not 
+                                    touch objects from layer 1 ou 2 and will go through tehm).
     """
 
-    def __init__(self, _position: (int, int), _texturePath: str, _mass: float, _velocity: (int, int) = (0, 0), _active: bool = True):
-        """ __init__ est appelée quand on crée l'objet.
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _velocity: (int, int) = (0, 0), _active: bool = True):
+        """ __init__ is called to create an object
             Args :
-                - self: obligatoire pour les méthodes (fonctions d'objets).
-                - _position (list): la position de départ de l'objet.
-                - _texturePath (str): le path vers la texture de l'objet.
-                - _mass (float): la masse de l'objet.
-                - _velocity (couple (int, int)): la vitesse initiale de l'objet.
-                - _active (bool): si l'objet est activé ou non.
+                - self: mandatory for methods (objects' functions).
+                - _position (tuple (int, int)): object's position.
+                - _size (couple (int, int)): object's size.
+                - _texturePath (str): Path for the object's texture.
+                - _mass (float): object's mass.
+                - _layer (int): objet's layer (for collisions).
+                - _notCollidable (list[int]): list of  layers with wich the object will no collide.
+                - _velocity (couple (int, int)): object's speed on x and y.
+                - _active (bool): If the object should be visible or not
         """
+        self.active = _active
         self.position = Vector2(_position[0], _position[1])
-        self.surface = pygame.image.load(_texturePath).convert()
+        self.size = Vector2(_size[0], _size[1])
+        self.surface = pygame.image.load(_texturePath).convert() #get the texture from the path
+        self.Resize(_size)  # Permet d'appliquer directement la taille de l'objet.
+
         self.mass = _mass
         self.velocity = Vector2(_velocity[0], _velocity[1])
-        self.active = _active
         self.gravity = 0
+        self.layer = _layer
+        self.notCollidable = _notCollidable
+
+    def Resize(self, size: (int, int)):
+        """ Modify objects size.
+            Args :
+                - size (couple (int, int)): New object's size on x and y.
+        """
+        self.size = Vector2(size[0], size[1])
+        self.surface = pygame.transform.scale(self.surface, size)
+
+
+""" ================================================================================================================ """
 
 
 class Vector2:
-    """ Cette classe permet de stocker des coordonnées. On peut additionner des Vector2 ensemble.
-        - x (int): coordonnée x (horizontale).
-        - y (int): coordonnée y (verticale).
+    """ This class let us stock coordinates. We can add 2 vector2 between them or multiply with a scalar.
+        - x (int): x coordinates (horizontal).
+        - y (int): y coordinates (vertical).
     """
 
     def __init__(self, _x: float, _y: float):
-        """ __init__ est appelée quand on crée l'objet.
+        """ __init__ is called when creating an object.
             Args :
-                - self: obligatoire pour les méthodes (fonctions d'objets).
-                - _x (int): la coordonnée x du vecteur.
-                - _y (int): la coordonnée y du vecteur.
+                - self: mandatory for methods (objects' functions).
+                - _x (int): x vectors' coordinate.
+                - _y (int): y vectors' coordinate.
         """
         self.x = _x
         self.y = _y
 
     def __add__(self, other):
-        """ __add__ permet d'additionner deux vecteurs. On a (a, b) + (c, d) = (a+c, b+d).
+        """ __add__ let us add 2 vectors. (a, b) + (c, d) = (a+c, b+d).
             Args :
-                - self: le premier vecteur.
-                - other: le deuxième vecteur.
+                - self: concerned vector.
+                - other: second vector.
         """
         return Vector2(self.x + other.x, self.y + other.y)
 
     def __mul__(self, other: float):
-        """ __mul__ permet de multiplier un Vector2 et une float. Ca donne k * (a, b) = (ka, kb).
+        """ __mul__ let us multiply a vector with a scalar(float). k * (a, b) = (ka, kb).
             Args :
-                - self: le vecteur concerné.
-                - other (float): le nombre par lequel on multiplie le vecteur.
+                - self: concerned vector.
+                - other (float): scalar used to multiply.
         """
         return Vector2(other * self.x, other * self.y)
 
@@ -69,15 +101,48 @@ class Vector2:
         return Vector2(other * self.x, other * self.y)
 
     def __repr__(self) -> str:
-        """ __repr__ renvoie ce qui doit être affiché quand on print() l'objet.
-            Retourne :
-                - (str): ce qui sera affiché lors du print(). Ca ressemble à 'Vector2(a, b).
+        """ __repr__ returns what should be diplayed to print the object.
+            Return :
+                - (str): What will be displayed with a print(). It looks like this: 'Vector2(a, b).
         """
         return "Vector2(" + str(self.x) + ", " + str(self.y) + ")"
 
     def Tuple(self) -> (int, int):
-        """ Renvoie un Tuple de la forme (a, b) car les fonctions de pygame n'acceptent pas le type Vector2.
-            Retourne :
-                - (couple (int, int)): le tuple associé au vecteur.
+        """ Return a tuple of the form (a, b) because pygame's function do not accept the type vector2.
+            Return :
+                - (tuple (int, int)): tuple of the vector's coordinates.
         """
         return self.x, self.y
+
+
+""" ================================================================================================================ """
+
+
+class Pooler:
+    """ this clas creates a pooler, which is a dictionary of the form {nom : liste de GameObjects} thus {str: [GameObject]}.
+    The point is to centralize the stockage of every object to iterate them faster, easier to use for us and use less RAM.
+
+    Cette classe permet de créer un pooler, c'est-à-dire un dictionnaire de la forme {nom : liste de GameObjects},
+    soit {str: [GameObject]}. L'objectif du pooler est de centraliser le stockage de tous les objets pour pouvoir
+    les itérer rapidement, d'avoir un stockage ordonné et de pouvoir libérer un peu de mémoire RAM (pas sûr de ça).
+    J'ai fait un objet spécial pour le pooler pour pouvoir lui mettre des méthodes (= des fonctions).
+        - main ({str: [GameObject]}): main structure of the pooler, a dictionnary containing every GameObjects.
+    """
+
+    def __init__(self, categories: [str]):
+        """ creates the object.
+            Args :
+                - categories ([str]): Name of each categories in the pooler (i.e.: ["Player",
+                                        "Wall", "Enemy"] made if we want to seperate categories of objects).
+        """
+        self.main = {}
+        for name in categories:
+            self.main[name] = []    # Initialise toutes les catégories comme ça {'nom_de_la_catégorie': []}.
+
+    def AddObject(self, gameObject: GameObject, category: str):
+        """ Let us add a new object to the pooler. So in the game.
+            Args :
+                - gameObject (GameObject): obejct to add in the pooler.
+                - category (str): object's category.
+        """
+        self.main[category].append(gameObject)
