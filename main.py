@@ -1,8 +1,11 @@
 import pygame
 import Scripts.InputsManager as InputsManager
+import Scripts.Physics as Physics
+import Scripts.Object as Object
+import Scripts.Constants as Constants
 
 # Flemme d'expliquer mtn je vous expliquerai ça IRL.
-# Chaque objet est de la forme d'un couple (rect, couleur).
+# N'y enregistrer que des GameObjects (voir dans Scripts/Object, la classe GameObject).
 pooler = {"Player": [], "Wall": []}
 
 """ ================================================================================================================ """
@@ -18,16 +21,25 @@ pygame.display.set_icon(pygame.image.load("Sprites/game_icon.png"))     # Change
 
 
 # Création du personnage.
-player = pygame.Rect(screenDimensions[0] / 2, screenDimensions[1] / 2, 10, 10)
-playerColor = (0, 0, 0)
-pooler["Player"].append((player, playerColor))  # On met le player dans le pooler (de la forme (rect, couleur)).
+playerPos = (screenDimensions[0] / 2, screenDimensions[1] / 2)
+playerTexture = "Sprites/player.png"
+playerMass = 1
+player = Object.GameObject(playerPos, playerTexture, playerMass)
+pooler["Player"].append(player)  # On met le GameObject player dans le pooler.
+
+# Création du sol.
+floorPos = (0, screenDimensions[1] - 200)
+floorTexture = "Sprites/wall.png"
+floorGravity = 0
+floor = Object.GameObject(floorPos, floorTexture, floorGravity)
+pooler["Wall"].append(floor)
 
 """ Fin de START =================================================================================================== """
 
 """ ================================================================================================================ """
 """ ==> UPDATE : mettre ici tout le code qui doit être éxécuté à chaque frame (ex. : mouvements du joueur, etc.). <= """
 
-gameRunning = False
+gameRunning = True
 
 # Boucle while, mettre le code à l'intérieur svp.
 while gameRunning:
@@ -35,14 +47,18 @@ while gameRunning:
     # Récupère et utilise les inputs, tout en checkant si le jeu doit s'arrêter.
     gameRunning = InputsManager.CheckInputs()
 
+    # Applique la gravité à tous les objets.
+    for objectType in pooler:
+        for gameObject in pooler[objectType]:
+            if gameObject.mass != 0: Physics.ApplyGravity(gameObject)
 
     # Affiche à l'écran tous les objets.
     for objectType in pooler:
-        for poolerObject in objectType:
-            pygame.draw.rect(screen, poolerObject[1], poolerObject[0])
+        for gameObject in pooler[objectType]:
+            screen.blit(gameObject.surface, gameObject.position.Tuple())
 
     pygame.display.flip()   # Nécessaire pour mettre à jour les visuels.
+    pygame.time.delay(Constants.deltaTime)    # On laisse un peu de temps avant la prochaine frame.
 
 """ Fin de UDPATE ================================================================================================== """
-
 
