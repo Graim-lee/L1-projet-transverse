@@ -44,8 +44,8 @@ class GameObject:
         self.active = _active
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
-        self.surface = pygame.image.load(_texturePath).convert() #get the texture from the path
-        self.Resize(_size)  # Permet d'appliquer directement la taille de l'objet.
+        self.surface = pygame.image.load(_texturePath).convert()    # Get the texture from the path.
+        self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.mass = _mass
         self.velocity = Vector2(_velocity[0], _velocity[1])
@@ -60,6 +60,16 @@ class GameObject:
         """
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
+
+    def __repr__(self) -> str:
+        """ __repr__ returns what should be displayed when printing the object.
+            Args :
+                - self (GameObject): the concerned GameObject (mandatory).
+            Returns :
+                - (str): what should be displayed when printing.
+        """
+        return "{GameObject: size = " + str(self.size) + " | position = " + str(self.position) + "}"
+
 
 
 """ ================================================================================================================ """
@@ -82,15 +92,31 @@ class Vector2:
         self.y = _y
 
     def __add__(self, other):
-        """ __add__ let us add 2 vectors. (a, b) + (c, d) = (a+c, b+d).
+        """ __add__ lets us add 2 vectors. (a, b) + (c, d) = (a+c, b+d).
             Args :
                 - self: concerned vector.
                 - other: second vector.
         """
         return Vector2(self.x + other.x, self.y + other.y)
 
+    def __sub__(self, other):
+        """ __sub__ lets us subtract one vector from another. (a, b) - (c, d) = (a-c, b-d).
+            Args :
+                - self: concerned vector.
+                - other: subtracted vector.
+        """
+        return Vector2(self.x - other.x, self.y - other.y)
+
+    def __rsub__(self, other):
+        """ __rsub__ lets us subtract one vector from another, but the other way around (see __rmul__).
+            Args :
+                - self: concerned vector.
+                - other: subtracted vector.
+        """
+        return Vector2(other.x - self.x, other.y - self.y)
+
     def __mul__(self, other: float):
-        """ __mul__ let us multiply a vector with a scalar(float). k * (a, b) = (ka, kb).
+        """ __mul__ lets us multiply a vector with a scalar(float). k * (a, b) = (ka, kb).
             Args :
                 - self: concerned vector.
                 - other (float): scalar used to multiply.
@@ -106,7 +132,7 @@ class Vector2:
         return Vector2(other * self.x, other * self.y)
 
     def __repr__(self) -> str:
-        """ __repr__ returns what should be diplayed to print the object.
+        """ __repr__ returns what should be displayed when printing the object.
             Return :
                 - (str): What will be displayed with a print(). It looks like this: 'Vector2(a, b).
         """
@@ -131,14 +157,14 @@ class Pooler:
     soit {str: [GameObject]}. L'objectif du pooler est de centraliser le stockage de tous les objets pour pouvoir
     les itérer rapidement, d'avoir un stockage ordonné et de pouvoir libérer un peu de mémoire RAM (pas sûr de ça).
     J'ai fait un objet spécial pour le pooler pour pouvoir lui mettre des méthodes (= des fonctions).
-        - main ({str: [GameObject]}): main structure of the pooler, a dictionnary containing every GameObjects.
+        - main ({str: [GameObject]}): main structure of the pooler, a dictionary containing every GameObjects.
     """
 
     def __init__(self, categories: [str]):
         """ creates the object.
             Args :
-                - categories ([str]): Name of each categories in the pooler (i.e.: ["Player",
-                                        "Wall", "Enemy"] made if we want to seperate categories of objects).
+                - categories ([str]): name of each category in the pooler (i.e.: ["Player", "Wall", "Enemy"] made
+                                        if we want to separate categories of objects).
         """
         self.main = {}
         for name in categories:
@@ -147,7 +173,7 @@ class Pooler:
     def AddObject(self, gameObject: GameObject, category: str):
         """ Let us add a new object to the pooler. So in the game.
             Args :
-                - gameObject (GameObject): obejct to add in the pooler.
+                - gameObject (GameObject): object to add in the pooler.
                 - category (str): object's category.
         """
         self.main[category].append(gameObject)
