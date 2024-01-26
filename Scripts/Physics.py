@@ -52,4 +52,34 @@ def ManageCollisions(body: Object.GameObject):
         Args :
             - body (GameObject): le GameObject pour qui on doit vérifier les collisions.
     """
+    global mainPooler
+    for category in mainPooler.main:
+        for gameObject in mainPooler.main[category]:
+            if not gameObject.active: continue
+            if CheckCollision(body, gameObject)[0] or CheckCollision(gameObject, body)[0]: return True
+
     return True
+
+def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> (bool, [(int, int)]):
+    """ Checks if the two given GameObjects are colliding or not. It works by checking for each corner of the object.
+    The function then returns every corner that are colliding with the object in order to determine where the collision
+    takes place.
+        Args :
+            - body (GameObject): the first GameObject.
+            - other (GameObject): the second GameObject.
+        Returns :
+            - (bool): True if the two objects are colliding, False otherwise.
+            - ([(int, int)]): the list of every point that collided with the object.
+    """
+    x1, y1 = body.position.x, body.position.y   # Position of the first GameObject.
+    a1, b1 = body.size.x, body.size.y   # Size of the first GameObject.
+    x2, y2 = other.position.x, other.position.y     # Position of the second GameObject.
+    a2, b2 = other.size.x, other.size.y     # Size of the second GameObject.
+    points = [(x2, y2), (x2 + a2, y2), (x2, y2 + b2), (x2 + a2, y2 + b2)]   # Les quatre coins du second GameObject.
+
+    collidedPoints = []
+    for point in points:
+        x, y = point[0], point[1]
+        if (x > x1) and (x < x1 + a1) and (y > y1) and (y < y1 + b1): collidedPoints.append(point)
+    if len(collidedPoints) > 0: return True, collidedPoints
+    return False, []
