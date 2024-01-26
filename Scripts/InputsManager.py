@@ -1,21 +1,21 @@
 """ InputsManager.py
-    Gère les inputs.
+    Manage inputs
 """
 import pygame
 
 def CheckInputs() -> bool:
-    """ Fonction principale, regarde tous les inputs. Si vous voulez détecter une touche, mettre le code ici.
-        Retourne:
-            - bool : True si le jeu continue à tourner, False si le jeu doit s'arrêter.
+    """ Main function, check every inputs. Si vous voulez détecter une touche, mettre le code ici.
+        return:
+            - bool : True if the game is running, False in the contrary
     """
 
-    # Tous les inputs utilisés.
+    # Evry inputs
     for event in pygame.event.get():
 
-        # KEYDOWN = l'utilisateur a appuyé sur une touche.
+        # KEYDOWN = the user pushed a key.
         if event.type == pygame.KEYDOWN:
 
-            # 'Escape' = fin du jeu.
+            # 'Escape' = end of the game.
             if event.key == pygame.K_ESCAPE:
                 return False
 
