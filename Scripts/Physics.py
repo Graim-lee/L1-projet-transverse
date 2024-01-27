@@ -2,7 +2,7 @@ import pygame
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
-G = 0.000098
+G = 0.00001
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
 
@@ -110,7 +110,6 @@ def ApplyFriction(body: Object.GameObject, grounded: bool):
     if grounded: horizontalSpeed *= Constants.groundedFrictionCoeff
     if -0.05 <= horizontalSpeed <= 0.05: horizontalSpeed = 0    # Completely nullifies the velocity if it is too low.
     body.velocity.x = horizontalSpeed
-
 
 def ManageCollisions(body: Object.GameObject):
     """ Checks, computes and manages the collisions of the given object.

@@ -4,7 +4,6 @@ import Scripts.Physics as Physics
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
-from Scripts.InputsManager import pressingSpace
 # Pooler object from the Object.py script. See there to get a description.
 pooler = Object.Pooler(["Player", "Wall"])
 
@@ -68,6 +67,7 @@ while gameRunning:
             if gameObject.active and gameObject.mass != 0:
                 Physics.ApplyPhysics(gameObject)
 
+    # Display every object on the screen.
     # Display every object on the screen.
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 

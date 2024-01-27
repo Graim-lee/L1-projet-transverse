@@ -9,8 +9,10 @@ import Scripts.Constants as Constants
 mainPooler = Object.Pooler({})
 player: Object.GameObject
 
-pressingA = False
+pressingQA = False
 pressingD = False
+
+jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -36,7 +38,7 @@ def CheckInputs() -> bool:
         Returns :
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
     """
-    global pressingA, pressingD
+    global pressingQA, pressingD
     # Every event.
     for event in pygame.event.get():
 
@@ -50,13 +52,15 @@ def CheckInputs() -> bool:
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
             # to True, and put it back to False when we detect that the user released the key.
 
-            elif event.key == pygame.K_a: pressingA = True  # 'A'
+            elif event.key == pygame.K_a: pressingQA = True  # 'A'
+            elif event.key == pygame.K_q: pressingQA = True  # 'Q'
             elif event.key == pygame.K_d: pressingD = True  # 'D'
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
-            if event.key == pygame.K_a: pressingA = False   # 'A'
+            if event.key == pygame.K_a: pressingQA = False   # 'A'
+            if event.key == pygame.K_q: pressingQA = False   # 'Q'
             if event.key == pygame.K_d: pressingD = False   # 'D'
 
     ApplyInputs()   # We apply the inputs' effects.
@@ -64,8 +68,7 @@ def CheckInputs() -> bool:
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
-
-    if pressingA: MovePlayer(-1)    # 'A'
+    if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
     if pressingD: MovePlayer(1)     # 'D'
 
 def Sign(x: float) -> int:
