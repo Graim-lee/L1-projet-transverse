@@ -2,7 +2,7 @@ import pygame
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
-G = 0.00001
+G = 0.000098
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
 
@@ -35,7 +35,7 @@ def PhysicsCalculations(body: Object.GameObject):
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
-        if body.velocity.y < 0: body.velocity.y = 0
+        if body.velocity.y > 0: body.velocity.y = 0
     else:
         # To apply the gravity.
         ApplyGravity(body)
@@ -69,7 +69,7 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
 def CheckGroundedCollision(left: Object.Vector2, right: Object.Vector2, other: Object.GameObject) -> bool:
     """ Checks if the object's grounded hitbox collides with a given GameObject. Works similarly to CheckCollision().
         Args :
-            - left, right (Vector2): the two edges of the grounded hitbox.
+            - left, right (Vector2): the two bottom edges of the object.
             - other (GameObject): the 'floor' object to check.
         Returns :
             - (bool): True if the object is grounded, False otherwise.
@@ -153,7 +153,7 @@ def ManageCollisions(body: Object.GameObject):
             repelForce += colDirection
             applyForce = True
 
-    if applyForce: body.velocity = repelForce
+    if applyForce: body.velocity += repelForce
 
 def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :

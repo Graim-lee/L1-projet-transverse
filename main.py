@@ -4,6 +4,7 @@ import Scripts.Physics as Physics
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
+from Scripts.InputsManager import pressingSpace
 # Pooler object from the Object.py script. See there to get a description.
 pooler = Object.Pooler(["Player", "Wall"])
 
@@ -53,12 +54,12 @@ while gameRunning:
 
     # Retrieves and manages user inputs.
     gameRunning = InputsManager.CheckInputs()
-
     # Applies the physics calculations to every object.
     for category in pooler.main:
         for gameObject in pooler.main[category]:
             if gameObject.active and gameObject.mass != 0:
                 Physics.PhysicsCalculations(gameObject)
+
 
     # Updates every object's position after the calculations (updating it after every calculation is useful for
     # detecting every collision, then managing them).

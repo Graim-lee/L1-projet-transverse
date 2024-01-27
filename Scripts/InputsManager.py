@@ -5,12 +5,15 @@ import pygame
 import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import Scripts.Physics as Physics
 
 mainPooler = Object.Pooler({})
 player: Object.GameObject
 
 pressingA = False
 pressingD = False
+pressingQ = False
+pressingSpace = False
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -36,7 +39,7 @@ def CheckInputs() -> bool:
         Returns :
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
     """
-    global pressingA, pressingD
+    global pressingA, pressingD, pressingSpace, pressingQ
     # Every event.
     for event in pygame.event.get():
 
@@ -44,20 +47,23 @@ def CheckInputs() -> bool:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE: return False   # 'Escape' = end of the game.
-            elif event.key == pygame.K_SPACE: JumpPlayer()
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
             # to True, and put it back to False when we detect that the user released the key.
 
             elif event.key == pygame.K_a: pressingA = True  # 'A'
+            elif event.key == pygame.K_q: pressingQ = True  # 'Q'
             elif event.key == pygame.K_d: pressingD = True  # 'D'
+            elif event.key == pygame.K_SPACE: pressingSpace = True
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
             if event.key == pygame.K_a: pressingA = False   # 'A'
             if event.key == pygame.K_d: pressingD = False   # 'D'
+            if event.key == pygame.K_q: pressingQ = False   # 'Q'
+            if event.key == pygame.K_SPACE: pressingSpace = False
 
     ApplyInputs()   # We apply the inputs' effects.
     return True
@@ -65,8 +71,9 @@ def CheckInputs() -> bool:
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
 
-    if pressingA: MovePlayer(-1)    # 'A'
+    if pressingA or pressingQ: MovePlayer(-1)    # 'A'
     if pressingD: MovePlayer(1)     # 'D'
+    if pressingSpace and player.grounded: JumpPlayer()
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
@@ -91,6 +98,7 @@ def MovePlayer(direction: int):
     player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
 
 def JumpPlayer():
+    global pressingSpace
     """ Applies an upward velocity to the player for it to jump. """
-    if player.grounded:
-        player.velocity += Object.Vector2(0, -10) * Constants.deltaTime
+    player.velocity += Object.Vector2(0, -2.5) * Constants.deltaTime
+    pressingSpace = False
