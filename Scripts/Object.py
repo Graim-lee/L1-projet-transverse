@@ -1,5 +1,5 @@
 """
-    This file declares every classes of object for the OOP
+    This file declares every class of object for the OOP
 """
 import pygame
 
@@ -12,19 +12,20 @@ import pygame
 
 
 class GameObject:
-    """ This class contain every recurent informations for objects in the game
+    """ This class contain every recurrent information for objects in the game.
         - active (bool): If the object needs to appear or should not.
-        - position (Vector2): object's coordinates
-        - size (Vector2): objtc's size(in pixels).
-        - surface (Surface): object's suface in pygame (texture)
+        - position (Vector2): object's coordinates.
+        - size (Vector2): object's size(in pixels).
+        - surface (Surface): object's surface in pygame (texture)
 
-        - mass (float): object's mass (0 if it is not affected by gravity).
+        - mass (float): object's mass (0 if it should not be affected by gravity or any force).
         - velocity (Vector2): speed vector.
-        - gravity (float): object's gravity (used to caculate its gravity at each frame).
-        - layer (int): number to categorize objects. Usefull to decide whether objects need collision or not
+        - grounded (bool): True if the object is on the ground, False otherwise.
+        - gravity (float): object's gravity (used to calculate its gravity at each frame).
+        - layer (int): number to categorize objects. Useful to decide whether objects need collision or not
         - notCollidable (list[int]): list of every layers the object should not collide
                                     (i.e.: if notCollidable = [1,2], then the object will not 
-                                    touch objects from layer 1 ou 2 and will go through tehm).
+                                    touch objects from layer 1 ou 2 and will go through them).
     """
 
     def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _velocity: (int, int) = (0, 0), _active: bool = True):
@@ -49,6 +50,7 @@ class GameObject:
 
         self.mass = _mass
         self.velocity = Vector2(_velocity[0], _velocity[1])
+        self.grounded = False
         self.gravity = 0
         self.layer = _layer
         self.notCollidable = _notCollidable

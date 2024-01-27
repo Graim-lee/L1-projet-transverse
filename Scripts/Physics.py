@@ -1,5 +1,4 @@
 import pygame
-import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
@@ -7,7 +6,7 @@ G = 0.00001
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
 
-def SetPooler(pooler: {str: [Object.GameObject]}):
+def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
     modifying the main.py pooler will directly modify this one too. This pooler is useful for managing collisions.
         Args :
@@ -17,19 +16,69 @@ def SetPooler(pooler: {str: [Object.GameObject]}):
     mainPooler = pooler
 
 def ApplyPhysics(body: Object.GameObject):
-    """ Main function from Physics.py. Proceeds with every physics calculations and moves the objects accordingly.
+    """ Moves the object according to the PhysicsCalculations() function, called earlier in main.py.
+        Args :
+            - body (GameObject): GameObject to move.
+    """
+    # We move the object according to its velocity.
+    # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
+    body.position += body.velocity * deltaTime
+
+def PhysicsCalculations(body: Object.GameObject):
+    """ Main function from Physics.py. Proceeds with every physics calculations.
         Args :
             - body (GameObject): GameObject to apply the physics calculations on.
     """
     # Gravity.
-    ApplyGravity(body)
+    grounded = CheckIfGrounded(body)
+    body.grounded = grounded
+    if grounded:
+        # To stop the gravity's acceleration.
+        body.gravity = 0
+        if body.velocity.y < 0: body.velocity.y = 0
+    else:
+        # To apply the gravity.
+        ApplyGravity(body)
 
-    # Collisions.
-    ManageCollisions(body)
+    ManageCollisions(body)  # Collisions.
+    ApplyFriction(body, grounded)   # Friction.
 
-    # We move the object according to its velocity.
-    # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
-    body.position += body.velocity * deltaTime
+def CheckIfGrounded(body: Object.GameObject) -> bool:
+    """ Checks whether the object is grounded, that is, if it is on the floor or if it is currently falling.
+        Args :
+            - body (GameObject): the object we want to check.
+        Returns :
+            - (bool): True if the object is grounded, False otherwise.
+    """
+    # groundedLeft and groundedRight represent 2 points, so a segment. They are located right under the object, and
+    # are used to detect if the object is grounded : if the segment overlaps with a collidable object, then the body
+    # is grounded.
+    groundedLeft = body.position + Object.Vector2(0, body.size.y) + Object.Vector2(0, Constants.maxGroundedDistance)
+    groundedRight = body.position + body.size + Object.Vector2(0, Constants.maxGroundedDistance)
+
+    global mainPooler
+    for category in mainPooler.main:
+        for gameObject in mainPooler.main[category]:
+            if gameObject == body: continue
+            if not gameObject.active: continue
+            if gameObject.layer in body.notCollidable: continue
+
+            if CheckGroundedCollision(groundedLeft, groundedRight, gameObject): return True
+    return False
+
+def CheckGroundedCollision(left: Object.Vector2, right: Object.Vector2, other: Object.GameObject) -> bool:
+    """ Checks if the object's grounded hitbox collides with a given GameObject. Works similarly to CheckCollision().
+        Args :
+            - left, right (Vector2): the two edges of the grounded hitbox.
+            - other (GameObject): the 'floor' object to check.
+        Returns :
+            - (bool): True if the object is grounded, False otherwise.
+    """
+    topleft, bottomright = other.position, other.position + other.size
+
+    if (left.y < topleft.y) or (left.y > bottomright.y): return False   # If the objects are vertically disjoint.
+    if (right.x < topleft.x) or (left.x > bottomright.x): return False     # Same but horizontally.
+    return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
 
 def ApplyGravity(body: Object.GameObject):
     """ Computes the object's gravity and updates its velocity vector accordingly.
@@ -48,12 +97,31 @@ def ApplyGravity(body: Object.GameObject):
     body.velocity += Object.Vector2(0, addVelocity)
     body.gravity += G
 
+def ApplyFriction(body: Object.GameObject, grounded: bool):
+    """ Slows down the body's velocity by the frictionCoeff constant (see Constants.py). If the body is grounded, the
+    friction coefficient is even larger, in order to slow the object down even more. Note that the friction only affects
+    the horizontal velocity, as gravity already affects the vertical one.
+        Args :
+            - body (GameObject): the object to apply the friction to.
+            - grounded (bool): whether the object is currently grounded or not.
+    """
+    horizontalSpeed = body.velocity.x
+    horizontalSpeed *= Constants.frictionCoeff  # Application of the coefficients of friction.
+    if grounded: horizontalSpeed *= Constants.groundedFrictionCoeff
+    if -0.05 <= horizontalSpeed <= 0.05: horizontalSpeed = 0    # Completely nullifies the velocity if it is too low.
+    body.velocity.x = horizontalSpeed
+
+
 def ManageCollisions(body: Object.GameObject):
     """ Checks, computes and manages the collisions of the given object.
         Args :
             - body (GameObject): the given GameObject.
     """
     global mainPooler
+    body.collisionPos = body.position
+    repelForce = Object.Vector2(0, 0)   # The force applied to the object to simulate collision.
+    applyForce = False                          # Stores whether to apply the repelForce or not (only apply when there is a collision).
+
     for category in mainPooler.main:
         for gameObject in mainPooler.main[category]:
 
@@ -70,18 +138,22 @@ def ManageCollisions(body: Object.GameObject):
             # but rather at its top-left corner, which doesn't suit the situation).
             bodyMassCenter = body.position + 0.5 * body.size
 
-            # We compute the orientation of the force by which we are going to repel the object apart.
+            # We compute the orientation of the force by which we will repel the object.
             colDirection = bodyMassCenter - collisionCenter
             colDirection *= 0.1     # The smaller the vector is, the smaller the approximation error of the distance will be.
 
             # Knowing that its norm is a constant (see Constants.py, collisionForce), we want to normalize the vector
             # (= make it length 1) to then make it the right length.
-            normCoeff = 1 / ApproxDist(colDirection.x ** 2, colDirection.y ** 2)
+            approxDistance = ApproxDist(colDirection.x ** 2, colDirection.y ** 2)
+            normCoeff = 1 if approxDistance == 0 else (1 / approxDistance)  # To avoid any division by 0.
             colDirection *= normCoeff   # Normalized vector (length 1).
             colDirection *= Constants.collisionForce    # Vector of right length.
 
-            # We apply the repelling force to the object's velocity.
-            body.velocity += colDirection
+            # We use the collisionPos vector to update the position of the object at the end of all the physics calculations.
+            repelForce += colDirection
+            applyForce = True
+
+    if applyForce: body.velocity = repelForce
 
 def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :
@@ -95,8 +167,8 @@ def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     topleft1, topleft2 = body.position, other.position
     bottomright1, bottomright2 = body.position + body.size, other.position + other.size
 
-    if (bottomright1.x <= topleft2.x) or (bottomright2.y <= topleft1.y): return False   # If the objects are horizontally disjoint.
-    if (bottomright1.y <= topleft2.y) or (bottomright2.y <= topleft1.y): return False     # Same but vertically.
+    if (bottomright1.x < topleft2.x) or (bottomright2.y < topleft1.y): return False   # If the objects are horizontally disjoint.
+    if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
     return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
 
 def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Object.Vector2:
