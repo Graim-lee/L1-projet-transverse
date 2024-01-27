@@ -2,7 +2,6 @@ import pygame
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
-G = 0.00001
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
 
@@ -95,7 +94,7 @@ def ApplyGravity(body: Object.GameObject):
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
     # is located towards increasing y coordinates, so we must add up the gravity value instead of subtracting it.
     body.velocity += Object.Vector2(0, addVelocity)
-    body.gravity += G
+    body.gravity += Constants.G
 
 def ApplyFriction(body: Object.GameObject, grounded: bool):
     """ Slows down the body's velocity by the frictionCoeff constant (see Constants.py). If the body is grounded, the
@@ -152,7 +151,15 @@ def ManageCollisions(body: Object.GameObject):
             repelForce += colDirection
             applyForce = True
 
-    if applyForce: body.velocity += repelForce
+    if applyForce:
+        body.velocity += repelForce  # Applying the anti-collision force.
+        body.collisionDuration += Constants.deltaTime   # Keeping track of the duration of the collision.
+    else:
+        # Preventing the anti-collision to still affect the object after the end of the collision.
+        body.velocity -= body.previousRepelForce * body.collisionDuration
+        body.collisionDuration = 0
+
+    body.previousRepelForce = repelForce
 
 def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :

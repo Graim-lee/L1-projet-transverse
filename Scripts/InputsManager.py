@@ -46,7 +46,7 @@ def CheckInputs() -> bool:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE: return False   # 'Escape' = end of the game.
-            elif event.key == pygame.K_SPACE: JumpPlayer()
+            elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
@@ -59,17 +59,25 @@ def CheckInputs() -> bool:
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
-            if event.key == pygame.K_a: pressingQA = False   # 'A'
-            if event.key == pygame.K_q: pressingQA = False   # 'Q'
-            if event.key == pygame.K_d: pressingD = False   # 'D'
+            if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
+
+            elif event.key == pygame.K_a: pressingQA = False   # 'A'
+            elif event.key == pygame.K_q: pressingQA = False   # 'Q'
+            elif event.key == pygame.K_d: pressingD = False   # 'D'
 
     ApplyInputs()   # We apply the inputs' effects.
     return True
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
+    global jumpBufferTimer
+
     if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
     if pressingD: MovePlayer(1)     # 'D'
+
+    if jumpBufferTimer > 0:
+        JumpPlayer()    # 'Space'
+        jumpBufferTimer -= Constants.deltaTime
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
@@ -93,7 +101,21 @@ def MovePlayer(direction: int):
     # Increases the velocity of the player.
     player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
 
+def StartJumpBufferTimer():
+    """ Sets the jumpBufferTimer to a constant. While the jump buffer timer is active (that is, greater than 0), the
+    player will jump as soon as he is grounded. """
+    global jumpBufferTimer
+    jumpBufferTimer = Constants.maxJumpBufferTimer
+
 def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """
+    global jumpBufferTimer
     if player.grounded:
         player.velocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
+        jumpBufferTimer = 0
+
+def PlayerReleaseJump():
+    """ Slows down the y velocity of the player when the user releases the 'Space' key. This helps the user by leaving
+    him more control over the height of the jump (quickly pressing 'Space' = short jump, long press = high jump). """
+    if player.velocity.y < 0:
+        player.velocity.y *= Constants.playerStopJumpCoeff

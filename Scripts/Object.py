@@ -26,6 +26,11 @@ class GameObject:
         - notCollidable (list[int]): list of every layers the object should not collide
                                     (i.e.: if notCollidable = [1,2], then the object will not 
                                     touch objects from layer 1 ou 2 and will go through them).
+
+        - previousRepelForce (Vector2): stores the previous repel force exerted on the object during a collision (allows
+                                    to avoid bouncing off walls and floor).
+        - collisionDuration (float): stores for how long the object has been colliding with another object. Works in
+                                    conjunction with previousRepelForce to prevent bouncing.
     """
 
     def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _velocity: (int, int) = (0, 0), _active: bool = True):
@@ -54,6 +59,9 @@ class GameObject:
         self.gravity = 0
         self.layer = _layer
         self.notCollidable = _notCollidable
+
+        self.previousRepelForce = Vector2(0, 0)
+        self.collisionDuration = 0
 
     def Resize(self, size: (int, int)):
         """ Modify objects size.
