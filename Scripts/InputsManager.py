@@ -93,4 +93,4 @@ def MovePlayer(direction: int):
 def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """
     if player.grounded:
-        player.velocity += Object.Vector2(0, -10) * Constants.deltaTime
+        player.velocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime

@@ -35,7 +35,7 @@ def PhysicsCalculations(body: Object.GameObject):
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
-        if body.velocity.y < 0: body.velocity.y = 0
+        if body.velocity.y > 0: body.velocity.y = 0
     else:
         # To apply the gravity.
         ApplyGravity(body)

@@ -15,4 +15,4 @@ playerSpeed = 0.1
 # The maximum horizontal speed of the player.
 maxPlayerSpeed = 1
 # The force applied to the player when jumping, negative as y-coordinates are reversed.
-playerJumpForce = -100
+playerJumpForce = -1
