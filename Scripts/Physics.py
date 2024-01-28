@@ -21,7 +21,7 @@ def ApplyPhysics(body: Object.GameObject):
     """
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
-    body.position += body.velocity * deltaTime
+    body.position += (body.velocity + body.continuousVelocity) * deltaTime
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -148,11 +148,16 @@ def ManageCollisions(body: Object.GameObject):
             colDirection *= Constants.collisionForce    # Vector of right length.
 
             # We use the collisionPos vector to update the position of the object at the end of all the physics calculations.
+            print("Partial repel force :", repelForce, gameObject)
             repelForce += colDirection
             applyForce = True
 
     if applyForce:
+        print("Full repel force equals ===>", repelForce)
         body.velocity += repelForce  # Applying the anti-collision force.
+        # We cancel the continuous velocity if the collision counters it.
+        if Sign(repelForce.x) != 0 and Sign(body.continuousVelocity.x) != Sign(repelForce.x): body.continuousVelocity.x = 0
+        if Sign(repelForce.y) != 0 and Sign(body.continuousVelocity.y) != Sign(repelForce.y): body.continuousVelocity.y = 0
         body.collisionDuration += Constants.deltaTime   # Keeping track of the duration of the collision.
     else:
         # Preventing the anti-collision to still affect the object after the end of the collision.
@@ -173,7 +178,7 @@ def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     topleft1, topleft2 = body.position, other.position
     bottomright1, bottomright2 = body.position + body.size, other.position + other.size
 
-    if (bottomright1.x < topleft2.x) or (bottomright2.y < topleft1.y): return False   # If the objects are horizontally disjoint.
+    if (bottomright1.x < topleft2.x) or (bottomright2.x < topleft1.x): return False   # If the objects are horizontally disjoint.
     if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
     return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
 
@@ -236,3 +241,14 @@ def ApproxDist(x: float, y: float) -> float:
     """
     if x == 0: return y    # To avoid a division by 0.
     return x + (y ** 2) / (2 * x)
+
+def Sign(x: float) -> int:
+    """ Computes the sign of x.
+        Args :
+            - x (float): the number which sign we want.
+        Returns :
+            - (int): -1 if x is negative, 1 if x is positive, and 0 if x is null.
+    """
+    if x < 0: return -1
+    if x > 0: return 1
+    return 0

@@ -20,6 +20,13 @@ class GameObject:
 
         - mass (float): object's mass (0 if it should not be affected by gravity or any force).
         - velocity (Vector2): speed vector.
+        - continuousVelocity (Vector2): a Vector2 for continuous velocity. Explanation : if we just want the object to
+                                        be subjected to an instantaneous force (i.e.: jumping, the force is only applied
+                                        once, when the player presses 'Space'), we can add this force to the velocity
+                                        vector. However, a continuous force (i.e.: the left/rightward force when moving
+                                        the player, as it is applied each frame) will make the collision algorithm work.
+                                        As such, this vector allows to store the continuous forces of an object for the
+                                        collision algorithm to be able to cancel it if needed.
         - grounded (bool): True if the object is on the ground, False otherwise.
         - gravity (float): object's gravity (used to calculate its gravity at each frame).
         - layer (int): number to categorize objects. Useful to decide whether objects need collision or not
@@ -55,6 +62,7 @@ class GameObject:
 
         self.mass = _mass
         self.velocity = Vector2(_velocity[0], _velocity[1])
+        self.continuousVelocity = Vector2(0, 0)
         self.grounded = False
         self.gravity = 0
         self.layer = _layer

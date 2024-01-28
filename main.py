@@ -36,6 +36,15 @@ floorLayer = 1
 floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [])
 pooler.AddObject(floor, "Wall")     # We put the floor in the 'Wall' category as they share the same properties.
 
+# Creating the test floor.
+wallPos = (0, 0)
+wallSize = (600, screenDimensions[1])
+wallTexture = "Sprites/wall.png"
+wallMass = 0
+wallLayer = 1
+wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
+pooler.AddObject(wall, "Wall")
+
 # We link different objects to different scripts.
 InputsManager.SetPooler(pooler)
 InputsManager.SetPlayer(player)

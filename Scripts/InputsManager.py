@@ -79,27 +79,17 @@ def ApplyInputs():
         JumpPlayer()    # 'Space'
         jumpBufferTimer -= Constants.deltaTime
 
-def Sign(x: float) -> int:
-    """ Computes the sign of x.
-        Args :
-            - x (float): the number which sign we want.
-        Returns :
-            - (int): -1 if x is negative, 1 if x is positive, and 0 if x is null.
-    """
-    if x < 0: return -1
-    if x > 0: return 1
-    return 0
-
 def MovePlayer(direction: int):
     """ When the user presses 'A' or 'D'. Makes the player go left or right (depending on the parameter direction) by
-    applying a left/rightward velocity to it. Also prevents the player from exceeding a certain maximum speed.
+    applying a left/rightward velocity to it. Also prevents the player from exceeding a certain maximum speed. Using
+    moveVelocity allows to cancel the movement when detecting a collision (so that the player can't phase through walls).
         Args :
             - direction (int): only takes in 1 or -1. Determines whether the player should move right or left.
     """
     # Prevents the player from exceeding the maximum speed.
-    if Sign(direction * Constants.maxPlayerSpeed - player.velocity.x) != Sign(direction): return True
+    if Sign(direction * Constants.maxPlayerSpeed - player.continuousVelocity.x) != Sign(direction): return True
     # Increases the velocity of the player.
-    player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
+    player.continuousVelocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
 
 def StartJumpBufferTimer():
     """ Sets the jumpBufferTimer to a constant. While the jump buffer timer is active (that is, greater than 0), the
@@ -119,3 +109,14 @@ def PlayerReleaseJump():
     him more control over the height of the jump (quickly pressing 'Space' = short jump, long press = high jump). """
     if player.velocity.y < 0:
         player.velocity.y *= Constants.playerStopJumpCoeff
+
+def Sign(x: float) -> int:
+    """ Computes the sign of x.
+        Args :
+            - x (float): the number which sign we want.
+        Returns :
+            - (int): -1 if x is negative, 1 if x is positive, and 0 if x is null.
+    """
+    if x < 0: return -1
+    if x > 0: return 1
+    return 0
