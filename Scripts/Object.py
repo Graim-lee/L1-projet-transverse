@@ -19,7 +19,12 @@ class GameObject:
         - surface (Surface): object's surface in pygame (texture)
 
         - mass (float): object's mass (0 if it should not be affected by gravity or any force).
-        - velocity (Vector2): speed vector.
+        - velocity (Vector2): speed vector, the sum of instantVelocity and continuousVelocity. Do not directly modify
+                                this vector, modify instantVelocity or continuousVelocity instead please :3
+        - instantVelocity (Vector2): a Vector2 for instantaneous velocity (i.e.: explosion burst, jump force, etc.)
+                                    Explanation : to distinguish from continuousVelocity, which is a velocity that
+                                    should be set each frame, instantVelocity is a velocity vector that should be changed
+                                    only at certain points in time (and not continuously).
         - continuousVelocity (Vector2): a Vector2 for continuous velocity. Explanation : if we just want the object to
                                         be subjected to an instantaneous force (i.e.: jumping, the force is only applied
                                         once, when the player presses 'Space'), we can add this force to the velocity
@@ -40,7 +45,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _velocity: (int, int) = (0, 0), _active: bool = True):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _active: bool = True):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -61,7 +66,8 @@ class GameObject:
         self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.mass = _mass
-        self.velocity = Vector2(_velocity[0], _velocity[1])
+        self.velocity = Vector2(0, 0)
+        self.instantVelocity = Vector2(0, 0)
         self.continuousVelocity = Vector2(0, 0)
         self.grounded = False
         self.gravity = 0
@@ -162,6 +168,13 @@ class Vector2:
                 - (tuple (int, int)): tuple of the vector's coordinates.
         """
         return self.x, self.y
+
+    def Norm(self) -> float:
+        """ Returns the norm of the vector squared. The formula is : x^2 + y^2.
+            Return :
+                - (float): the squared distance of the vector.
+        """
+        return self.x ** 2 + self.y ** 2
 
 
 """ ================================================================================================================ """

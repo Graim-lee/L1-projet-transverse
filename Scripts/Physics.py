@@ -21,7 +21,7 @@ def ApplyPhysics(body: Object.GameObject):
     """
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
-    body.position += (body.velocity + body.continuousVelocity) * deltaTime
+    body.position += body.velocity * deltaTime
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -34,12 +34,15 @@ def PhysicsCalculations(body: Object.GameObject):
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
-        if body.velocity.y > 0: body.velocity.y = 0
+        if body.instantVelocity.y > 0: body.instantVelocity.y = 0
+        if body.continuousVelocity.y > 0: body.continuousVelocity.y = 0
     else:
         # To apply the gravity.
         ApplyGravity(body)
 
     ManageCollisions(body)  # Collisions.
+
+    body.velocity = body.instantVelocity + body.continuousVelocity
     ApplyFriction(body, grounded)   # Friction.
 
 def CheckIfGrounded(body: Object.GameObject) -> bool:
@@ -52,8 +55,8 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
     # groundedLeft and groundedRight represent 2 points, so a segment. They are located right under the object, and
     # are used to detect if the object is grounded : if the segment overlaps with a collidable object, then the body
     # is grounded.
-    groundedLeft = body.position + Object.Vector2(0, body.size.y) + Object.Vector2(0, Constants.maxGroundedDistance)
-    groundedRight = body.position + body.size + Object.Vector2(0, Constants.maxGroundedDistance)
+    groundedLeft = body.position + Object.Vector2(Constants.groundedHitboxBorder, body.size.y + Constants.maxGroundedDistance)
+    groundedRight = body.position + body.size + Object.Vector2(-Constants.groundedHitboxBorder, Constants.maxGroundedDistance)
 
     global mainPooler
     for category in mainPooler.main:
@@ -93,22 +96,30 @@ def ApplyGravity(body: Object.GameObject):
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
     # is located towards increasing y coordinates, so we must add up the gravity value instead of subtracting it.
-    body.velocity += Object.Vector2(0, addVelocity)
+    body.instantVelocity += Object.Vector2(0, addVelocity)
     body.gravity += Constants.G
 
 def ApplyFriction(body: Object.GameObject, grounded: bool):
-    """ Slows down the body's velocity by the frictionCoeff constant (see Constants.py). If the body is grounded, the
-    friction coefficient is even larger, in order to slow the object down even more. Note that the friction only affects
-    the horizontal velocity, as gravity already affects the vertical one.
+    """ Slows down the body's instantVelocity and continuousVelocity by the frictionCoeff constant (see Constants.py).
+    If the body is grounded, the friction coefficient is even larger, in order to slow the object down even more. Note
+    that the friction only affects the horizontal velocity, as gravity already affects the vertical one.
         Args :
             - body (GameObject): the object to apply the friction to.
             - grounded (bool): whether the object is currently grounded or not.
     """
-    horizontalSpeed = body.velocity.x
-    horizontalSpeed *= Constants.frictionCoeff  # Application of the coefficients of friction.
-    if grounded: horizontalSpeed *= Constants.groundedFrictionCoeff
-    if -0.05 <= horizontalSpeed <= 0.05: horizontalSpeed = 0    # Completely nullifies the velocity if it is too low.
-    body.velocity.x = horizontalSpeed
+    instantHorizontal, continuousHorizontal = body.instantVelocity.x, body.continuousVelocity.x
+    instantHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
+    continuousHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
+    if grounded:
+        instantHorizontal *= Constants.groundedFrictionCoeff
+        continuousHorizontal *= Constants.groundedFrictionCoeff
+
+    # Completely nullifies the velocity if it is too low.
+    if -0.1 <= instantHorizontal <= 0.1: instantHorizontal = 0
+    if -0.1 <= continuousHorizontal <= 0.1: continuousHorizontal = 0
+
+    body.instantVelocity.x = instantHorizontal
+    body.continuousVelocity.x = continuousHorizontal
 
 def ManageCollisions(body: Object.GameObject):
     """ Checks, computes and manages the collisions of the given object.
@@ -148,20 +159,22 @@ def ManageCollisions(body: Object.GameObject):
             colDirection *= Constants.collisionForce    # Vector of right length.
 
             # We use the collisionPos vector to update the position of the object at the end of all the physics calculations.
-            print("Partial repel force :", repelForce, gameObject)
             repelForce += colDirection
+            print("Partial repel force :", repelForce, gameObject)
             applyForce = True
 
     if applyForce:
         print("Full repel force equals ===>", repelForce)
-        body.velocity += repelForce  # Applying the anti-collision force.
+        print("Full velocity equals ===>", body.instantVelocity.y)
+        body.instantVelocity += repelForce  # Applying the anti-collision force.
         # We cancel the continuous velocity if the collision counters it.
         if Sign(repelForce.x) != 0 and Sign(body.continuousVelocity.x) != Sign(repelForce.x): body.continuousVelocity.x = 0
         if Sign(repelForce.y) != 0 and Sign(body.continuousVelocity.y) != Sign(repelForce.y): body.continuousVelocity.y = 0
         body.collisionDuration += Constants.deltaTime   # Keeping track of the duration of the collision.
     else:
         # Preventing the anti-collision to still affect the object after the end of the collision.
-        body.velocity -= body.previousRepelForce * body.collisionDuration
+        if body.previousRepelForce.y > 0: body.instantVelocity -= body.previousRepelForce * body.collisionDuration * 0.5
+        else: body.instantVelocity -= body.previousRepelForce * body.collisionDuration
         body.collisionDuration = 0
 
     body.previousRepelForce = repelForce

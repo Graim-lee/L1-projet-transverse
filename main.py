@@ -19,7 +19,7 @@ pygame.display.set_caption("Nom du jeu")    # Changes the name of the game's win
 pygame.display.set_icon(pygame.image.load("Sprites/game_icon.png"))     # Changes the icon of the game's window.
 
 # Creating the player's character.
-playerPos = (screenDimensions[0] / 2, screenDimensions[1] / 2)
+playerPos = (screenDimensions[0] / 2, 700)
 playerSize = (44, 44)
 playerTexture = "Sprites/player.png"
 playerMass = 1
@@ -36,9 +36,36 @@ floorLayer = 1
 floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [])
 pooler.AddObject(floor, "Wall")     # We put the floor in the 'Wall' category as they share the same properties.
 
-# Creating the test floor.
+# Creating the left wall.
 wallPos = (0, 0)
 wallSize = (600, screenDimensions[1])
+wallTexture = "Sprites/wall.png"
+wallMass = 0
+wallLayer = 1
+wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
+pooler.AddObject(wall, "Wall")
+
+# Creating the right wall.
+wallPos = (screenDimensions[0]-600, 0)
+wallSize = (600, screenDimensions[1])
+wallTexture = "Sprites/wall.png"
+wallMass = 0
+wallLayer = 1
+wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
+pooler.AddObject(wall, "Wall")
+
+# Creating ceiling.
+wallPos = (0, 0)
+wallSize = (screenDimensions[0], 600)
+wallTexture = "Sprites/wall.png"
+wallMass = 0
+wallLayer = 1
+wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
+pooler.AddObject(wall, "Wall")
+
+# Creating ceiling.
+wallPos = (600, 700)
+wallSize = (100, 300)
 wallTexture = "Sprites/wall.png"
 wallMass = 0
 wallLayer = 1

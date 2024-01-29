@@ -1,19 +1,22 @@
 # Time between 2 frames (in milliseconds).
 deltaTime = 1
 # Gravity force.
-G = 0.00004
+G = 0.00006
 
 # The maximum distance between an object and the floor for it to be considered 'grounded'.
 maxGroundedDistance = 1
+# A little distance to avoid the player from considering walls as floor (so that the grounded hitbox isn't exactly the
+# size of the player).
+groundedHitboxBorder = 2
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 0.99
 groundedFrictionCoeff = 0.97
 # The magnitude of the force applied to overlapping objects to manage collisions.
-collisionForce = 0.1
+collisionForce = 0.5
 
 
 # The horizontal speed of the player.
-playerSpeed = 0.1
+playerSpeed = 0.5
 # The maximum horizontal speed of the player.
 maxPlayerSpeed = 1
 # The force applied to the player when jumping, negative as y-coordinates are reversed.

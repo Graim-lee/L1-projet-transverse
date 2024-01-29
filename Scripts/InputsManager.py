@@ -101,14 +101,14 @@ def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """
     global jumpBufferTimer
     if player.grounded:
-        player.velocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
+        player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
         jumpBufferTimer = 0
 
 def PlayerReleaseJump():
     """ Slows down the y velocity of the player when the user releases the 'Space' key. This helps the user by leaving
     him more control over the height of the jump (quickly pressing 'Space' = short jump, long press = high jump). """
-    if player.velocity.y < 0:
-        player.velocity.y *= Constants.playerStopJumpCoeff
+    if player.instantVelocity.y < 0:
+        player.instantVelocity.y *= Constants.playerStopJumpCoeff
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
