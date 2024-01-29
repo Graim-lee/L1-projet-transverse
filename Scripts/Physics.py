@@ -160,12 +160,9 @@ def ManageCollisions(body: Object.GameObject):
 
             # We use the collisionPos vector to update the position of the object at the end of all the physics calculations.
             repelForce += colDirection
-            print("Partial repel force :", repelForce, gameObject)
             applyForce = True
 
     if applyForce:
-        print("Full repel force equals ===>", repelForce)
-        print("Full velocity equals ===>", body.instantVelocity.y)
         body.instantVelocity += repelForce  # Applying the anti-collision force.
         # We cancel the continuous velocity if the collision counters it.
         if Sign(repelForce.x) != 0 and Sign(body.continuousVelocity.x) != Sign(repelForce.x): body.continuousVelocity.x = 0
