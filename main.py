@@ -28,16 +28,17 @@ player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, pla
 pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
 # Creating the test floor.
-floorPos = (0, screenDimensions[1] - 200)
-floorSize = (screenDimensions[0], 100)
-floorTexture = "Sprites/wall.png"
+floorPos = (0, screenDimensions[1]- 200)
+floorSize = (screenDimensions[0]*5, 100)
+floorTexture = "Sprites/floar.png"
 floorMass = 0
 floorLayer = 1
 floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [])
 pooler.AddObject(floor, "Wall")     # We put the floor in the 'Wall' category as they share the same properties.
 
+
 # Creating the left wall.
-wallPos = (0, 0)
+wallPos = (-600, 0)
 wallSize = (600, screenDimensions[1])
 wallTexture = "Sprites/wall.png"
 wallMass = 0
@@ -45,37 +46,19 @@ wallLayer = 1
 wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
 pooler.AddObject(wall, "Wall")
 
-# Creating the right wall.
-wallPos = (screenDimensions[0]-600, 0)
-wallSize = (600, screenDimensions[1])
-wallTexture = "Sprites/wall.png"
-wallMass = 0
-wallLayer = 1
-wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
-pooler.AddObject(wall, "Wall")
-
-# Creating ceiling.
-wallPos = (0, 0)
-wallSize = (screenDimensions[0], 600)
-wallTexture = "Sprites/wall.png"
-wallMass = 0
-wallLayer = 1
-wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
-pooler.AddObject(wall, "Wall")
-
-# Creating ceiling.
-wallPos = (600, 700)
-wallSize = (100, 300)
-wallTexture = "Sprites/wall.png"
-wallMass = 0
-wallLayer = 1
-wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [])
-pooler.AddObject(wall, "Wall")
+platformPos = (1700, 750)
+platformSize = (100, 25)
+platformTexture = "Sprites/wall.png"
+platformMass = 0
+platformLayer = 1
+platform = Object.GameObject(platformPos, platformSize, platformTexture, platformMass, platformLayer, [])
+pooler.AddObject(platform, "Wall")
 
 # We link different objects to different scripts.
 InputsManager.SetPooler(pooler)
 InputsManager.SetPlayer(player)
 Physics.SetPooler(pooler)
+Physics.SetPlayer(player)
 
 """ End of START =================================================================================================== """
 

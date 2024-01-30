@@ -14,6 +14,15 @@ def SetPooler(pooler: Object.Pooler):
     global mainPooler
     mainPooler = pooler
 
+def SetPlayer(playerChar: Object.GameObject):
+    """ Allows to retrieve and copy the player GameObject from main.py. Also mutable, so it will be shared directly
+    with the main.py script. Useful as the player is often used in this script.
+        Args :
+            - playerChar (GameObject): the player GameObject created in main.py.
+    """
+    global player
+    player = playerChar
+
 def ApplyPhysics(body: Object.GameObject):
     """ Moves the object according to the PhysicsCalculations() function, called earlier in main.py.
         Args :
@@ -22,6 +31,22 @@ def ApplyPhysics(body: Object.GameObject):
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
     body.position += body.velocity * deltaTime
+    if body == player:
+        if body.position.x > 1500:
+            body.position.x = 1500
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    gameObject.position.x -= body.velocity.x * deltaTime
+        if body.position.x < 300 :
+            body.position.x = 300
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    gameObject.position.x -= body.velocity.x * deltaTime
+            
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
