@@ -16,7 +16,7 @@ def SetPooler(pooler: Object.Pooler):
 
 def SetPlayer(playerChar: Object.GameObject):
     """ Allows to retrieve and copy the player GameObject from main.py. Also mutable, so it will be shared directly
-    with the main.py script. Useful as the player is often used in this script.
+    with the main.py script. Useful for the camera position.
         Args :
             - playerChar (GameObject): the player GameObject created in main.py.
     """
@@ -32,15 +32,15 @@ def ApplyPhysics(body: Object.GameObject):
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
     body.position += body.velocity * deltaTime
     if body == player:
-        if body.position.x > 1500:
-            body.position.x = 1500
+        if body.position.x > Constants.maxCameraMoveThreshold:
+            body.position.x = Constants.maxCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
-        if body.position.x < 300 :
-            body.position.x = 300
+        if body.position.x < Constants.minCameraMoveThreshold :
+            body.position.x = Constants.minCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue

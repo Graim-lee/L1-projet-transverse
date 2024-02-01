@@ -72,6 +72,7 @@ while gameRunning:
 
     # Retrieves and manages user inputs.
     gameRunning = InputsManager.CheckInputs()
+
     # Applies the physics calculations to every object.
     for category in pooler.main:
         for gameObject in pooler.main[category]:
@@ -80,19 +81,26 @@ while gameRunning:
 
 
     # Updates every object's position after the calculations (updating it after every calculation is useful for
-    # detecting every collision, then managing them).
+    # detecting every collision, then managing them). Also reactivates / deactivates objects far enough from the camera's
+    # field of view.
     for category in pooler.main:
         for gameObject in pooler.main[category]:
-            if gameObject.active and gameObject.mass != 0:
+            if gameObject.active and gameObject.visible and gameObject.mass != 0:
                 Physics.ApplyPhysics(gameObject)
 
-    # Display every object on the screen.
-    # Display every object on the screen.
+            # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
+            topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
+            if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + screenDimensions[0]:
+                if not gameObject.alwaysLoaded: gameObject.visible = False
+            else:
+                gameObject.visible = True
+
+    # Displays every object on the screen.
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 
     for category in pooler.main:
         for gameObject in pooler.main[category]:
-            if gameObject.active:
+            if gameObject.active and gameObject.visible:
                 screen.blit(gameObject.surface, gameObject.position.Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.

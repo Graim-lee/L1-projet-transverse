@@ -24,6 +24,14 @@ playerJumpForce = -1.5
 # The coefficient slowing down the player when he releases the jump key ('Space') mid-air.
 playerStopJumpCoeff = 0.4
 
+
+# The x coordinates between which the player can move without moving the camera.
+minCameraMoveThreshold = 600
+maxCameraMoveThreshold = 1200
+
+# The maximum distance from the camera an object can be without being unloaded.
+cameraUnloadDistance = 500
+
 # Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
 # example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
 maxJumpBufferTimer = 50

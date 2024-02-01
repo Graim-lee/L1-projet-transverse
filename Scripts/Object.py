@@ -13,7 +13,11 @@ import pygame
 
 class GameObject:
     """ This class contain every recurrent information for objects in the game.
-        - active (bool): If the object needs to appear or should not.
+        - active (bool): if the object needs to appear or should not.
+        - visible (bool): if the object is outside the camera's field of view, this is False and allows not to lose time
+                            calculating these objects.
+        - alwaysLoaded (bool): if True, prevents the object from being unloaded by the camera.
+
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
         - surface (Surface): object's surface in pygame (texture)
@@ -45,7 +49,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _active: bool = True):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -54,12 +58,14 @@ class GameObject:
                 - _texturePath (str): Path for the object's texture.
                 - _mass (float): object's mass.
                 - _layer (int): objet's layer (for collisions).
-                - _notCollidable (list[int]): list of  layers with wich the object will no collide.
+                - _notCollidable (list[int]): list of layers with which the object will not collide.
                 - _velocity (couple (int, int)): object's speed on x and y.
-                - _active (bool): If the object should be visible or not
+                - _alwaysLoaded (bool): whether the object will always be loaded or not.
         """
-        self.active = _active
-        self.active = _active
+        self.active = True
+        self.visible = True
+        self.alwaysLoaded = _alwaysLoaded
+
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
         self.surface = pygame.image.load(_texturePath).convert()    # Get the texture from the path.
