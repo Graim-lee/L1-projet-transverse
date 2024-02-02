@@ -24,7 +24,7 @@ playerSize = (44, 44)
 playerTexture = "Sprites/player.png"
 playerMass = 1
 playerLayer = 0
-player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0)
+player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True)
 pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
 # Creating the test floor.
@@ -46,8 +46,8 @@ wallLayer = 1
 wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [], 0)
 pooler.AddObject(wall, "Wall")
 
-platformPos = (1700, 750)
-platformSize = (100, 25)
+platformPos = (1700, 650)
+platformSize = (100, 100)
 platformTexture = "Sprites/wall.png"
 platformMass = 0
 platformLayer = 1
@@ -59,7 +59,7 @@ fuckSize = (480, 160)
 fuckTexture = "Sprites/fuck.png"
 fuckMass = 0
 fuckLayer = 0
-fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [], 1)
+fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [], 1, _png=True)
 pooler.AddObject(fuck, "Fuck")
 
 # We link different objects to different scripts.
@@ -122,8 +122,7 @@ while gameRunning:
     for category in pooler.main:
         for gameObject in pooler.main[category]:
             if ComputeObject(gameObject):
-                screen.blit(gameObject.surface, gameObject.position.Tuple(), special_flags=pygame.BLEND_RGBA_MULT)
-                screen.blit(gameObject.alpha, gameObject.position.Tuple(), special_flags=pygame.BLEND_RGBA_MULT)
+                screen.blit(gameObject.surface, gameObject.position.Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.
 

@@ -31,6 +31,8 @@ def ApplyPhysics(body: Object.GameObject):
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
     body.position += body.velocity * deltaTime
+
+    # Moving the camera around the player.
     if body == player:
         if body.position.x > Constants.maxCameraMoveThreshold:
             body.position.x = Constants.maxCameraMoveThreshold
@@ -38,6 +40,7 @@ def ApplyPhysics(body: Object.GameObject):
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
         if body.position.x < Constants.minCameraMoveThreshold :
             body.position.x = Constants.minCameraMoveThreshold
@@ -45,6 +48,7 @@ def ApplyPhysics(body: Object.GameObject):
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
             
 
