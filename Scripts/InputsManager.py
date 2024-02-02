@@ -45,7 +45,8 @@ def CheckInputs() -> bool:
         # KEYDOWN = the user just pressed a key (only happens the first frame after the user presses said key).
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_ESCAPE: return False   # 'Escape' = end of the game.
+            if event.key == pygame.K_RETURN: return False   # 'Enter' = fin du jeu.
+            elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = menu différent.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
@@ -96,6 +97,12 @@ def StartJumpBufferTimer():
     player will jump as soon as he is grounded. """
     global jumpBufferTimer
     jumpBufferTimer = Constants.maxJumpBufferTimer
+
+def PressEscape():
+    """ Is executed when the player pressing 'Escape'. """
+    # Switching between the Pause Menu and the Game.
+    if Constants.currentScene == 0: Constants.currentScene = 1
+    elif Constants.currentScene == 1: Constants.currentScene = 0
 
 def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """

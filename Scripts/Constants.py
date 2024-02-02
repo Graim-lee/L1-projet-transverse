@@ -35,3 +35,9 @@ cameraUnloadDistance = 500
 # Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
 # example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
 maxJumpBufferTimer = 50
+
+
+# The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
+# pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
+# we want).
+currentScene = 0

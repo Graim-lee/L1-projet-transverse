@@ -17,10 +17,15 @@ class GameObject:
         - visible (bool): if the object is outside the camera's field of view, this is False and allows not to lose time
                             calculating these objects.
         - alwaysLoaded (bool): if True, prevents the object from being unloaded by the camera.
+        - scene (int): the ID (index) of the scene the object is in. The scene can be like 0 for the MainGame, 1 for the
+                        PauseMenu etc. (find the list in Constants.py), and allows not to show objects that aren't in a
+                        specific scene when in another. For example, you should not be able to see the player when
+                        looking in the pause menu.
 
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
         - surface (Surface): object's surface in pygame (texture)
+        - alpha (Surface): object's alpha surface (storing transparency of the texture), else png doesn't work.
 
         - mass (float): object's mass (0 if it should not be affected by gravity or any force).
         - velocity (Vector2): speed vector, the sum of instantVelocity and continuousVelocity. Do not directly modify
@@ -49,7 +54,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -60,15 +65,20 @@ class GameObject:
                 - _layer (int): objet's layer (for collisions).
                 - _notCollidable (list[int]): list of layers with which the object will not collide.
                 - _velocity (couple (int, int)): object's speed on x and y.
+                - _scene (int): the ID of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
         """
         self.active = True
         self.visible = True
         self.alwaysLoaded = _alwaysLoaded
+        self.scene = _scene
 
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
         self.surface = pygame.image.load(_texturePath).convert()    # Get the texture from the path.
+        tempAlpha = pygame.image.load(_texturePath).convert_alpha()
+        self.alpha = pygame.Surface(tempAlpha.get_rect().size, pygame.SRCALPHA)    # Get the texture's alpha from the path.
+        self.alpha.fill((255, 255, 255, 100))
         self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.mass = _mass
@@ -90,6 +100,7 @@ class GameObject:
         """
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
+        self.alpha = pygame.transform.scale(self.alpha, size)
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
