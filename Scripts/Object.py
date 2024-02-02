@@ -25,7 +25,6 @@ class GameObject:
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
         - surface (Surface): object's surface in pygame (texture)
-        - alpha (Surface): object's alpha surface (storing transparency of the texture), else png doesn't work.
 
         - mass (float): object's mass (0 if it should not be affected by gravity or any force).
         - velocity (Vector2): speed vector, the sum of instantVelocity and continuousVelocity. Do not directly modify
@@ -54,7 +53,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False, _animation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -67,6 +66,8 @@ class GameObject:
                 - _velocity (couple (int, int)): object's speed on x and y.
                 - _scene (int): the ID of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
+                - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
+                - _animation (bool): whether the object have an animation or not
         """
         self.active = True
         self.visible = True
@@ -75,11 +76,13 @@ class GameObject:
 
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
-        self.surface = pygame.image.load(_texturePath).convert()    # Get the texture from the path.
-        tempAlpha = pygame.image.load(_texturePath).convert_alpha()
-        self.alpha = pygame.Surface(tempAlpha.get_rect().size, pygame.SRCALPHA)    # Get the texture's alpha from the path.
-        self.alpha.fill((255, 255, 255, 100))
+        # Get the texture from the path.
+        if _png: self.surface = pygame.image.load(_texturePath)
+        else: self.surface = pygame.image.load(_texturePath).convert()
         self.Resize(_size)  # Allows to directly apply the object's new size.
+        self.path = _texturePath
+        self.animation = _animation
+        self.frame = 1  # nb of frame for the animation
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
@@ -100,7 +103,24 @@ class GameObject:
         """
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
-        self.alpha = pygame.transform.scale(self.alpha, size)
+
+    def Animation(self, path, direction):
+        """ Modify objects sprite
+            Args :
+                - path (string): the name of the object sprite
+                - direction (string): the direction to go
+
+        """
+        # change the frame
+        if self.frame >= 2 or self.frame == 0: self.frame = 1
+        else: self.frame += 1
+
+        self.surface = pygame.image.load("Sprites/" + path + "Move/" + path + "-Move-" + str(self.frame) + ".png").convert()
+        self.Resize((44, 44))
+
+        # change de direction
+        if direction == "right": self.surface = pygame.transform.flip(self.surface, False, False)
+        elif direction == "left": self.surface = pygame.transform.flip(self.surface, True, False)
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.

@@ -33,12 +33,14 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
+direction = "right" # la direction (jai pas réussi a la mettre dans la fonction CheckInput et la faire changer a chaque fois)
 def CheckInputs() -> bool:
     """ Main function, checks every input. If you want to detect an input, place the code here.
         Returns :
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
+            - (string): The direction to go
     """
-    global pressingQA, pressingD
+    global pressingQA, pressingD, direction
     # Every event.
     for event in pygame.event.get():
 
@@ -54,8 +56,12 @@ def CheckInputs() -> bool:
             # to True, and put it back to False when we detect that the user released the key.
 
             elif event.key == pygame.K_a: pressingQA = True  # 'A'
-            elif event.key == pygame.K_q: pressingQA = True  # 'Q'
-            elif event.key == pygame.K_d: pressingD = True  # 'D'
+            elif event.key == pygame.K_q:
+                pressingQA = True  # 'Q'
+                direction = "left"  # set the direction to left
+            elif event.key == pygame.K_d:
+                pressingD = True  # 'D'
+                direction = "right" # set the direction to right
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
@@ -67,7 +73,7 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_d: pressingD = False   # 'D'
 
     ApplyInputs()   # We apply the inputs' effects.
-    return True
+    return True, direction
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """

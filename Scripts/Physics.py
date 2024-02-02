@@ -31,22 +31,44 @@ def ApplyPhysics(body: Object.GameObject):
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
     body.position += body.velocity * deltaTime
+
+    # Moving the camera around the player.
+    # X
     if body == player:
-        if body.position.x > Constants.maxCameraMoveThreshold:
-            body.position.x = Constants.maxCameraMoveThreshold
+        if body.position.x > Constants.maxXCameraMoveThreshold:
+            body.position.x = Constants.maxXCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
-        if body.position.x < Constants.minCameraMoveThreshold :
-            body.position.x = Constants.minCameraMoveThreshold
+        if body.position.x < Constants.minXCameraMoveThreshold :
+            body.position.x = Constants.minXCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
-            
+        # Y
+        if body.position.y > Constants.maxYCameraMoveThreshold:
+            body.position.y = Constants.maxYCameraMoveThreshold
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
+                    gameObject.position.y -= body.velocity.y * deltaTime
+        if body.position.y < Constants.minYCameraMoveThreshold :
+            body.position.y = Constants.minYCameraMoveThreshold
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
+                    gameObject.position.y -= body.velocity.y * deltaTime
+
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
