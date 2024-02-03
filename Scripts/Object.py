@@ -2,7 +2,7 @@
     This file declares every class of object for the OOP
 """
 import pygame
-
+import math
 
 """ ================================================================================================================ """
 
@@ -185,6 +185,13 @@ class Vector2:
         return self.x, self.y
 
     def Norm(self) -> float:
+        """ Returns the norm of the vector. The formula is : sqrt(x^2 + y^2).
+            Return :
+                - (float): the squared distance of the vector.
+        """
+        return math.sqrt(self.SquareNorm())
+
+    def SquareNorm(self) -> float:
         """ Returns the norm of the vector squared. The formula is : x^2 + y^2.
             Return :
                 - (float): the squared distance of the vector.

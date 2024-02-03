@@ -4,6 +4,7 @@ import Scripts.Constants as Constants
 
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
+player: Object.GameObject
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -232,6 +233,12 @@ def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Obj
     """
     collisionVertices = GetCollisionVertices(body, other)   # We retrieve every vertex concerned by the collision.
     center, verticesCount = Object.Vector2(0, 0), len(collisionVertices)
+
+    # To prevent division by 0 (when two objects completely overlap, that means, when one is inside another).
+    if verticesCount == 0:
+        center = body.position
+        body.velocity = Object.Vector2(0, Constants.collisionForce)     # The default force is downwards.
+        verticesCount = 1
 
     # Same formula as for the average (the sum divided by the count).
     for vertex in collisionVertices:

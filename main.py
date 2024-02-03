@@ -47,7 +47,7 @@ wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, []
 pooler.AddObject(wall, "Wall")
 
 platformPos = (1700, 650)
-platformSize = (100, 100)
+platformSize = (100, 150)
 platformTexture = "Sprites/wall.png"
 platformMass = 0
 platformLayer = 1
