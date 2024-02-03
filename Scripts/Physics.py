@@ -60,7 +60,11 @@ def PhysicsCalculations(body: Object.GameObject):
     """
     # Gravity.
     grounded = CheckIfGrounded(body)
+    # Prevents objects that just began falling off a platform from being floaty.
+    if not grounded and body.grounded and body.velocity.y >= 0:
+        body.gravity = Constants.fallInitialGravity
     body.grounded = grounded
+
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
@@ -118,10 +122,6 @@ def ApplyGravity(body: Object.GameObject):
         Args:
             - body (GameObject): GameObject for which we want to compute the gravity.
     """
-    global G
-
-    currentTime = pygame.time.get_ticks()
-    previousTime = currentTime - deltaTime
     addVelocity = body.gravity * deltaTime  # The formula is given by (Vx1, Vy1) = (Vx0, Vy0) + Dt * g.
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
