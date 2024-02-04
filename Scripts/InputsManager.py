@@ -33,14 +33,14 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
-direction = "right" # la direction (jai pas réussi a la mettre dans la fonction CheckInput et la faire changer a chaque fois)
+move = [False,"Right"] # [if moving, direction] (jai pas réussi a la mettre dans la fonction CheckInput et la faire changer a chaque fois)
 def CheckInputs() -> bool:
     """ Main function, checks every input. If you want to detect an input, place the code here.
         Returns :
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
             - (string): The direction to go
     """
-    global pressingQA, pressingD, direction
+    global pressingQA, pressingD, move
     # Every event.
     for event in pygame.event.get():
 
@@ -58,10 +58,11 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_a: pressingQA = True  # 'A'
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
-                direction = "left"  # set the direction to left
+                move[1] = "Left"  # set the direction to left
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
-                direction = "right" # set the direction to right
+                move[1] = "Right" # set the direction to right
+            move[0] = True
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
@@ -71,9 +72,10 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_a: pressingQA = False   # 'A'
             elif event.key == pygame.K_q: pressingQA = False   # 'Q'
             elif event.key == pygame.K_d: pressingD = False   # 'D'
+            move[0] = False
 
     ApplyInputs()   # We apply the inputs' effects.
-    return True, direction
+    return True, move
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
