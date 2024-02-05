@@ -3,7 +3,7 @@ deltaTime = 1
 # Gravity force.
 G = 0.00006
 # The force applied to an object when falling off a platform to prevent it from being floaty.
-fallInitialGravity = 0.02
+fallInitialGravity = 0.018
 
 # The maximum distance between an object and the floor for it to be considered 'grounded'.
 maxGroundedDistance = 1
