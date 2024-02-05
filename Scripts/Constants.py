@@ -5,6 +5,11 @@ screenDimensions = (1920, 1080)
 framerate = 60
 deltaTime = 1.0 / framerate
 
+# How many times the ApplyPhysics() function (from Physics.py) will be called. The more calls, the better the precision
+# but the more calculations needed.
+physicsTimeDivision = 20
+inverseTimeDivision = 1.0 / physicsTimeDivision
+
 # Gravity force.
 G = 20
 # The force applied to an object when falling off a platform to prevent it from being floaty.
@@ -17,19 +22,21 @@ maxGroundedDistance = 3
 groundedHitboxBorder = 2
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 1
-groundedFrictionCoeff = 0.95
+groundedFrictionCoeff = 0.7
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 
 
 # The horizontal speed of the player.
-playerSpeed = 10000
+playerSpeed = 7000
 # The maximum horizontal speed of the player.
 maxPlayerSpeed = 500
 # The force applied to the player when jumping, negative as y-coordinates are reversed.
 playerJumpForce = -25000
 # The coefficient slowing down the player when he releases the jump key ('Space') mid-air.
 playerStopJumpCoeff = 0.4
+# A multiplier for the slingshot propulsion force.
+slingshotForce = 1.5
 
 
 # The x coordinates between which the player can move without moving the camera.
@@ -50,4 +57,6 @@ maxJumpBufferTimer = 50
 # The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
 # pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
 # we want).
-currentScene = 0
+currentScene = "Level_0"
+# To remember which level the player is in even when the game is paused.
+currentLevel = "Level_0"

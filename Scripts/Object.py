@@ -17,10 +17,10 @@ class GameObject:
         - visible (bool): if the object is outside the camera's field of view, this is False and allows not to lose time
                             calculating these objects.
         - alwaysLoaded (bool): if True, prevents the object from being unloaded by the camera.
-        - scene (int): the ID (index) of the scene the object is in. The scene can be like 0 for the MainGame, 1 for the
-                        PauseMenu etc. (find the list in Constants.py), and allows not to show objects that aren't in a
-                        specific scene when in another. For example, you should not be able to see the player when
-                        looking in the pause menu.
+        - scene (str): the name (ID) of the scene the object is in. The scene can be named 'Level_1_1', 'Pause_Menu',
+                        etc. (find the list in Constants.py), and allows not to show objects that aren't in a specific
+                        scene when in another. For example, you should not be able to see the player when looking in the
+                        pause menu.
 
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
@@ -53,7 +53,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: str, _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -64,7 +64,7 @@ class GameObject:
                 - _layer (int): objet's layer (for collisions).
                 - _notCollidable (list[int]): list of layers with which the object will not collide.
                 - _velocity (couple (int, int)): object's speed on x and y.
-                - _scene (int): the ID of the scene to which the GameObject belongs.
+                - _scene (str): the name of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
                 - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
                 - _hasAnimation (bool): whether the object has animations or not.
@@ -73,6 +73,8 @@ class GameObject:
         self.visible = True
         self.alwaysLoaded = _alwaysLoaded
         self.scene = _scene
+
+        if not isinstance(_scene, str): print(self)
 
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
@@ -91,6 +93,7 @@ class GameObject:
         self.layer = _layer
         self.notCollidable = _notCollidable
 
+        self.collidedDuringFrame = False
         self.previousRepelForce = Vector2(0, 0)
         self.collisionDuration = 0
 

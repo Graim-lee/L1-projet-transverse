@@ -129,13 +129,16 @@ def StartJumpBufferTimer():
 def PressEscape():
     """ Is executed when the player pressing 'Escape'. """
     # Switching between the Pause Menu and the Game.
-    if Constants.currentScene == 0: Constants.currentScene = 1
-    elif Constants.currentScene == 1: Constants.currentScene = 0
+    if "Level" in Constants.currentScene:
+        Constants.currentLevel = Constants.currentScene
+        Constants.currentScene = "Pause_Menu"
+
+    elif Constants.currentScene == "Pause_Menu":
+        Constants.currentScene = Constants.currentLevel
 
 def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """
     global jumpBufferTimer
-    print("yo")
     if player.grounded:
         player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
         jumpBufferTimer = 0
@@ -164,43 +167,44 @@ def UseSlingshot():
     if not player.grounded: return
 
     # Computes the force of propulsion.
-    mousePos = pygame.mouse.get_pos()
-    xDiff = (slingshotStart.x - mousePos[0]) * 0.01
-    yDiff = (slingshotStart.y - mousePos[1]) * 0.01
+    mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+    propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
-    if xDiff < -1.5: xDiff = -1.5
+    print(propulsionForce)
+
+    """if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
     if yDiff < -1.5: yDiff = -1.5
-    elif yDiff > 1.5: yDiff = 1.5
+    elif yDiff > 1.5: yDiff = 1.5"""
 
     # Application of the force.
-    player.instantVelocity += Object.Vector2(xDiff, yDiff)
+    player.instantVelocity += propulsionForce
 
 def ShowSlingshotTrajectory():
     global slingshotStart
 
     # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
-    # slingshot vector).
-    x0 = player.position + 0.5 * player.size
-    v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * 0.01
+    # slingshot vector). I must specify the type of x0 else my IDE gives me a warning, and it annoys me :'(
+    x0: Object.Vector2 = player.position + 0.5 * player.size
+    v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * Constants.slingshotForce
 
-    if v0.x > 1.5: v0.x = 1.5
+    """if v0.x > 1.5: v0.x = 1.5
     elif v0.x < -1.5: v0.x = -1.5
     if v0.y > 1.5: v0.y = 1.5
-    elif v0.y < -1.5: v0.y = -1.5
+    elif v0.y < -1.5: v0.y = -1.5"""
 
     # The trajectory equation is x(t) = v0 + x0 - 0.5 * g * t^2.
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t
-        pos = x0 + v0 * timeSplit + Object.Vector2(0, 10 * timeSplit**2)
-        print("Gravity at " + str(t) + " : " + str(0.5 * Constants.G * timeSplit**2))
+        timeSplit = t * Constants.deltaTime
+        pos = x0 + timeSplit * v0 + Object.Vector2(0, 0.5 * timeSplit**2)
+        # print("Gravity at " + str(t) + " : " + str(0.5 * Constants.G * timeSplit**2))
         dotsPosition.append(pos)
 
     # Showing the dots.
     for i in range(5):
         currentDot = mainPooler.main["Trajectory"][i]
-        currentDot.position = dotsPosition[i]
+        currentDot.position = dotsPosition[i] - 0.5 * currentDot.size
         currentDot.active = True
 
 def DisplayDots():
@@ -208,7 +212,7 @@ def DisplayDots():
 
     if len(mainPooler.main["Trajectory"]) == 0:
         for i in range(5):
-            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Sprites/dot.png", 0, 2, [], 0)
+            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Sprites/dot.png", 0, 2, [0, 1, 2], "Level_0")
             mainPooler.AddObject(newDot, "Trajectory")
 
     for dot in mainPooler.main["Trajectory"]:

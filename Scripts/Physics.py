@@ -4,6 +4,7 @@ import Scripts.Constants as Constants
 
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
+player: Object.GameObject
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -23,52 +24,169 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
-def ApplyPhysics(body: Object.GameObject):
-    """ Moves the object according to the PhysicsCalculations() function, called earlier in main.py.
+def ApplyPhysics(body: Object.GameObject, i: int):
+    """ Moves the object according to the PhysicsCalculations() function, called earlier in main.py. It only moves the
+    object a little bit, and is called multiple times in the main loop each frame. That allows to check each frame if a
+    collision is detected, and if so, cancel the movement. Thanks to that, we have more precise collision detection.
         Args :
             - body (GameObject): GameObject to move.
     """
+    global mainPooler
+
+    # In case of collision cancelling the movement, we keep track of the previous position.
+    previousPosition = body.position
+
     # We move the object according to its velocity.
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
-    body.position += body.velocity * deltaTime
+    body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
-    # Moving the camera around the player.
+    #print(str(i) + " : " + str(previousPosition) + " --> " + str(body.position))
+
+    # Checking for collisions.
+    for category in mainPooler.main:
+        for gameObject in mainPooler.main[category]:
+            if body != gameObject and gameObject.layer not in body.notCollidable and CheckCollision(body, gameObject):
+                CancelCollision(body, gameObject)
+                body.position = previousPosition
+                body.collidedDuringFrame = True
+                """print("COLLISION! Going back to " + str(previousPosition))
+                print(str(body) + " --> " + str(body.notCollidable))
+                print(str(gameObject) + " --> " + str(gameObject.layer))"""
+
+def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
+    """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :
+    the top-left coordinate and the bottom-right.
+        Args :
+            - body, other (GameObject): the two GameObjects to check.
+        Returns :
+            - (bool): True if the two objects are colliding, False otherwise.
+    """
+    topleft1, topleft2 = body.position, other.position
+    bottomright1, bottomright2 = body.position + body.size, other.position + other.size
+
+    if (bottomright1.x < topleft2.x) or (bottomright2.x < topleft1.x): return False   # If the objects are horizontally disjoint.
+    if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
+    return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
+
+
+def CancelCollision(body: Object.GameObject, other: Object.GameObject):
+    """ Activates when two objects are overlapping. Allows to stop the first object's (body) velocity towards the second
+    object (other) so that he doesn't stick to it afterward.
+        Args :
+            - body, other (GameObject): the two objects in collision. Only body will be modified by this function.
+    """
+    # The average center of the collision.
+    collisionCenter = GetCollisionCenter(body, other)
+    # The physical center of the object (barycenter, as pygame's center is at the top-left and not in the real center).
+    bodyCenter = body.position + 0.5 * body.size
+    # The vector directly opposite to the collision direction.
+    repelForce = bodyCenter - collisionCenter
+
+    """print("Collision center : " + str(collisionCenter))
+    print("Body center : " + str(bodyCenter))
+    print("Repel : " + str(repelForce))"""
+
+    # We take the absolute values of the coordinates of repelForce.
+    if repelForce.x < 0: repelForce.x *= -1
+    if repelForce.y < 0: repelForce.y *= -1
+
+    # We reduce the repelForce coordinates by the size of the 'body' object.
+    repelForce.x *= 1.0 / body.size.x
+    repelForce.y *= 1.0 / body.size.y
+
+    # We check which axis of the repelForce is greater, and cancel it from our original velocity.
+    if repelForce.x > repelForce.y:
+        body.velocity.x = 0
+        body.instantVelocity.x = 0
+        body.continuousVelocity.x = 0
+        #print("Canceled X -> " + str(body.velocity))
+    else:
+        body.velocity.y = 0
+        body.instantVelocity.y = 0
+        body.continuousVelocity.y = 0
+        #print("Canceled Y -> " + str(body.velocity))
+
+def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Object.Vector2:
+    """ Returns the coordinates of the 'center' of the collision, that is average of every vertex concerned by the
+    collision. It gives a rough estimate to where the collision really comes from.
+        Args :
+            - body (GameObject): the first GameObject concerned by the collision.
+            - other (GameObject): the second GameObject concerned by the collision.
+        Returns :
+            - ((int, int)): the coordinates of the 'center' of the collision.
+    """
+    collisionVertices = GetCollisionVertices(body, other)   # We retrieve every vertex concerned by the collision.
+    center, verticesCount = Object.Vector2(0, 0), len(collisionVertices)
+
+    if verticesCount == 0:
+        #print("Default")
+        verticesCount = 1
+        # The default collision center is upwards (resulting in a default downwards force).
+        center = body.position + 0.5 * body.size + Object.Vector2(0, -1)
+
+    # Same formula as for the average (the sum divided by the count).
+    for vertex in collisionVertices:
+        center += Object.Vector2(vertex[0], vertex[1])
+    center *= 1 / float(verticesCount)
+
+    return center
+
+def GetCollisionVertices(body: Object.GameObject, other: Object.GameObject) -> [(int, int)]:
+    """ Returns a list of tuples, representing the coordinates of each vertex concerned by the collision of the two
+    objects. Useful to determine the 'center' of the collision. The algorithm works by checking if a vertex is
+    in-between the top-left and the bottom-right corners of the other object.
+        Args :
+            - body (GameObject): the first GameObject in the collision.
+            - other (GameObject): the second GameObject in the collision.
+        Returns :
+            - ([(int, int)]): a list of the coordinates of every vertex in the collision.
+    """
+    # List of all 4 vertices of the first object (in the order [top-left, bottom-right, top-right, bottom-left]).
+    vertices1 = [body.position.Tuple(), (body.position + body.size).Tuple(), (body.position.x + body.size.x, body.position.y), (body.position.x, body.position.y + body.size.y)]
+    # Same for the other object.
+    vertices2 = [other.position.Tuple(), (other.position + other.size).Tuple(), (other.position.x + other.size.x, other.position.y), (other.position.x, other.position.y + other.size.y)]
+
+    collisionVertices = []      # List for the return of the function.
+
+    # Algorithm for the vertices of the first object.
+    for vert1 in vertices1:
+        if (vert1[0] >= vertices2[0][0]) and (vert1[1] >= vertices2[0][1]) and (vert1[0] <= vertices2[1][0]) and (vert1[1] <= vertices2[1][1]):
+            collisionVertices.append(vert1)
+
+    # Algorithm for the vertices of the second object.
+    for vert2 in vertices2:
+        if (vert2[0] >= vertices1[0][0]) and (vert2[1] >= vertices1[0][1]) and (vert2[0] <= vertices1[1][0]) and (vert2[1] <= vertices1[1][1]):
+            collisionVertices.append(vert2)
+
+    return collisionVertices
+
+def MoveCamera():
+    """ Used to keep the camera focused on the player. """
     # X
-    if body == player:
-        if body.position.x > Constants.maxXCameraMoveThreshold:
-            body.position.x = Constants.maxXCameraMoveThreshold
-            for category in mainPooler.main:
-                for gameObject in mainPooler.main[category]:
-                    if gameObject == body: continue
-                    if not gameObject.active: continue
-                    if gameObject.scene != 0: continue
-                    gameObject.position.x -= body.velocity.x * deltaTime
-        if body.position.x < Constants.minXCameraMoveThreshold :
-            body.position.x = Constants.minXCameraMoveThreshold
-            for category in mainPooler.main:
-                for gameObject in mainPooler.main[category]:
-                    if gameObject == body: continue
-                    if not gameObject.active: continue
-                    if gameObject.scene != 0: continue
-                    gameObject.position.x -= body.velocity.x * deltaTime
-        # Y
-        if body.position.y > Constants.maxYCameraMoveThreshold:
-            body.position.y = Constants.maxYCameraMoveThreshold
-            for category in mainPooler.main:
-                for gameObject in mainPooler.main[category]:
-                    if gameObject == body: continue
-                    if not gameObject.active: continue
-                    if gameObject.scene != 0: continue
-                    gameObject.position.y -= body.velocity.y * deltaTime
-        if body.position.y < Constants.minYCameraMoveThreshold :
-            body.position.y = Constants.minYCameraMoveThreshold
-            for category in mainPooler.main:
-                for gameObject in mainPooler.main[category]:
-                    if gameObject == body: continue
-                    if not gameObject.active: continue
-                    if gameObject.scene != 0: continue
-                    gameObject.position.y -= body.velocity.y * deltaTime
+    if player.position.x > Constants.maxXCameraMoveThreshold:
+        for category in mainPooler.main:
+            for gameObject in mainPooler.main[category]:
+                if not gameObject.active or "Level" not in gameObject.scene: continue
+                gameObject.position.x -= player.velocity.x * deltaTime
 
+    if player.position.x < Constants.minXCameraMoveThreshold :
+        for category in mainPooler.main:
+            for gameObject in mainPooler.main[category]:
+                if not gameObject.active or "Level" not in gameObject.scene: continue
+                gameObject.position.x -= player.velocity.x * deltaTime
+
+    # Y
+    if player.position.y > Constants.maxYCameraMoveThreshold:
+        for category in mainPooler.main:
+            for gameObject in mainPooler.main[category]:
+                if not gameObject.active or "Level" not in gameObject.scene: continue
+                gameObject.position.y -= player.velocity.y * deltaTime
+
+    if player.position.y < Constants.minYCameraMoveThreshold:
+        for category in mainPooler.main:
+            for gameObject in mainPooler.main[category]:
+                if not gameObject.active or "Level" not in gameObject.scene: continue
+                gameObject.position.y -= player.velocity.y * deltaTime
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -225,69 +343,7 @@ def ManageCollisions(body: Object.GameObject):
 
     body.previousRepelForce = repelForce
 
-def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
-    """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :
-    the top-left coordinate and the bottom-right.
-        Args :
-            - body (GameObject): the first GameObject.
-            - other (GameObject): the second GameObject.
-        Returns :
-            - (bool): True if the two objects are colliding, False otherwise.
-    """
-    topleft1, topleft2 = body.position, other.position
-    bottomright1, bottomright2 = body.position + body.size, other.position + other.size
 
-    if (bottomright1.x < topleft2.x) or (bottomright2.x < topleft1.x): return False   # If the objects are horizontally disjoint.
-    if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
-    return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
-
-def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Object.Vector2:
-    """ Returns the coordinates of the 'center' of the collision, that is average of every vertex concerned by the
-    collision. It gives a rough estimate to where the collision really comes from.
-        Args :
-            - body (GameObject): the first GameObject concerned by the collision.
-            - other (GameObject): the second GameObject concerned by the collision.
-        Returns :
-            - ((int, int)): the coordinates of the 'center' of the collision.
-    """
-    collisionVertices = GetCollisionVertices(body, other)   # We retrieve every vertex concerned by the collision.
-    center, verticesCount = Object.Vector2(0, 0), len(collisionVertices)
-
-    # Same formula as for the average (the sum divided by the count).
-    for vertex in collisionVertices:
-        center += Object.Vector2(vertex[0], vertex[1])
-    center *= 1 / float(verticesCount)
-
-    return center
-
-def GetCollisionVertices(body: Object.GameObject, other: Object.GameObject) -> [(int, int)]:
-    """ Returns a list of tuples, representing the coordinates of each vertex concerned by the collision of the two
-    objects. Useful to determine the 'center' of the collision. The algorithm works by checking if a vertex is
-    in-between the top-left and the bottom-right corners of the other object.
-        Args :
-            - body (GameObject): the first GameObject in the collision.
-            - other (GameObject): the second GameObject in the collision.
-        Returns :
-            - ([(int, int)]): a list of the coordinates of every vertex in the collision.
-    """
-    # List of all 4 vertices of the first object (in the order [top-left, bottom-right, top-right, bottom-left]).
-    vertices1 = [body.position.Tuple(), (body.position + body.size).Tuple(), (body.position.x + body.size.x, body.position.y), (body.position.x, body.position.y + body.size.y)]
-    # Same for the other object.
-    vertices2 = [other.position.Tuple(), (other.position + other.size).Tuple(), (other.position.x + other.size.x, other.position.y), (other.position.x, other.position.y + other.size.y)]
-
-    collisionVertices = []      # List for the return of the function.
-
-    # Algorithm for the vertices of the first object.
-    for vert1 in vertices1:
-        if (vert1[0] >= vertices2[0][0]) and (vert1[1] >= vertices2[0][1]) and (vert1[0] <= vertices2[1][0]) and (vert1[1] <= vertices2[1][1]):
-            collisionVertices.append(vert1)
-
-    # Algorithm for the vertices of the second object.
-    for vert2 in vertices2:
-        if (vert2[0] >= vertices1[0][0]) and (vert2[1] >= vertices1[0][1]) and (vert2[0] <= vertices1[1][0]) and (vert2[1] <= vertices1[1][1]):
-            collisionVertices.append(vert2)
-
-    return collisionVertices
 
 def ApproxDist(x: float, y: float) -> float:
     """ This function gives an approximation of the distance between two numbers (that is, the result of sqrt(x^2 + y^2)).
