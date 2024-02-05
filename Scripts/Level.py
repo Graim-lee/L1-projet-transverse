@@ -1,3 +1,4 @@
+import pygame
 import Scripts.Constants as Constants
 import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
@@ -10,7 +11,7 @@ def Level0 ():
     # Creating the player's character.
     playerPos = (Constants.screenDimensions[0] / 2, 700)
     playerSize = (44, 44)
-    playerTexture = "Sprites/idle.png"
+    playerTexture = "Sprites/Player/idle.png"
     playerMass = 1
     playerLayer = 0
     player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True, True)
@@ -56,3 +57,5 @@ def Level0 ():
     InputsManager.SetPlayer(player)
     Physics.SetPooler(pooler)
     Physics.SetPlayer(player)
+
+    return pooler
