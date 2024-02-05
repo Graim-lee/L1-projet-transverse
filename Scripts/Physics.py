@@ -4,7 +4,6 @@ import Scripts.Constants as Constants
 
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler([])
-player: Object.GameObject
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -34,24 +33,42 @@ def ApplyPhysics(body: Object.GameObject):
     body.position += body.velocity * deltaTime
 
     # Moving the camera around the player.
+    # X
     if body == player:
-        if body.position.x > Constants.maxCameraMoveThreshold:
-            body.position.x = Constants.maxCameraMoveThreshold
+        if body.position.x > Constants.maxXCameraMoveThreshold:
+            body.position.x = Constants.maxXCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
                     if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
-        if body.position.x < Constants.minCameraMoveThreshold :
-            body.position.x = Constants.minCameraMoveThreshold
+        if body.position.x < Constants.minXCameraMoveThreshold :
+            body.position.x = Constants.minXCameraMoveThreshold
             for category in mainPooler.main:
                 for gameObject in mainPooler.main[category]:
                     if gameObject == body: continue
                     if not gameObject.active: continue
                     if gameObject.scene != 0: continue
                     gameObject.position.x -= body.velocity.x * deltaTime
-            
+        # Y
+        if body.position.y > Constants.maxYCameraMoveThreshold:
+            body.position.y = Constants.maxYCameraMoveThreshold
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
+                    gameObject.position.y -= body.velocity.y * deltaTime
+        if body.position.y < Constants.minYCameraMoveThreshold :
+            body.position.y = Constants.minYCameraMoveThreshold
+            for category in mainPooler.main:
+                for gameObject in mainPooler.main[category]:
+                    if gameObject == body: continue
+                    if not gameObject.active: continue
+                    if gameObject.scene != 0: continue
+                    gameObject.position.y -= body.velocity.y * deltaTime
+
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -60,11 +77,7 @@ def PhysicsCalculations(body: Object.GameObject):
     """
     # Gravity.
     grounded = CheckIfGrounded(body)
-    # Prevents objects that just began falling off a platform from being floaty.
-    if not grounded and body.grounded and body.velocity.y >= 0:
-        body.gravity = Constants.fallInitialGravity
     body.grounded = grounded
-
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
@@ -122,6 +135,10 @@ def ApplyGravity(body: Object.GameObject):
         Args:
             - body (GameObject): GameObject for which we want to compute the gravity.
     """
+    global G
+
+    currentTime = pygame.time.get_ticks()
+    previousTime = currentTime - deltaTime
     addVelocity = body.gravity * deltaTime  # The formula is given by (Vx1, Vy1) = (Vx0, Vy0) + Dt * g.
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
@@ -233,12 +250,6 @@ def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Obj
     """
     collisionVertices = GetCollisionVertices(body, other)   # We retrieve every vertex concerned by the collision.
     center, verticesCount = Object.Vector2(0, 0), len(collisionVertices)
-
-    # To prevent division by 0 (when two objects completely overlap, that means, when one is inside another).
-    if verticesCount == 0:
-        center = body.position
-        body.velocity = Object.Vector2(0, Constants.collisionForce)     # The default force is downwards.
-        verticesCount = 1
 
     # Same formula as for the average (the sum divided by the count).
     for vertex in collisionVertices:

@@ -2,7 +2,7 @@
     This file declares every class of object for the OOP.
 """
 import pygame
-import math
+
 
 """ ================================================================================================================ """
 
@@ -53,7 +53,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False, _animation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -67,6 +67,7 @@ class GameObject:
                 - _scene (int): the ID of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
                 - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
+                - _animation (bool): whether the object have an animation or not
         """
         self.active = True
         self.visible = True
@@ -79,6 +80,9 @@ class GameObject:
         if _png: self.surface = pygame.image.load(_texturePath)
         else: self.surface = pygame.image.load(_texturePath).convert()
         self.Resize(_size)  # Allows to directly apply the object's new size.
+        self.path = _texturePath
+        self.animation = _animation
+        self.frame = 1  # nb of frame for the animation
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
@@ -99,6 +103,26 @@ class GameObject:
         """
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
+
+    def Animation(self, path, move):
+        """ Modify objects sprite
+            Args :
+                - path (string): the name of the object sprite
+                - direction (list of string): [is moving, the direction]
+
+        """
+        # change the frame
+        if self.frame >= 2 or self.frame == 0: self.frame = 1
+        else: self.frame += 1
+
+        # select the animation between not moving and moving
+        if not move[0]: self.surface = pygame.image.load("Sprites/"+path+".png").convert()
+        else: self.surface = pygame.image.load("Sprites/" + path + "Move/" + path + "-Move-" + str(self.frame) + ".png").convert()
+        self.Resize((44, 44))
+
+        # change de direction
+        if move[1] == "Right": self.surface = pygame.transform.flip(self.surface, False, False)
+        elif move[1] == "Left": self.surface = pygame.transform.flip(self.surface, True, False)
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
@@ -185,13 +209,6 @@ class Vector2:
         return self.x, self.y
 
     def Norm(self) -> float:
-        """ Returns the norm of the vector. The formula is : sqrt(x^2 + y^2).
-            Return :
-                - (float): the squared distance of the vector.
-        """
-        return math.sqrt(self.SquareNorm())
-
-    def SquareNorm(self) -> float:
         """ Returns the norm of the vector squared. The formula is : x^2 + y^2.
             Return :
                 - (float): the squared distance of the vector.

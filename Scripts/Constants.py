@@ -28,8 +28,11 @@ playerStopJumpCoeff = 0.4
 
 
 # The x coordinates between which the player can move without moving the camera.
-minCameraMoveThreshold = 600
-maxCameraMoveThreshold = 1200
+minXCameraMoveThreshold = 600
+maxXCameraMoveThreshold = 1200
+# The y coordinates
+minYCameraMoveThreshold = 400 #if is increase will make the camera lower when we go to high
+maxYCameraMoveThreshold = 800
 
 # The maximum distance from the camera an object can be without being unloaded.
 cameraUnloadDistance = 500
