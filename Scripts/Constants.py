@@ -1,3 +1,6 @@
+# Screen dimension.
+screenDimensions = (1920, 1080)
+
 # Time between 2 frames (in milliseconds).
 deltaTime = 1
 # Gravity force.

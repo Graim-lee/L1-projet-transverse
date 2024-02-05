@@ -34,7 +34,6 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
-move = [False,"Right"] # [if moving, direction] (jai pas réussi a la mettre dans la fonction CheckInput et la faire changer a chaque fois)
 def CheckInputs() -> bool:
     """ Main function, checks every input. If you want to detect an input, place the code here.
         Returns :
@@ -57,15 +56,15 @@ def CheckInputs() -> bool:
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
             # to True, and put it back to False when we detect that the user released the key.
 
-            elif event.key == pygame.K_a: pressingQA = True  # 'A'
+            elif event.key == pygame.K_a:
+                pressingQA = True  # 'A'
+                player.moving = -1
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
-                move[1] = "Left"  # set the direction to left
-                move[0] = True
+                player.moving = -1
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
-                move[1] = "Right" # set the direction to right
-                move[0] = True
+                player.moving = 1
 
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: slingshotArmed = True
@@ -77,14 +76,11 @@ def CheckInputs() -> bool:
 
             elif event.key == pygame.K_a: 
                 pressingQA = False   # 'A'
-                move[0] = False
-            elif event.key == pygame.K_q: 
+            elif event.key == pygame.K_q:
                 pressingQA = False   # 'Q'
-                move[0] = False
-            elif event.key == pygame.K_d: 
+            elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
-                move[0] = False
-        
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1: slingshotArmed = True
 
@@ -95,7 +91,7 @@ def CheckInputs() -> bool:
 
 
     ApplyInputs()   # We apply the inputs' effects.
-    return True, move
+    return True
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
@@ -103,6 +99,8 @@ def ApplyInputs():
 
     if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
     if pressingD: MovePlayer(1)     # 'D'
+
+    if not pressingQA and not pressingD: player.moving = 0
 
     if jumpBufferTimer > 0:
         JumpPlayer()    # 'Space'

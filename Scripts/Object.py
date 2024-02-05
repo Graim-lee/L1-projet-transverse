@@ -96,6 +96,11 @@ class GameObject:
         self.previousRepelForce = Vector2(0, 0)
         self.collisionDuration = 0
 
+        self.png = _png
+        self.moving = 0
+        self.walkFrame = 0
+        self.walkCycle = 0
+
     def Resize(self, size: (int, int)):
         """ Modify objects size.
             Args :
@@ -104,25 +109,43 @@ class GameObject:
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
 
-    def Animation(self, path, move):
+    def Animation(self, category):
         """ Modify objects sprite
             Args :
                 - path (string): the name of the object sprite
                 - direction (list of string): [is moving, the direction]
 
         """
-        # change the frame
-        if self.frame == 2: self.frame = 1
-        else: self.frame = 2
+        # Idle animation.
+        if self.moving == 0:
+            self.SetSprite("Sprites/" + category + "/idle.png")
 
-        # Select the animation between not moving and moving
-        if not move[0]: self.surface = pygame.image.load("Sprites/"+path+".png").convert()
-        else: self.surface = pygame.image.load("Sprites/" + path + "Move/" + path + "-Move-" + str(self.frame) + ".png").convert()
+        # Walk animation.
+        else:
+            self.walkFrame += 1
+
+            # Changes the animation frame.
+            if self.walkFrame > 50:
+                self.walkFrame = 0
+                self.walkCycle += 1
+                if self.walkCycle >= 2: self.walkCycle = 0
+                self.SetSprite("Sprites/" + category + "/move_" + str(self.walkCycle + 1)+".png")
+
+            # Makes the player face the right direction.
+            self.surface = pygame.transform.flip(self.surface, False if self.moving == 1 else True, False)
+
         self.Resize((44, 44))
 
-        # Change the direction
-        if move[1] == "Right": self.surface = pygame.transform.flip(self.surface, False, False)
-        elif move[1] == "Left": self.surface = pygame.transform.flip(self.surface, True, False)
+    def SetSprite(self, path: str):
+        """ Changes the object's sprite located at the given path. Changes either by a png if the object has the _png
+        tag activated or a normal image otherwise.
+            Args :
+                - path (str): the path where the image is located.
+            Returns :
+                - (Surface): the pygame surface for the player.
+        """
+        if self.png: self.surface = pygame.image.load(path)
+        else: self.surface = pygame.image.load(path).convert()
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
