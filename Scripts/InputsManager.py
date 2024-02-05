@@ -88,7 +88,7 @@ def CheckInputs() -> bool:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             slingshotArmed = False
             UseSlingshot()
-
+            HideDots()
 
     ApplyInputs()   # We apply the inputs' effects.
     return True
@@ -135,6 +135,7 @@ def PressEscape():
 def JumpPlayer():
     """ Applies an upward velocity to the player for it to jump. """
     global jumpBufferTimer
+    print("yo")
     if player.grounded:
         player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
         jumpBufferTimer = 0
@@ -170,10 +171,10 @@ def UseSlingshot():
     if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
     if yDiff < -1.5: yDiff = -1.5
+    elif yDiff > 1.5: yDiff = 1.5
 
-    # Application of the force & hiding the dots.
+    # Application of the force.
     player.instantVelocity += Object.Vector2(xDiff, yDiff)
-    HideDots()
 
 def ShowSlingshotTrajectory():
     global slingshotStart
@@ -181,13 +182,18 @@ def ShowSlingshotTrajectory():
     # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
     # slingshot vector).
     x0 = player.position + 0.5 * player.size
-    v0 = slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+    v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * 0.01
+
+    if v0.x > 1.5: v0.x = 1.5
+    elif v0.x < -1.5: v0.x = -1.5
+    if v0.y > 1.5: v0.y = 1.5
+    elif v0.y < -1.5: v0.y = -1.5
 
     # The trajectory equation is x(t) = v0 + x0 - 0.5 * g * t^2.
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t * 0.2
-        pos = x0 + v0 * 0.5 * timeSplit + Object.Vector2(0, 500000 * Constants.G * timeSplit**2)
+        timeSplit = t
+        pos = x0 + v0 * timeSplit + Object.Vector2(0, 10 * timeSplit**2)
         print("Gravity at " + str(t) + " : " + str(0.5 * Constants.G * timeSplit**2))
         dotsPosition.append(pos)
 

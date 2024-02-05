@@ -14,6 +14,8 @@ screen = pygame.display.set_mode(screenDimensions)
 screen.fill((255, 255, 255))
 frame = 0
 
+gameClock = pygame.time.Clock()
+
 pooler = Level.Level0()
 
 """ End of START =================================================================================================== """
@@ -78,6 +80,6 @@ while gameRunning:
     frame += 1
 
     # We wait a bit before running the next frame.
-    pygame.time.delay(Constants.deltaTime)
+    gameClock.tick(Constants.framerate)
 
 """ Fin de UDPATE ================================================================================================== """

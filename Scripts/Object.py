@@ -127,7 +127,7 @@ class GameObject:
             self.walkFrame += 1
 
             # Changes the animation frame.
-            if self.walkFrame > 50:
+            if self.walkFrame > 5:
                 self.walkFrame = 0
                 self.walkCycle += 1
                 if self.walkCycle >= 2: self.walkCycle = 0

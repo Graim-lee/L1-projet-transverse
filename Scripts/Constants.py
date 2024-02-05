@@ -1,15 +1,17 @@
 # Screen dimension.
 screenDimensions = (1920, 1080)
 
-# Time between 2 frames (in milliseconds).
-deltaTime = 1
+# Framerate of the game (60 FPS) and time between two frames
+framerate = 60
+deltaTime = 1.0 / framerate
+
 # Gravity force.
-G = 0.00006
+G = 20
 # The force applied to an object when falling off a platform to prevent it from being floaty.
 fallInitialGravity = 0.018
 
 # The maximum distance between an object and the floor for it to be considered 'grounded'.
-maxGroundedDistance = 1
+maxGroundedDistance = 3
 # A little distance to avoid the player from considering walls as floor (so that the grounded hitbox isn't exactly the
 # size of the player).
 groundedHitboxBorder = 2
@@ -17,15 +19,15 @@ groundedHitboxBorder = 2
 frictionCoeff = 1
 groundedFrictionCoeff = 0.95
 # The magnitude of the force applied to overlapping objects to manage collisions.
-collisionForce = 0.5
+collisionForce = 5
 
 
 # The horizontal speed of the player.
-playerSpeed = 0.5
+playerSpeed = 10000
 # The maximum horizontal speed of the player.
-maxPlayerSpeed = 1
+maxPlayerSpeed = 500
 # The force applied to the player when jumping, negative as y-coordinates are reversed.
-playerJumpForce = -1.5
+playerJumpForce = -25000
 # The coefficient slowing down the player when he releases the jump key ('Space') mid-air.
 playerStopJumpCoeff = 0.4
 
@@ -33,8 +35,8 @@ playerStopJumpCoeff = 0.4
 # The x coordinates between which the player can move without moving the camera.
 minXCameraMoveThreshold = 600
 maxXCameraMoveThreshold = 1200
-# The y coordinates
-minYCameraMoveThreshold = 400 #if is increase will make the camera lower when we go to high
+# The y coordinates.
+minYCameraMoveThreshold = 400
 maxYCameraMoveThreshold = 800
 
 # The maximum distance from the camera an object can be without being unloaded.
