@@ -53,7 +53,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False, _animation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: int, _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -67,7 +67,7 @@ class GameObject:
                 - _scene (int): the ID of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
                 - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
-                - _animation (bool): whether the object have an animation or not
+                - _hasAnimation (bool): whether the object has animations or not.
         """
         self.active = True
         self.visible = True
@@ -81,8 +81,6 @@ class GameObject:
         else: self.surface = pygame.image.load(_texturePath).convert()
         self.Resize(_size)  # Allows to directly apply the object's new size.
         self.path = _texturePath
-        self.animation = _animation
-        self.frame = 1  # nb of frame for the animation
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
@@ -96,8 +94,11 @@ class GameObject:
         self.previousRepelForce = Vector2(0, 0)
         self.collisionDuration = 0
 
+        self.hasAnimation = _hasAnimation
         self.png = _png
         self.moving = 0
+        self.previousDirection = 1
+        self.spriteFlipped = False
         self.walkFrame = 0
         self.walkCycle = 0
 
@@ -122,6 +123,7 @@ class GameObject:
 
         # Walk animation.
         else:
+            self.previousDirection = self.moving
             self.walkFrame += 1
 
             # Changes the animation frame.
@@ -131,21 +133,24 @@ class GameObject:
                 if self.walkCycle >= 2: self.walkCycle = 0
                 self.SetSprite("Sprites/" + category + "/move_" + str(self.walkCycle + 1)+".png")
 
-            # Makes the player face the right direction.
-            self.surface = pygame.transform.flip(self.surface, False if self.moving == 1 else True, False)
+        # Makes the player face the right direction.
+        if self.previousDirection == -1 and not self.spriteFlipped:
+            self.surface = pygame.transform.flip(self.surface, True, False)
+            self.spriteFlipped = True
 
         self.Resize((44, 44))
 
     def SetSprite(self, path: str):
         """ Changes the object's sprite located at the given path. Changes either by a png if the object has the _png
         tag activated or a normal image otherwise.
-            Args :
+            Args := pygame
                 - path (str): the path where the image is located.
             Returns :
                 - (Surface): the pygame surface for the player.
         """
         if self.png: self.surface = pygame.image.load(path)
         else: self.surface = pygame.image.load(path).convert()
+        self.spriteFlipped = False
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.

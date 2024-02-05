@@ -112,7 +112,7 @@ while gameRunning:
                 if ComputeObject(gameObject) and gameObject.mass != 0:
                     Physics.ApplyPhysics(gameObject)
 
-                    gameObject.Animation(category)
+                    if gameObject.hasAnimation: gameObject.Animation(category)
 
                 # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
                 topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
