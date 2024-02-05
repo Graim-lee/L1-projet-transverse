@@ -11,6 +11,7 @@ player: Object.GameObject
 
 pressingQA = False
 pressingD = False
+slingshotArmed = False
 
 jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
 
@@ -33,14 +34,12 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
-direction = "right" # la direction (jai pas réussi a la mettre dans la fonction CheckInput et la faire changer a chaque fois)
 def CheckInputs() -> bool:
     """ Main function, checks every input. If you want to detect an input, place the code here.
         Returns :
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
-            - (string): The direction to go
     """
-    global pressingQA, pressingD, direction
+    global pressingQA, pressingD, slingshotArmed
     # Every event.
     for event in pygame.event.get():
 
@@ -56,12 +55,8 @@ def CheckInputs() -> bool:
             # to True, and put it back to False when we detect that the user released the key.
 
             elif event.key == pygame.K_a: pressingQA = True  # 'A'
-            elif event.key == pygame.K_q:
-                pressingQA = True  # 'Q'
-                direction = "left"  # set the direction to left
-            elif event.key == pygame.K_d:
-                pressingD = True  # 'D'
-                direction = "right" # set the direction to right
+            elif event.key == pygame.K_q: pressingQA = True  # 'Q'
+            elif event.key == pygame.K_d: pressingD = True  # 'D'
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
@@ -71,13 +66,21 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_a: pressingQA = False   # 'A'
             elif event.key == pygame.K_q: pressingQA = False   # 'Q'
             elif event.key == pygame.K_d: pressingD = False   # 'D'
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1: slingshotArmed = True
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1: 
+                slingshotArmed = False
+                shooting()
 
     ApplyInputs()   # We apply the inputs' effects.
-    return True, direction
+    return True
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
-    global jumpBufferTimer
+    global jumpBufferTimer, slingshotArmed
 
     if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
     if pressingD: MovePlayer(1)     # 'D'
@@ -85,6 +88,8 @@ def ApplyInputs():
     if jumpBufferTimer > 0:
         JumpPlayer()    # 'Space'
         jumpBufferTimer -= Constants.deltaTime
+    
+    if slingshotArmed: arming()
 
 def MovePlayer(direction: int):
     """ When the user presses 'A' or 'D'. Makes the player go left or right (depending on the parameter direction) by
@@ -133,3 +138,17 @@ def Sign(x: float) -> int:
     if x < 0: return -1
     if x > 0: return 1
     return 0
+
+def arming():
+    mousePos = pygame.mouse.get_pos()
+    # print(mousePos, player.position)
+
+def shooting():
+    mousePos = pygame.mouse.get_pos()
+    xDiff = (player.position.x-mousePos[0])/100
+    yDiff = (player.position.y-mousePos[1])/100
+    if xDiff < -1.5: xDiff = -1.5
+    elif xDiff > 1.5: xDiff = 1.5
+    if yDiff < -1.5: yDiff = -1.5
+    if player.grounded:
+        player.instantVelocity += Object.Vector2(xDiff, yDiff)

@@ -24,11 +24,11 @@ playerSize = (44, 44)
 playerTexture = "Sprites/player.png"
 playerMass = 1
 playerLayer = 0
-player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True, True)
+player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True)
 pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
 # Creating the test floor.
-floorPos = (0, screenDimensions[1]- 200)
+floorPos = (0, screenDimensions[1] - 200)
 floorSize = (screenDimensions[0]*5, 100)
 floorTexture = "Sprites/floar.png"
 floorMass = 0
@@ -46,8 +46,8 @@ wallLayer = 1
 wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [], 0)
 pooler.AddObject(wall, "Wall")
 
-platformPos = (1700, 650)
-platformSize = (300, 100)
+platformPos = (1700, 700)
+platformSize = (100, 20)
 platformTexture = "Sprites/wall.png"
 platformMass = 0
 platformLayer = 1
@@ -89,7 +89,7 @@ def ComputeObject(gameObject: Object.GameObject) -> bool:
 while gameRunning:
 
     # Retrieves and manages user inputs.
-    gameRunning, direction = InputsManager.CheckInputs()
+    gameRunning = InputsManager.CheckInputs()
 
     # Only runs when we are in the Main Game (and not in a Pause Menu or in the Main Menu).
     if Constants.currentScene == 0:
@@ -108,9 +108,6 @@ while gameRunning:
             for gameObject in pooler.main[category]:
                 if ComputeObject(gameObject) and gameObject.mass != 0:
                     Physics.ApplyPhysics(gameObject)
-                    AnimationCoolDown = 75
-                    if pygame.time.get_ticks() % AnimationCoolDown == 0:
-                        gameObject.Animation(category, direction)
 
                 # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
                 topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
