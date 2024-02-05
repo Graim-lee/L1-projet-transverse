@@ -77,6 +77,8 @@ def PhysicsCalculations(body: Object.GameObject):
     """
     # Gravity.
     grounded = CheckIfGrounded(body)
+    if body.grounded and not grounded and body.velocity.y >= 0:
+        body.gravity = Constants.fallInitialGravity
     body.grounded = grounded
     if grounded:
         # To stop the gravity's acceleration.

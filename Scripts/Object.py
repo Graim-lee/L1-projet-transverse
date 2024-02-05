@@ -111,16 +111,16 @@ class GameObject:
                 - direction (list of string): [is moving, the direction]
 
         """
-        # change the frame
+        # Change the frame
         if self.frame >= 2 or self.frame == 0: self.frame = 1
         else: self.frame += 1
 
-        # select the animation between not moving and moving
+        # Select the animation between not moving and moving
         if not move[0]: self.surface = pygame.image.load("Sprites/"+path+".png").convert()
         else: self.surface = pygame.image.load("Sprites/" + path + "Move/" + path + "-Move-" + str(self.frame) + ".png").convert()
         self.Resize((44, 44))
 
-        # change de direction
+        # Change the direction
         if move[1] == "Right": self.surface = pygame.transform.flip(self.surface, False, False)
         elif move[1] == "Left": self.surface = pygame.transform.flip(self.surface, True, False)
 

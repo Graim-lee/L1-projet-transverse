@@ -41,7 +41,6 @@ def CheckInputs() -> bool:
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
             - (string): The direction to go
     """
-
     global pressingQA, pressingD, move, slingshotArmed
 
     # Every event.
@@ -67,6 +66,9 @@ def CheckInputs() -> bool:
                 move[1] = "Right" # set the direction to right
             move[0] = True
 
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: slingshotArmed = True
+
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
@@ -76,9 +78,7 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_q: pressingQA = False   # 'Q'
             elif event.key == pygame.K_d: pressingD = False   # 'D'
             move[0] = False
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1: slingshotArmed = True
+
 
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1: 
@@ -100,7 +100,7 @@ def ApplyInputs():
         JumpPlayer()    # 'Space'
         jumpBufferTimer -= Constants.deltaTime
     
-    if slingshotArmed: arming()
+    if slingshotArmed: Arming()
 
 def MovePlayer(direction: int):
     """ When the user presses 'A' or 'D'. Makes the player go left or right (depending on the parameter direction) by
@@ -150,7 +150,7 @@ def Sign(x: float) -> int:
     if x > 0: return 1
     return 0
 
-def arming():
+def Arming():
     mousePos = pygame.mouse.get_pos()
     # print(mousePos, player.position)
 
