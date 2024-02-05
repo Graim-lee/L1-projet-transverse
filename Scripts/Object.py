@@ -275,3 +275,11 @@ class Pooler:
                 - category (str): object's category.
         """
         self.main[category].append(gameObject)
+
+    def Copy(self):
+        copied = Pooler({})
+        for category in self.main:
+            copied.main[category] = []
+            for gameObject in self.main[category]:
+                copied.main[category].append(gameObject)
+        return copied

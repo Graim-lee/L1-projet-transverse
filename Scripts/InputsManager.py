@@ -2,7 +2,6 @@
     Manage inputs
 """
 import pygame
-import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
@@ -12,6 +11,7 @@ player: Object.GameObject
 pressingQA = False
 pressingD = False
 slingshotArmed = False
+slingshotStart = Object.Vector2(0, 0)
 
 jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
 
@@ -40,7 +40,7 @@ def CheckInputs() -> bool:
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
             - (string): The direction to go
     """
-    global pressingQA, pressingD, move, slingshotArmed
+    global pressingQA, pressingD, slingshotArmed, slingshotStart
 
     # Every event.
     for event in pygame.event.get():
@@ -66,9 +66,6 @@ def CheckInputs() -> bool:
                 pressingD = True  # 'D'
                 player.moving = 1
 
-
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: slingshotArmed = True
-
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
@@ -81,13 +78,15 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1: slingshotArmed = True
+        # 'Left-click' = slingshot
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            slingshotArmed = True
+            mouseX, mouseY = pygame.mouse.get_pos()
+            slingshotStart = Object.Vector2(mouseX, mouseY)
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1: 
-                slingshotArmed = False
-                shooting()
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            slingshotArmed = False
+            UseSlingshot()
 
 
     ApplyInputs()   # We apply the inputs' effects.
@@ -160,12 +159,40 @@ def Arming():
     mousePos = pygame.mouse.get_pos()
     # print(mousePos, player.position)
 
-def shooting():
+def UseSlingshot():
+    global slingshotStart
+    if not player.grounded: return
+
     mousePos = pygame.mouse.get_pos()
-    xDiff = (player.position.x-mousePos[0])/100
-    yDiff = (player.position.y-mousePos[1])/100
+    xDiff = (slingshotStart.x - mousePos[0]) * 0.01
+    yDiff = (slingshotStart.y - mousePos[1]) * 0.01
+
     if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
     if yDiff < -1.5: yDiff = -1.5
     if player.grounded:
         player.instantVelocity += Object.Vector2(xDiff, yDiff)
+
+def ShowSlingshotTrajectory():
+    global slingshotStart
+
+    # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
+    # slingshot vector).
+    x0 = player.position
+    v0 = slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+
+    # The trajectory equation is x(t) = v0 + x0 - 0.5 * g * t^2.
+    dotsPosition = []
+    for t in range(1, 6):
+        pos = x0 + v0 - 0.5 * Constants.G * t**2
+        dotsPosition.append(pos)
+
+    # Showing the dots.
+
+def DisplayDots():
+    global mainPooler
+
+    if len(mainPooler.main["Trajectory"]) == 0:
+        for i in range(5):
+
+            mainPooler.AddObject()

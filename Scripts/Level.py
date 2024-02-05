@@ -4,9 +4,12 @@ import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 
+mainPooler = Object.Pooler(["Player", "Wall", "Trajectory", "Fuck"])
+
 def Level0 ():
     # Pooler object from the Object.py script. See there to get a description.
-    pooler = Object.Pooler(["Player", "Wall", "Fuck"])
+    global mainPooler
+    pooler = mainPooler.Copy()
 
     # Creating the player's character.
     playerPos = (Constants.screenDimensions[0] / 2, 700)
