@@ -73,7 +73,6 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_q: pressingQA = False   # 'Q'
             elif event.key == pygame.K_d: pressingD = False   # 'D'
             move[0] = False
-
     ApplyInputs()   # We apply the inputs' effects.
     return True, move
 
