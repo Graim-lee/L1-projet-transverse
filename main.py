@@ -3,9 +3,7 @@ import Scripts.InputsManager as InputsManager
 import Scripts.Physics as Physics
 import Scripts.Object as Object
 import Scripts.Constants as Constants
-
-# Pooler object from the Object.py script. See there to get a description.
-pooler = Object.Pooler(["Player", "Wall", "Fuck"])
+import Scripts.Level as Level
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -16,60 +14,7 @@ screen = pygame.display.set_mode(screenDimensions)
 screen.fill((255, 255, 255))
 frame = 0
 
-pygame.display.set_caption("Nom du jeu")    # Changes the name of the game's window.
-pygame.display.set_icon(pygame.image.load("Sprites/game_icon.png"))     # Changes the icon of the game's window.
-
-# Creating the player's character.
-playerPos = (screenDimensions[0] / 2, 700)
-playerSize = (44, 44)
-playerTexture = "Sprites/Player/idle.png"
-playerMass = 1
-playerLayer = 0
-player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True, True)
-pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
-
-# Creating the test floor.
-floorPos = (0, screenDimensions[1] - 200)
-floorSize = (screenDimensions[0]*5, 100)
-floorTexture = "Sprites/floar.png"
-floorMass = 0
-floorLayer = 1
-floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [], 0)
-pooler.AddObject(floor, "Wall")     # We put the floor in the 'Wall' category as they share the same properties.
-
-
-# Creating the left wall.
-wallPos = (-600, 0)
-wallSize = (600, screenDimensions[1])
-wallTexture = "Sprites/wall.png"
-wallMass = 0
-wallLayer = 1
-wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [], 0)
-pooler.AddObject(wall, "Wall")
-
-
-platformPos = (1700, 650)
-platformSize = (300, 100)
-
-platformTexture = "Sprites/wall.png"
-platformMass = 0
-platformLayer = 1
-platform = Object.GameObject(platformPos, platformSize, platformTexture, platformMass, platformLayer, [], 0)
-pooler.AddObject(platform, "Wall")
-
-fuckPos = (screenDimensions[0] / 2 - 240, 200)
-fuckSize = (480, 160)
-fuckTexture = "Sprites/fuck.png"
-fuckMass = 0
-fuckLayer = 0
-fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [], 1, _png=True)
-pooler.AddObject(fuck, "Fuck")
-
-# We link different objects to different scripts.
-InputsManager.SetPooler(pooler)
-InputsManager.SetPlayer(player)
-Physics.SetPooler(pooler)
-Physics.SetPlayer(player)
+pooler = Level.Level0()
 
 """ End of START =================================================================================================== """
 
@@ -116,7 +61,7 @@ while gameRunning:
 
                 # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
                 topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
-                if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + screenDimensions[0]:
+                if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + Constants.screenDimensions[0]:
                     if not gameObject.alwaysLoaded: gameObject.visible = False
                 else:
                     gameObject.visible = True
