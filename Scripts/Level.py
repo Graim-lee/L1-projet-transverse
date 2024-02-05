@@ -17,7 +17,7 @@ def Level0 ():
     playerTexture = "Sprites/Player/idle.png"
     playerMass = 1
     playerLayer = 0
-    player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [], 0, True, True, True)
+    player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [2], 0, True, True, True)
     pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
     # Creating the test floor.
@@ -26,7 +26,7 @@ def Level0 ():
     floorTexture = "Sprites/floar.png"
     floorMass = 0
     floorLayer = 1
-    floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [], 0)
+    floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [2], 0)
     pooler.AddObject(floor, "Wall")  # We put the floor in the 'Wall' category as they share the same properties.
 
     # Creating the left wall.
@@ -35,7 +35,7 @@ def Level0 ():
     wallTexture = "Sprites/wall.png"
     wallMass = 0
     wallLayer = 1
-    wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [], 0)
+    wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [2], 0)
     pooler.AddObject(wall, "Wall")
 
     platformPos = (1700, 650)
@@ -44,7 +44,7 @@ def Level0 ():
     platformTexture = "Sprites/wall.png"
     platformMass = 0
     platformLayer = 1
-    platform = Object.GameObject(platformPos, platformSize, platformTexture, platformMass, platformLayer, [], 0)
+    platform = Object.GameObject(platformPos, platformSize, platformTexture, platformMass, platformLayer, [2], 0)
     pooler.AddObject(platform, "Wall")
 
     fuckPos = (Constants.screenDimensions[0] / 2 - 240, 200)
@@ -52,7 +52,7 @@ def Level0 ():
     fuckTexture = "Sprites/fuck.png"
     fuckMass = 0
     fuckLayer = 0
-    fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [], 1, _png=True)
+    fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [2], 1, _png=True)
     pooler.AddObject(fuck, "Fuck")
 
     # We link different objects to different scripts.

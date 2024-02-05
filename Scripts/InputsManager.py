@@ -83,6 +83,7 @@ def CheckInputs() -> bool:
             slingshotArmed = True
             mouseX, mouseY = pygame.mouse.get_pos()
             slingshotStart = Object.Vector2(mouseX, mouseY)
+            DisplayDots()
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             slingshotArmed = False
@@ -105,7 +106,7 @@ def ApplyInputs():
         JumpPlayer()    # 'Space'
         jumpBufferTimer -= Constants.deltaTime
     
-    if slingshotArmed: Arming()
+    if slingshotArmed: ShowSlingshotTrajectory()
 
 def MovePlayer(direction: int):
     """ When the user presses 'A' or 'D'. Makes the player go left or right (depending on the parameter direction) by
@@ -155,14 +156,13 @@ def Sign(x: float) -> int:
     if x > 0: return 1
     return 0
 
-def Arming():
-    mousePos = pygame.mouse.get_pos()
-    # print(mousePos, player.position)
-
 def UseSlingshot():
     global slingshotStart
+
+    # Prevents the player from jumping midair.
     if not player.grounded: return
 
+    # Computes the force of propulsion.
     mousePos = pygame.mouse.get_pos()
     xDiff = (slingshotStart.x - mousePos[0]) * 0.01
     yDiff = (slingshotStart.y - mousePos[1]) * 0.01
@@ -170,29 +170,46 @@ def UseSlingshot():
     if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
     if yDiff < -1.5: yDiff = -1.5
-    if player.grounded:
-        player.instantVelocity += Object.Vector2(xDiff, yDiff)
+
+    # Application of the force & hiding the dots.
+    player.instantVelocity += Object.Vector2(xDiff, yDiff)
+    HideDots()
 
 def ShowSlingshotTrajectory():
     global slingshotStart
 
     # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
     # slingshot vector).
-    x0 = player.position
+    x0 = player.position + 0.5 * player.size
     v0 = slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
     # The trajectory equation is x(t) = v0 + x0 - 0.5 * g * t^2.
     dotsPosition = []
     for t in range(1, 6):
-        pos = x0 + v0 - 0.5 * Constants.G * t**2
+        timeSplit = t * 0.2
+        pos = x0 + v0 * 0.5 * timeSplit + Object.Vector2(0, 500000 * Constants.G * timeSplit**2)
+        print("Gravity at " + str(t) + " : " + str(0.5 * Constants.G * timeSplit**2))
         dotsPosition.append(pos)
 
     # Showing the dots.
+    for i in range(5):
+        currentDot = mainPooler.main["Trajectory"][i]
+        currentDot.position = dotsPosition[i]
+        currentDot.active = True
 
 def DisplayDots():
     global mainPooler
 
     if len(mainPooler.main["Trajectory"]) == 0:
         for i in range(5):
+            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Sprites/dot.png", 0, 2, [], 0)
+            mainPooler.AddObject(newDot, "Trajectory")
 
-            mainPooler.AddObject()
+    for dot in mainPooler.main["Trajectory"]:
+        dot.active = True
+
+def HideDots():
+    global mainPooler
+
+    for dot in mainPooler.main["Trajectory"]:
+        dot.active = False
