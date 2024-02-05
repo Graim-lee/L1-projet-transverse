@@ -28,7 +28,7 @@ player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, pla
 pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
 # Creating the test floor.
-floorPos = (0, screenDimensions[1]- 200)
+floorPos = (0, screenDimensions[1] - 200)
 floorSize = (screenDimensions[0]*5, 100)
 floorTexture = "Sprites/floar.png"
 floorMass = 0
@@ -46,8 +46,10 @@ wallLayer = 1
 wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [], 0)
 pooler.AddObject(wall, "Wall")
 
+
 platformPos = (1700, 650)
 platformSize = (300, 100)
+
 platformTexture = "Sprites/wall.png"
 platformMass = 0
 platformLayer = 1

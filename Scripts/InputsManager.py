@@ -11,6 +11,7 @@ player: Object.GameObject
 
 pressingQA = False
 pressingD = False
+slingshotArmed = False
 
 jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
 
@@ -40,7 +41,9 @@ def CheckInputs() -> bool:
             - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
             - (string): The direction to go
     """
-    global pressingQA, pressingD, move
+
+    global pressingQA, pressingD, move, slingshotArmed
+
     # Every event.
     for event in pygame.event.get():
 
@@ -73,12 +76,22 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_q: pressingQA = False   # 'Q'
             elif event.key == pygame.K_d: pressingD = False   # 'D'
             move[0] = False
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1: slingshotArmed = True
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1: 
+                slingshotArmed = False
+                shooting()
+
+
     ApplyInputs()   # We apply the inputs' effects.
     return True, move
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
-    global jumpBufferTimer
+    global jumpBufferTimer, slingshotArmed
 
     if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
     if pressingD: MovePlayer(1)     # 'D'
@@ -86,6 +99,8 @@ def ApplyInputs():
     if jumpBufferTimer > 0:
         JumpPlayer()    # 'Space'
         jumpBufferTimer -= Constants.deltaTime
+    
+    if slingshotArmed: arming()
 
 def MovePlayer(direction: int):
     """ When the user presses 'A' or 'D'. Makes the player go left or right (depending on the parameter direction) by
@@ -134,3 +149,17 @@ def Sign(x: float) -> int:
     if x < 0: return -1
     if x > 0: return 1
     return 0
+
+def arming():
+    mousePos = pygame.mouse.get_pos()
+    # print(mousePos, player.position)
+
+def shooting():
+    mousePos = pygame.mouse.get_pos()
+    xDiff = (player.position.x-mousePos[0])/100
+    yDiff = (player.position.y-mousePos[1])/100
+    if xDiff < -1.5: xDiff = -1.5
+    elif xDiff > 1.5: xDiff = 1.5
+    if yDiff < -1.5: yDiff = -1.5
+    if player.grounded:
+        player.instantVelocity += Object.Vector2(xDiff, yDiff)

@@ -11,8 +11,8 @@ maxGroundedDistance = 1
 # size of the player).
 groundedHitboxBorder = 2
 # The friction coefficients when the player is airborne and when the player is grounded.
-frictionCoeff = 0.99
-groundedFrictionCoeff = 0.97
+frictionCoeff = 1
+groundedFrictionCoeff = 0.95
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 0.5
 

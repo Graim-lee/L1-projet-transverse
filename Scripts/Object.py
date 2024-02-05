@@ -1,5 +1,5 @@
 """
-    This file declares every class of object for the OOP
+    This file declares every class of object for the OOP.
 """
 import pygame
 
