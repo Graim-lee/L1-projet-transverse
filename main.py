@@ -14,6 +14,7 @@ pooler = Object.Pooler(["Player", "Wall", "Fuck"])
 screenDimensions = (1920, 1080)
 screen = pygame.display.set_mode(screenDimensions)
 screen.fill((255, 255, 255))
+frame = 0
 
 pygame.display.set_caption("Nom du jeu")    # Changes the name of the game's window.
 pygame.display.set_icon(pygame.image.load("Sprites/game_icon.png"))     # Changes the icon of the game's window.
@@ -110,8 +111,8 @@ while gameRunning:
             for gameObject in pooler.main[category]:
                 if ComputeObject(gameObject) and gameObject.mass != 0:
                     Physics.ApplyPhysics(gameObject)
-                    AnimationCoolDown = 75
-                    if pygame.time.get_ticks() % AnimationCoolDown == 0:
+                    AnimationCoolDown = 50
+                    if frame % AnimationCoolDown == 0:
                         gameObject.Animation(category, direction)
 
                 # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
@@ -130,7 +131,7 @@ while gameRunning:
                 screen.blit(gameObject.surface, gameObject.position.Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.
-
+    frame += 1
 
     # We wait a bit before running the next frame.
     pygame.time.delay(Constants.deltaTime)

@@ -62,20 +62,26 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
                 move[1] = "Left"  # set the direction to left
+                move[0] = True
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
                 move[1] = "Right" # set the direction to right
-            move[0] = True
+                move[0] = True
 
         # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
         if event.type == pygame.KEYUP:
 
             if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
 
-            elif event.key == pygame.K_a: pressingQA = False   # 'A'
-            elif event.key == pygame.K_q: pressingQA = False   # 'Q'
-            elif event.key == pygame.K_d: pressingD = False   # 'D'
-            move[0] = False
+            elif event.key == pygame.K_a: 
+                pressingQA = False   # 'A'
+                move[0] = False
+            elif event.key == pygame.K_q: 
+                pressingQA = False   # 'Q'
+                move[0] = False
+            elif event.key == pygame.K_d: 
+                pressingD = False   # 'D'
+                move[0] = False
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1: slingshotArmed = True

@@ -112,8 +112,8 @@ class GameObject:
 
         """
         # change the frame
-        if self.frame >= 2 or self.frame == 0: self.frame = 1
-        else: self.frame += 1
+        if self.frame == 2: self.frame = 1
+        else: self.frame = 2
 
         # select the animation between not moving and moving
         if not move[0]: self.surface = pygame.image.load("Sprites/"+path+".png").convert()
