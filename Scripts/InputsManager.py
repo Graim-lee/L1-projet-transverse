@@ -170,7 +170,7 @@ def UseSlingshot():
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
-    print(propulsionForce)
+    #print(propulsionForce)
 
     """if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
@@ -185,7 +185,7 @@ def ShowSlingshotTrajectory():
 
     # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
     # slingshot vector). I must specify the type of x0 else my IDE gives me a warning, and it annoys me :'(
-    x0: Object.Vector2 = player.position + 0.5 * player.size
+    x0: Object.Vector2 = (player.position + 0.5 * player.size) * (2.0 / Constants.G)
     v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * Constants.slingshotForce
 
     """if v0.x > 1.5: v0.x = 1.5
@@ -193,12 +193,13 @@ def ShowSlingshotTrajectory():
     if v0.y > 1.5: v0.y = 1.5
     elif v0.y < -1.5: v0.y = -1.5"""
 
-    # The trajectory equation is x(t) = v0 + x0 - 0.5 * g * t^2.
+    # The trajectory equation is x(t) = v0 * t - 0.5 * g * (t^3 / 3 + t^2 / 2 + x0).
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t * Constants.deltaTime
-        pos = x0 + timeSplit * v0 + Object.Vector2(0, 0.5 * timeSplit**2)
-        # print("Gravity at " + str(t) + " : " + str(0.5 * Constants.G * timeSplit**2))
+        timeSplit = t * 0.2     # Time between two dots.
+        framesCount = timeSplit * Constants.framerate   # Number of frames elapsed in the range of timeSplit.
+        pos = timeSplit * v0 + timeSplit * 0.5 * Constants.G * Object.Vector2(0, framesCount * (framesCount + 1)) + x0
+        print("Position : " + str(pos))
         dotsPosition.append(pos)
 
     # Showing the dots.

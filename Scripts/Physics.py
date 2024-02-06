@@ -205,6 +205,7 @@ def PhysicsCalculations(body: Object.GameObject):
         if body.continuousVelocity.y > 0: body.continuousVelocity.y = 0
     else:
         # To apply the gravity.
+        #print(body.velocity)
         ApplyGravity(body)
 
     ManageCollisions(body)  # Collisions.
@@ -257,8 +258,6 @@ def ApplyGravity(body: Object.GameObject):
     """
     global G
 
-    currentTime = pygame.time.get_ticks()
-    previousTime = currentTime - deltaTime
     addVelocity = body.gravity * deltaTime  # The formula is given by (Vx1, Vy1) = (Vx0, Vy0) + Dt * g.
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
