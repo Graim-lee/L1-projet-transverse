@@ -35,9 +35,16 @@ maxPlayerSpeed = 500
 playerJumpForce = -25000
 # The coefficient slowing down the player when he releases the jump key ('Space') mid-air.
 playerStopJumpCoeff = 0.4
+
 # A multiplier for the slingshot propulsion force.
 slingshotForce = 1.5
-
+# These three constants are used to display the trajectory of the slingshot. DO NOT CHANGE PLS I took so long to get them right :-:
+slVelocityFactor = 0.29
+slGravityFactor = 0.6
+slGravityPower = 2.38
+# This bool prevents a bug from happening, where the slingshot doesn't apply the right force (because on the first frame,
+# the player is still grounded, and the game applies the ground velocity, hence reducing his speed).
+playerUsedSlingshot = False
 
 # The x coordinates between which the player can move without moving the camera.
 minXCameraMoveThreshold = 600

@@ -40,8 +40,6 @@ def ApplyPhysics(body: Object.GameObject, i: int):
     # The formula for that movement is (x1, y1) = (x0, y0) + Dt * (Vx, Vy).
     body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
-    #print(str(i) + " : " + str(previousPosition) + " --> " + str(body.position))
-
     # Checking for collisions.
     for category in mainPooler.main:
         for gameObject in mainPooler.main[category]:
@@ -49,9 +47,6 @@ def ApplyPhysics(body: Object.GameObject, i: int):
                 CancelCollision(body, gameObject)
                 body.position = previousPosition
                 body.collidedDuringFrame = True
-                """print("COLLISION! Going back to " + str(previousPosition))
-                print(str(body) + " --> " + str(body.notCollidable))
-                print(str(gameObject) + " --> " + str(gameObject.layer))"""
 
 def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :
@@ -82,10 +77,6 @@ def CancelCollision(body: Object.GameObject, other: Object.GameObject):
     # The vector directly opposite to the collision direction.
     repelForce = bodyCenter - collisionCenter
 
-    """print("Collision center : " + str(collisionCenter))
-    print("Body center : " + str(bodyCenter))
-    print("Repel : " + str(repelForce))"""
-
     # We take the absolute values of the coordinates of repelForce.
     if repelForce.x < 0: repelForce.x *= -1
     if repelForce.y < 0: repelForce.y *= -1
@@ -99,12 +90,10 @@ def CancelCollision(body: Object.GameObject, other: Object.GameObject):
         body.velocity.x = 0
         body.instantVelocity.x = 0
         body.continuousVelocity.x = 0
-        #print("Canceled X -> " + str(body.velocity))
     else:
         body.velocity.y = 0
         body.instantVelocity.y = 0
         body.continuousVelocity.y = 0
-        #print("Canceled Y -> " + str(body.velocity))
 
 def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Object.Vector2:
     """ Returns the coordinates of the 'center' of the collision, that is average of every vertex concerned by the
@@ -119,7 +108,6 @@ def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Obj
     center, verticesCount = Object.Vector2(0, 0), len(collisionVertices)
 
     if verticesCount == 0:
-        #print("Default")
         verticesCount = 1
         # The default collision center is upwards (resulting in a default downwards force).
         center = body.position + 0.5 * body.size + Object.Vector2(0, -1)
@@ -205,7 +193,6 @@ def PhysicsCalculations(body: Object.GameObject):
         if body.continuousVelocity.y > 0: body.continuousVelocity.y = 0
     else:
         # To apply the gravity.
-        #print(body.velocity)
         ApplyGravity(body)
 
     ManageCollisions(body)  # Collisions.
@@ -276,9 +263,11 @@ def ApplyFriction(body: Object.GameObject, grounded: bool):
     instantHorizontal, continuousHorizontal = body.instantVelocity.x, body.continuousVelocity.x
     instantHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
     continuousHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
-    if grounded:
+    if grounded and not Constants.playerUsedSlingshot:  # We do not apply the friction on the first frame of the slingshot.
         instantHorizontal *= Constants.groundedFrictionCoeff
         continuousHorizontal *= Constants.groundedFrictionCoeff
+
+    Constants.playerUsedSlingshot = False   # To reset the 1-frame variable.
 
     # Completely nullifies the velocity if it is too low.
     if -0.1 <= instantHorizontal <= 0.1: instantHorizontal = 0
@@ -341,8 +330,6 @@ def ManageCollisions(body: Object.GameObject):
         body.collisionDuration = 0
 
     body.previousRepelForce = repelForce
-
-
 
 def ApproxDist(x: float, y: float) -> float:
     """ This function gives an approximation of the distance between two numbers (that is, the result of sqrt(x^2 + y^2)).

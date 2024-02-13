@@ -88,7 +88,7 @@ def CheckInputs() -> bool:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             slingshotArmed = False
             UseSlingshot()
-            HideDots()
+            #HideDots()
 
     ApplyInputs()   # We apply the inputs' effects.
     return True
@@ -170,8 +170,6 @@ def UseSlingshot():
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
-    #print(propulsionForce)
-
     """if xDiff < -1.5: xDiff = -1.5
     elif xDiff > 1.5: xDiff = 1.5
     if yDiff < -1.5: yDiff = -1.5
@@ -179,14 +177,18 @@ def UseSlingshot():
 
     # Application of the force.
     player.instantVelocity += propulsionForce
+    Constants.playerUsedSlingshot = True
 
 def ShowSlingshotTrajectory():
     global slingshotStart
 
     # Initial conditions : x0 is the position of the player ; v0 is the initial speed of the player (given by the
     # slingshot vector). I must specify the type of x0 else my IDE gives me a warning, and it annoys me :'(
-    x0: Object.Vector2 = (player.position + 0.5 * player.size) * (2.0 / Constants.G)
+    x0: Object.Vector2 = (player.position + 0.5 * player.size)
     v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * Constants.slingshotForce
+
+    # The three magical constants to display the trajectory (found by trial and error).
+    sV, sG, sGP = Constants.slVelocityFactor, Constants.slGravityFactor, Constants.slGravityPower
 
     """if v0.x > 1.5: v0.x = 1.5
     elif v0.x < -1.5: v0.x = -1.5
@@ -196,10 +198,8 @@ def ShowSlingshotTrajectory():
     # The trajectory equation is x(t) = v0 * t - 0.5 * g * (t^3 / 3 + t^2 / 2 + x0).
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t * 0.2     # Time between two dots.
-        framesCount = timeSplit * Constants.framerate   # Number of frames elapsed in the range of timeSplit.
-        pos = timeSplit * v0 + timeSplit * 0.5 * Constants.G * Object.Vector2(0, framesCount * (framesCount + 1)) + x0
-        print("Position : " + str(pos))
+        timeSplit = t     # Time between two dots.
+        pos = x0 + timeSplit * v0 * sV + sG * Constants.G * Object.Vector2(0, timeSplit ** sGP)
         dotsPosition.append(pos)
 
     # Showing the dots.
