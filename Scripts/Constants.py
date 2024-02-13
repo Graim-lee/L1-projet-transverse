@@ -47,6 +47,10 @@ slGravityPower = 2.38
 # This bool prevents a bug from happening, where the slingshot doesn't apply the right force (because on the first frame,
 # the player is still grounded, and the game applies the ground velocity, hence reducing his speed).
 playerUsedSlingshot = False
+# Counts the number of jumps (= uses of slingshot) the player can perform without touching the ground. playerJumpCount is
+# modified throughout the script, but maxPlayerJumpCount isn't.
+maxPlayerJumpCount = 2
+playerJumpCount = 2
 
 # The x coordinates between which the player can move without moving the camera.
 minXCameraMoveThreshold = 600

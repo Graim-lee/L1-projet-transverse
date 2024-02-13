@@ -89,7 +89,7 @@ def CheckInputs() -> bool:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             slingshotArmed = False
             UseSlingshot()
-            #HideDots()
+            HideDots()
 
     ApplyInputs()   # We apply the inputs' effects.
     return True
@@ -164,8 +164,11 @@ def Sign(x: float) -> int:
 def UseSlingshot():
     global slingshotStart
 
+    # Resets the jump (= slingshot) count of the player.
+    if player.grounded: Constants.playerJumpCount = Constants.maxPlayerJumpCount
+
     # Prevents the player from jumping midair.
-    if not player.grounded: return
+    if Constants.playerJumpCount <= 0: return
 
     # Computes the force of propulsion.
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
@@ -178,7 +181,9 @@ def UseSlingshot():
 
     # Application of the force.
     player.instantVelocity += propulsionForce
+    player.gravity = 0
     Constants.playerUsedSlingshot = True
+    Constants.playerJumpCount -= 1
 
 def ShowSlingshotTrajectory():
     global slingshotStart
@@ -196,7 +201,7 @@ def ShowSlingshotTrajectory():
     # The three magical constants to display the trajectory (found by trial and error).
     sV, sG, sGP = Constants.slVelocityFactor, Constants.slGravityFactor, Constants.slGravityPower
 
-    # The trajectory equation is x(t) = v0 * t - 0.5 * g * (t^3 / 3 + t^2 / 2 + x0).
+    # The trajectory equation is x(t) = x0 + v0*t*sV - sG*g*t^sGP.
     dotsPosition = []
     for t in range(1, 6):
         timeSplit = t     # Time between two dots.
