@@ -2,6 +2,7 @@
     Manage inputs
 """
 import pygame
+import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 
@@ -170,10 +171,10 @@ def UseSlingshot():
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
-    """if xDiff < -1.5: xDiff = -1.5
-    elif xDiff > 1.5: xDiff = 1.5
-    if yDiff < -1.5: yDiff = -1.5
-    elif yDiff > 1.5: yDiff = 1.5"""
+    # We limit the force of the slingshot for it not to be too strong.
+    if propulsionForce.x ** 2 + propulsionForce.y ** 2 > Constants.maxSlingshotForce ** 2:
+        reductionCoeff = Constants.maxSlingshotForce / math.sqrt(propulsionForce.x ** 2 + propulsionForce.y ** 2)
+        propulsionForce *= reductionCoeff
 
     # Application of the force.
     player.instantVelocity += propulsionForce
@@ -187,13 +188,13 @@ def ShowSlingshotTrajectory():
     x0: Object.Vector2 = (player.position + 0.5 * player.size)
     v0 = (slingshotStart - Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])) * Constants.slingshotForce
 
+    # We limit the force of the slingshot for it not to be too strong.
+    if v0.x**2 + v0.y**2 > Constants.maxSlingshotForce**2:
+        reductionCoeff = Constants.maxSlingshotForce / math.sqrt(v0.x ** 2 + v0.y ** 2)
+        v0 *= reductionCoeff
+
     # The three magical constants to display the trajectory (found by trial and error).
     sV, sG, sGP = Constants.slVelocityFactor, Constants.slGravityFactor, Constants.slGravityPower
-
-    """if v0.x > 1.5: v0.x = 1.5
-    elif v0.x < -1.5: v0.x = -1.5
-    if v0.y > 1.5: v0.y = 1.5
-    elif v0.y < -1.5: v0.y = -1.5"""
 
     # The trajectory equation is x(t) = v0 * t - 0.5 * g * (t^3 / 3 + t^2 / 2 + x0).
     dotsPosition = []

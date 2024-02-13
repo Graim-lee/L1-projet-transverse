@@ -38,6 +38,8 @@ playerStopJumpCoeff = 0.4
 
 # A multiplier for the slingshot propulsion force.
 slingshotForce = 1.5
+# The maximum force of the slingshot.
+maxSlingshotForce = 650
 # These three constants are used to display the trajectory of the slingshot. DO NOT CHANGE PLS I took so long to get them right :-:
 slVelocityFactor = 0.29
 slGravityFactor = 0.6
