@@ -42,7 +42,6 @@ def CheckInputs() -> bool:
             - (string): The direction to go
     """
     global pressingQA, pressingD, slingshotArmed, slingshotStart
-
     # Every event.
     for event in pygame.event.get():
 
@@ -97,9 +96,9 @@ def CheckInputs() -> bool:
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
     global jumpBufferTimer, slingshotArmed
-
-    if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
-    if pressingD: MovePlayer(1)     # 'D'
+    if player.grounded:
+        if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
+        if pressingD: MovePlayer(1)     # 'D'
 
     if not pressingQA and not pressingD: player.moving = 0
 

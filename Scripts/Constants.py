@@ -11,9 +11,9 @@ physicsTimeDivision = 20
 inverseTimeDivision = 1.0 / physicsTimeDivision
 
 # Gravity force.
-G = 20
+G = 25
 # The force applied to an object when falling off a platform to prevent it from being floaty.
-fallInitialGravity = 0.018
+fallInitialGravity = 1500
 
 # The maximum distance between an object and the floor for it to be considered 'grounded'.
 maxGroundedDistance = 3

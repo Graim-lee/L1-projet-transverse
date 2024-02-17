@@ -49,7 +49,6 @@ def EveryObject() -> [Object.GameObject]:
 
 # Main loop of the game.
 while gameRunning:
-
     # Retrieves and manages user inputs.
     gameRunning = InputsManager.CheckInputs()
 
