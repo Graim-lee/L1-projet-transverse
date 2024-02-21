@@ -8,6 +8,9 @@ import Scripts.Level as Level
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
 
+# Initializing pygame.
+pygame.init()
+
 # Creating the game's window.
 screenDimensions = Constants.screenDimensions
 screen = pygame.display.set_mode(screenDimensions)
@@ -16,6 +19,10 @@ frame = 0
 
 # Storing pygame's clock (to have a fixed framerate).
 gameClock = pygame.time.Clock()
+
+# Initializing the text objects.
+textFont = pygame.font.Font("Fonts/dp.ttf", 50)
+titleFont = pygame.font.Font("Fonts/dp.ttf", 170)
 
 pooler = Level.Level0()
 
@@ -91,7 +98,14 @@ while gameRunning:
 
     for gameObject in EveryObject():
         if ComputeObject(gameObject):
-            screen.blit(gameObject.surface, gameObject.position.Tuple())
+            # Rendering 'Real'-type objects.
+            if gameObject.type == "Real":
+                screen.blit(gameObject.surface, gameObject.position.Tuple())
+            # Displaying text for 'Text' objects.
+            elif gameObject.type == "Text":
+                fontToUse = titleFont if gameObject.data[1] else textFont
+                displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
+                screen.blit(displayFont, gameObject.position.Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1

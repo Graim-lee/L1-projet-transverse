@@ -21,6 +21,17 @@ class GameObject:
                         etc. (find the list in Constants.py), and allows not to show objects that aren't in a specific
                         scene when in another. For example, you should not be able to see the player when looking in the
                         pause menu.
+        - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
+                        player or an enemy. A 'Text' object doesn't have any texture, but displays text. A 'Button' object
+                        is only used in UI, it is linked to a specific function to execute when pressed.
+        - data (): this parameter can take different types for every type of object. For a 'Real' GameObject, this is the
+                        path of its texture in the files (it replaces texturePath).
+                    For a 'Text' type GameObject, data is a tuple of the form (str, bool). The first element of the tuple
+                        is the text to be displayed, and the second one is whether the text is a title or not (titles are
+                        just bigger).
+                    A 'Button' object takes a tuple of type (str, function). The str (first element of the tuple) is the
+                        text displayed on the button. The function (second element) is the function to be executed when
+                        the button is clicked.
 
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
@@ -53,18 +64,18 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _texturePath: str, _mass: float, _layer: int, _notCollidable: [int], _scene: str, _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _scene: str, _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
                 - _position (tuple (int, int)): object's position.
-                - _size (couple (int, int)): object's size.
-                - _texturePath (str): Path for the object's texture.
+                - _size (tuple (int, int)): object's size.
+                - _scene (str): the name of the scene to which the GameObject belongs.
+                - _type (str): the type of the object (a Real, a Text, or a Button...).
+                - _data (): the object's data (depends on its type). See the description above.
                 - _mass (float): object's mass.
                 - _layer (int): objet's layer (for collisions).
                 - _notCollidable (list[int]): list of layers with which the object will not collide.
-                - _velocity (couple (int, int)): object's speed on x and y.
-                - _scene (str): the name of the scene to which the GameObject belongs.
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
                 - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
                 - _hasAnimation (bool): whether the object has animations or not.
@@ -74,15 +85,21 @@ class GameObject:
         self.alwaysLoaded = _alwaysLoaded
         self.scene = _scene
 
-        if not isinstance(_scene, str): print(self)
-
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
-        # Get the texture from the path.
-        if _png: self.surface = pygame.image.load(_texturePath)
-        else: self.surface = pygame.image.load(_texturePath).convert()
-        self.Resize(_size)  # Allows to directly apply the object's new size.
-        self.path = _texturePath
+
+        # If the GameObject is of type "Real", we apply the texture.
+        if _type == "Real":
+            if _png: self.surface = pygame.image.load(_data)
+            else: self.surface = pygame.image.load(_data).convert()
+            self.Resize(_size)  # Allows to directly apply the object's new size.
+        self.type = _type
+        self.data = _data
+
+        # Modifying size for 'Text' and 'Button' type objects.
+        if _type == "Text":
+            fontSize = 70 if _data[1] else 170
+            self.size = (Vector2(7, 0) * len(_data[0]) + Vector2(0, 12)) * fontSize
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)

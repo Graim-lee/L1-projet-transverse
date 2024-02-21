@@ -41,9 +41,9 @@ slingshotForce = 1.5
 # The maximum force of the slingshot.
 maxSlingshotForce = 650
 # These three constants are used to display the trajectory of the slingshot. DO NOT CHANGE PLS I took so long to get them right :-:
-slVelocityFactor = 0.29
-slGravityFactor = 0.6
-slGravityPower = 2.38
+slVelocityFactor = 0.33
+slGravityFactor = 0.65
+slGravityPower = 2.5
 # This bool prevents a bug from happening, where the slingshot doesn't apply the right force (because on the first frame,
 # the player is still grounded, and the game applies the ground velocity, hence reducing his speed).
 playerUsedSlingshot = False

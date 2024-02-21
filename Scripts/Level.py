@@ -4,7 +4,7 @@ import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 
-mainPooler = Object.Pooler(["Player", "Wall", "Trajectory", "Fuck"])
+mainPooler = Object.Pooler(["Text", "Player", "Wall", "Trajectory"])
 
 def Level0():
     # Pooler object from the Object.py script. See there to get a description.
@@ -16,8 +16,8 @@ def Level0():
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/idle.png"
     playerMass = 1
-    playerLayer = 0
-    player = Object.GameObject(playerPos, playerSize, playerTexture, playerMass, playerLayer, [2], "Level_0", True, True, True)
+    playerLayer = 1
+    player = Object.GameObject(playerPos, playerSize, "Level_0", "Real", playerTexture, playerMass, playerLayer, [0], True, True, True)
     pooler.AddObject(player, "Player")  # On met le GameObject player dans le pooler.
 
     # Creating the test floor.
@@ -25,8 +25,8 @@ def Level0():
     floorSize = (Constants.screenDimensions[0] * 5, 100)
     floorTexture = "Sprites/floar.png"
     floorMass = 0
-    floorLayer = 1
-    floor = Object.GameObject(floorPos, floorSize, floorTexture, floorMass, floorLayer, [2], "Level_0")
+    floorLayer = 2
+    floor = Object.GameObject(floorPos, floorSize, "Level_0", "Real", floorTexture, floorMass, floorLayer, [0])
     pooler.AddObject(floor, "Wall")  # We put the floor in the 'Wall' category as they share the same properties.
 
     # Creating the left wall.
@@ -34,8 +34,8 @@ def Level0():
     wallSize = (600, Constants.screenDimensions[1])
     wallTexture = "Sprites/wall.png"
     wallMass = 0
-    wallLayer = 1
-    wall = Object.GameObject(wallPos, wallSize, wallTexture, wallMass, wallLayer, [2], "Level_0")
+    wallLayer = 2
+    wall = Object.GameObject(wallPos, wallSize, "Level_0", "Real", wallTexture, wallMass, wallLayer, [0])
     pooler.AddObject(wall, "Wall")
 
     platformPos = (1700, 650)
@@ -43,17 +43,17 @@ def Level0():
 
     platformTexture = "Sprites/wall.png"
     platformMass = 0
-    platformLayer = 1
-    platform = Object.GameObject(platformPos, platformSize, platformTexture, platformMass, platformLayer, [2], "Level_0")
+    platformLayer = 2
+    platform = Object.GameObject(platformPos, platformSize, "Level_0", "Real", platformTexture, platformMass, platformLayer, [0])
     pooler.AddObject(platform, "Wall")
 
-    fuckPos = (Constants.screenDimensions[0] / 2 - 240, 200)
-    fuckSize = (480, 160)
-    fuckTexture = "Sprites/fuck.png"
-    fuckMass = 0
-    fuckLayer = 0
-    fuck = Object.GameObject(fuckPos, fuckSize, fuckTexture, fuckMass, fuckLayer, [2], "Pause_Menu", _png=True)
-    pooler.AddObject(fuck, "Fuck")
+    pauseTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
+    pauseTitle = Object.GameObject(pauseTitlePos, (0,0), "Pause_Menu", "Text", ("Pause", True), 0, 0, [0])
+    pooler.AddObject(pauseTitle, "Text")
+
+    fuckPos = (Constants.screenDimensions[0] / 2 - 100, 600)
+    fuck = Object.GameObject(fuckPos, (0,0), "Level_0", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
+    pooler.AddObject(fuck, "Text")
 
     # We link different objects to different scripts.
     InputsManager.SetPooler(pooler)

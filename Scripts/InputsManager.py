@@ -218,7 +218,7 @@ def DisplayDots():
 
     if len(mainPooler.main["Trajectory"]) == 0:
         for i in range(5):
-            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Sprites/dot.png", 0, 2, [0, 1, 2], "Level_0")
+            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), Constants.currentLevel, "Real", "Sprites/dot.png", 0, 0, [0, 1, 2])
             mainPooler.AddObject(newDot, "Trajectory")
 
     for dot in mainPooler.main["Trajectory"]:
