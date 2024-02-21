@@ -2,6 +2,7 @@
     This file declares every class of object for the OOP.
 """
 import pygame
+import Scripts.Constants as Constants
 
 
 """ ================================================================================================================ """
@@ -96,10 +97,14 @@ class GameObject:
         self.type = _type
         self.data = _data
 
-        # Modifying size for 'Text' and 'Button' type objects.
+        # Modifying size for 'Text' type objects.
         if _type == "Text":
-            fontSize = 70 if _data[1] else 170
-            self.size = (Vector2(7, 0) * len(_data[0]) + Vector2(0, 12)) * fontSize
+            fontSize = 9 if _data[1] else 3
+            self.size = fontSize * (Vector2(7, 0) * len(_data[0]) + Vector2(0, 15))
+
+        # Modifying size for 'Button' type objects.
+        if _type == "Button":
+            self.size = Vector2(Constants.buttonSize[0], Constants.buttonSize[1])
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)

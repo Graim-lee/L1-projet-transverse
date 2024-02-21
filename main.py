@@ -20,18 +20,19 @@ frame = 0
 # Storing pygame's clock (to have a fixed framerate).
 gameClock = pygame.time.Clock()
 
-# Initializing the text objects.
+# Initializing the text and button objects.
 textFont = pygame.font.Font("Fonts/dp.ttf", 50)
 titleFont = pygame.font.Font("Fonts/dp.ttf", 170)
 
+buttonSurface = pygame.image.load("Sprites/button.png").convert()
+
+# Initializing the pooler.
 pooler = Level.Level0()
 
 """ End of START =================================================================================================== """
 
 """ ================================================================================================================ """
 """ ==> UPDATE : put here the code that shall get executed each frame (i.e.: player movements, physics, etc.). <==== """
-
-gameRunning = True
 
 def ComputeObject(gameObject: Object.GameObject) -> bool:
     """ Returns true if the object should be rendered and applied physics on (I made a function to avoid repeating the
@@ -55,12 +56,12 @@ def EveryObject() -> [Object.GameObject]:
     return result
 
 # Main loop of the game.
-while gameRunning:
+while Constants.gameRunning:
     # Retrieves and manages user inputs.
     gameRunning = InputsManager.CheckInputs()
 
     # Only runs when we are in the Main Game (and not in a Pause Menu or in the Main Menu).
-    if "Level" in Constants.currentScene:
+    if not Constants.inMenu:
 
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
         # object to prepare it for the collision detection.
@@ -106,6 +107,12 @@ while gameRunning:
                 fontToUse = titleFont if gameObject.data[1] else textFont
                 displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
                 screen.blit(displayFont, gameObject.position.Tuple())
+            # Rendering the button and its text for 'Button' objects.
+            elif gameObject.type == "Button":
+                displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
+                screen.blit(pygame.transform.scale(buttonSurface, gameObject.size.Tuple()), gameObject.position.Tuple())
+                textDisplacement = Object.Vector2(Constants.buttonSize[0] * 0.5 - len(gameObject.data[0]) * Constants.buttonCenterCoeff, Constants.buttonTextHeight)
+                screen.blit(displayFont, (gameObject.position + textDisplacement).Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1

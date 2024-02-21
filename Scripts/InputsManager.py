@@ -35,20 +35,19 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
-def CheckInputs() -> bool:
-    """ Main function, checks every input. If you want to detect an input, place the code here.
-        Returns :
-            - (bool): True if the game is running, False otherwise. Allows main.py to know if the game should end.
-            - (string): The direction to go
-    """
+def CheckInputs():
+    """ Main function, checks every input. If you want to detect an input, place the code here. """
     global pressingQA, pressingD, slingshotArmed, slingshotStart
+    # We check whether we are in a menu or not.
+    Constants.inMenu = "Level" not in Constants.currentScene
+
     # Every event.
     for event in pygame.event.get():
 
         # KEYDOWN = the user just pressed a key (only happens the first frame after the user presses said key).
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_RETURN: return False   # 'Enter' = fin du jeu.
+            if event.key == pygame.K_RETURN: Constants.gameRunning = False   # 'Enter' = fin du jeu.
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = menu différent.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
 
@@ -78,20 +77,34 @@ def CheckInputs() -> bool:
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
 
-        # 'Left-click' = slingshot
+        # 'Left-click'.
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            slingshotArmed = True
-            mouseX, mouseY = pygame.mouse.get_pos()
-            slingshotStart = Object.Vector2(mouseX, mouseY)
-            DisplayDots()
+            # If we are playing, we use the slingshot.
+            if not Constants.inMenu:
+                slingshotArmed = True
+                mouseX, mouseY = pygame.mouse.get_pos()
+                slingshotStart = Object.Vector2(mouseX, mouseY)
+                DisplayDots()
+            # If we are in a menu, we click on a button.
+            else:
+                mouseX, mouseY = pygame.mouse.get_pos()
+                for button in mainPooler.main["Button"]:
+                    # We check for each button if it is in the desired range.
+                    if not button.active: continue
+                    if button.scene != Constants.currentScene: continue
+                    if button.position.x > mouseX or button.position.x + Constants.buttonSize[0] < mouseX: continue
+                    if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
+                    button.data[1]()    # We call the function associated to the button.
+
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if slingshotArmed:
+                UseSlingshot()
+                HideDots()
             slingshotArmed = False
-            UseSlingshot()
-            HideDots()
+
 
     ApplyInputs()   # We apply the inputs' effects.
-    return True
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """

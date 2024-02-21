@@ -3,8 +3,9 @@ import Scripts.Constants as Constants
 import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
+import Scripts.ButtonFunctions as ButtonFunctions
 
-mainPooler = Object.Pooler(["Text", "Player", "Wall", "Trajectory"])
+mainPooler = Object.Pooler(["Text", "Button", "Player", "Wall", "Trajectory"])
 
 def Level0():
     # Pooler object from the Object.py script. See there to get a description.
@@ -54,6 +55,10 @@ def Level0():
     fuckPos = (Constants.screenDimensions[0] / 2 - 100, 600)
     fuck = Object.GameObject(fuckPos, (0,0), "Level_0", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
     pooler.AddObject(fuck, "Text")
+
+    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 600)
+    button = Object.GameObject(buttonPos, (0,0), "Pause_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    pooler.AddObject(button, "Button")
 
     # We link different objects to different scripts.
     InputsManager.SetPooler(pooler)

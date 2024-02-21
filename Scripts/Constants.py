@@ -1,9 +1,16 @@
+""" Meta informations ============================================================================================== """
+
 # Screen dimension.
 screenDimensions = (1920, 1080)
 
 # Framerate of the game (60 FPS) and time between two frames
 framerate = 60
 deltaTime = 1.0 / framerate
+
+# Whether the game is running or not.
+gameRunning = True
+
+""" Physics-related constants ====================================================================================== """
 
 # How many times the ApplyPhysics() function (from Physics.py) will be called. The more calls, the better the precision
 # but the more calculations needed.
@@ -26,6 +33,7 @@ groundedFrictionCoeff = 0.7
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 
+""" Player controller constants ==================================================================================== """
 
 # The horizontal speed of the player.
 playerSpeed = 7000
@@ -52,6 +60,12 @@ playerUsedSlingshot = False
 maxPlayerJumpCount = 2
 playerJumpCount = 2
 
+# Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
+# example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
+maxJumpBufferTimer = 50
+
+"""" Camera constants ============================================================================================== """
+
 # The x coordinates between which the player can move without moving the camera.
 minXCameraMoveThreshold = 600
 maxXCameraMoveThreshold = 1200
@@ -62,10 +76,7 @@ maxYCameraMoveThreshold = 800
 # The maximum distance from the camera an object can be without being unloaded.
 cameraUnloadDistance = 500
 
-# Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
-# example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
-maxJumpBufferTimer = 50
-
+""" Scene & game state constants =================================================================================== """
 
 # The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
 # pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
@@ -73,3 +84,13 @@ maxJumpBufferTimer = 50
 currentScene = "Level_0"
 # To remember which level the player is in even when the game is paused.
 currentLevel = "Level_0"
+# True whenever the game is in a Menu (main menu or pause menu), False when the game is in a level.
+inMenu = False
+
+""" UI constants =================================================================================================== """
+
+# The size of the buttons. They all share the same size and dimensions.
+buttonSize = (200, 80)
+# Magical font constants to center text in a button. Do not change pls.
+buttonCenterCoeff = 8.5
+buttonTextHeight = 18
