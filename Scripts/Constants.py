@@ -78,10 +78,12 @@ cameraUnloadDistance = 500
 
 """ Scene & game state constants =================================================================================== """
 
+# Go at the end of Level.py for a list of every scene so far.
+
 # The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
 # pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
 # we want).
-currentScene = "Level_0"
+currentScene = "Main_Menu"
 # To remember which level the player is in even when the game is paused.
 currentLevel = "Level_0"
 # True whenever the game is in a Menu (main menu or pause menu), False when the game is in a level.

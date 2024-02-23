@@ -4,6 +4,7 @@ import Scripts.Physics as Physics
 import Scripts.Object as Object
 import Scripts.Constants as Constants
 import Scripts.Level as Level
+import Scripts.ButtonFunctions as ButtonFunctions
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -26,8 +27,16 @@ titleFont = pygame.font.Font("Fonts/dp.ttf", 170)
 
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
-# Initializing the pooler.
-pooler = Level.Level0()
+# Initializing the pooler and the player.
+pooler = Level.BasePooler()
+player = pooler.main["Player"][0]
+
+# We link different objects to different scripts.
+InputsManager.SetPooler(pooler)
+InputsManager.SetPlayer(player)
+Physics.SetPooler(pooler)
+Physics.SetPlayer(player)
+ButtonFunctions.SetPlayer(player)
 
 """ End of START =================================================================================================== """
 

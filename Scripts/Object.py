@@ -293,8 +293,15 @@ class Pooler:
         for name in categories:
             self.main[name] = []    # Initialise toutes les catégories comme ça {'nom_de_la_catégorie': []}.
 
+    def AddCategory(self, category: str):
+        """ Let us add a new category to the pooler.
+            Args :
+                - category (str): the category's name.
+        """
+        self.main[category] = []
+
     def AddObject(self, gameObject: GameObject, category: str):
-        """ Let us add a new object to the pooler. So in the game.
+        """ Let us add a new object to the pooler.
             Args :
                 - gameObject (GameObject): object to add in the pooler.
                 - category (str): object's category.
@@ -308,3 +315,25 @@ class Pooler:
             for gameObject in self.main[category]:
                 copied.main[category].append(gameObject)
         return copied
+
+    def __add__(self, other):
+        """ __add__ lets us "add" two poolers. It actually just concatenates them. But with style B)
+            Args :
+                - self: concerned pooler.
+                - other: second pooler.
+        """
+        result = Pooler([])
+
+        # Concatenating elements from the first pooler.
+        for category in self.main:
+            result.AddCategory(category)
+            for gameObject in self.main[category]:
+                result.AddObject(gameObject, category)
+
+        # Concatenating elements from the second pooler.
+        for category in other.main:
+            if category not in result.main: result.AddCategory(category)
+            for gameObject in other.main[category]:
+                result.AddObject(gameObject, category)
+
+        return result

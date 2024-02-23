@@ -44,11 +44,11 @@ def CheckInputs():
     # Every event.
     for event in pygame.event.get():
 
-        # KEYDOWN = the user just pressed a key (only happens the first frame after the user presses said key).
+        """ KEYDOWN ====================================================================================================
+        The user just pressed a key (only happens the first frame after the user presses said key) ================= """
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_RETURN: Constants.gameRunning = False   # 'Enter' = fin du jeu.
-            elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = menu différent.
+            if event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = menu différent.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
@@ -65,7 +65,8 @@ def CheckInputs():
                 pressingD = True  # 'D'
                 player.moving = 1
 
-        # KEYUP = the user just released a key (only happens on the first frame after releasing the key).
+        """ KEYUP ======================================================================================================
+        The user just released a key (only happens on the first frame after releasing the key) ===================== """
         if event.type == pygame.KEYUP:
 
             if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
@@ -77,7 +78,8 @@ def CheckInputs():
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
 
-        # 'Left-click'.
+        """ LEFT-CLICK PRESSED =========================================================================================
+        Activates right after the user presses left-click ========================================================== """
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # If we are playing, we use the slingshot.
             if not Constants.inMenu:
@@ -96,7 +98,8 @@ def CheckInputs():
                     if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
                     button.data[1]()    # We call the function associated to the button.
 
-
+        """ LEFT-CLICK RELEASED ========================================================================================
+        When the user lets go of left-click ======================================================================== """
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if slingshotArmed:
                 UseSlingshot()
@@ -105,6 +108,10 @@ def CheckInputs():
 
 
     ApplyInputs()   # We apply the inputs' effects.
+
+
+""" ================================================================================================================ """
+
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
