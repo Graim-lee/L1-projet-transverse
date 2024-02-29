@@ -203,7 +203,7 @@ def PhysicsCalculations(body: Object.GameObject):
         body.velocity = body.instantVelocity
     elif not(body.fallingFromGround):
         body.velocity = body.continuousVelocity
-    elif body.instantVelocity.x:
+    else:
         body.velocity = body.instantVelocity + body.continuousVelocity
     ApplyFriction(body, grounded)   # Friction.
 
