@@ -185,6 +185,7 @@ def PhysicsCalculations(body: Object.GameObject):
     grounded = CheckIfGrounded(body)
     if body.grounded and not grounded and body.velocity.y >= 0:
         body.gravity = Constants.fallInitialGravity
+        body.fallingFromGround = True
         
     body.grounded = grounded
     if grounded:
@@ -198,7 +199,12 @@ def PhysicsCalculations(body: Object.GameObject):
 
     ManageCollisions(body)  # Collisions.
 
-    body.velocity = body.instantVelocity + body.continuousVelocity
+    if not(body.fallingFromGround) and (body.instantVelocity.x > 6 or body.instantVelocity.y >6 or body.instantVelocity.x < -6 or body.instantVelocity.x < -6):
+        body.velocity = body.instantVelocity
+    elif not(body.fallingFromGround):
+        body.velocity = body.continuousVelocity
+    elif body.instantVelocity.x:
+        body.velocity = body.instantVelocity + body.continuousVelocity
     ApplyFriction(body, grounded)   # Friction.
 
 def CheckIfGrounded(body: Object.GameObject) -> bool:
@@ -221,7 +227,9 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
             if not gameObject.active: continue
             if gameObject.layer in body.notCollidable: continue
 
-            if CheckGroundedCollision(groundedLeft, groundedRight, gameObject): return True
+            if CheckGroundedCollision(groundedLeft, groundedRight, gameObject): 
+                body.fallingFromGround = False
+                return True
     return False
 
 def CheckGroundedCollision(left: Object.Vector2, right: Object.Vector2, other: Object.GameObject) -> bool:

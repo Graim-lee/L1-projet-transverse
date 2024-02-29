@@ -80,23 +80,27 @@ def CheckInputs():
 
         """ LEFT-CLICK PRESSED =========================================================================================
         Activates right after the user presses left-click ========================================================== """
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # If we are playing, we use the slingshot.
-            if not Constants.inMenu:
-                slingshotArmed = True
-                mouseX, mouseY = pygame.mouse.get_pos()
-                slingshotStart = Object.Vector2(mouseX, mouseY)
-                DisplayDots()
-            # If we are in a menu, we click on a button.
-            else:
-                mouseX, mouseY = pygame.mouse.get_pos()
-                for button in mainPooler.main["Button"]:
-                    # We check for each button if it is in the desired range.
-                    if not button.active: continue
-                    if button.scene != Constants.currentScene: continue
-                    if button.position.x > mouseX or button.position.x + Constants.buttonSize[0] < mouseX: continue
-                    if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
-                    button.data[1]()    # We call the function associated to the button.
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                # If we are playing, we use the slingshot.
+                if not Constants.inMenu:
+                    slingshotArmed = True
+                    mouseX, mouseY = pygame.mouse.get_pos()
+                    slingshotStart = Object.Vector2(mouseX, mouseY)
+                    DisplayDots()
+                # If we are in a menu, we click on a button.
+                else:
+                    mouseX, mouseY = pygame.mouse.get_pos()
+                    for button in mainPooler.main["Button"]:
+                        # We check for each button if it is in the desired range.
+                        if not button.active: continue
+                        if button.scene != Constants.currentScene: continue
+                        if button.position.x > mouseX or button.position.x + Constants.buttonSize[0] < mouseX: continue
+                        if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
+                        button.data[1]()    # We call the function associated to the button.
+            if event.button == 3:
+                slingshotArmed = False
+                HideDots()
 
         """ LEFT-CLICK RELEASED ========================================================================================
         When the user lets go of left-click ======================================================================== """
@@ -199,7 +203,7 @@ def UseSlingshot():
         propulsionForce *= reductionCoeff
 
     # Application of the force.
-    player.instantVelocity += propulsionForce
+    player.instantVelocity = propulsionForce
     player.gravity = 0
     Constants.playerUsedSlingshot = True
     Constants.playerJumpCount -= 1
