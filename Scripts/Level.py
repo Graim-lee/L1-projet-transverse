@@ -98,6 +98,20 @@ def Level_0(pooler: Object.Pooler):
     fuck = Object.GameObject(fuckPos, (0,0), "Level_0", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
     pooler.AddObject(fuck, "Text")
 
+    # platform 2.
+    platform2Pos = (2200, 650)
+    platform2Size = (300, 100)
+    platform2Texture = "Sprites/wall.png"
+    platform2 = Object.GameObject(platform2Pos, platform2Size, "Level_0", "Real", platform2Texture, 0, 2, [0])
+    pooler.AddObject(platform2, "Wall")
+
+    # platform 3.
+    platform3Pos = (2200, 400)
+    platform3Size = (300, 100)
+    platform3Texture = "Sprites/wall.png"
+    platform3 = Object.GameObject(platform3Pos, platform3Size, "Level_0", "Real", platform3Texture, 0, 2, [0])
+    pooler.AddObject(platform3, "Wall")
+
 
 """ LIST OF EVERY SCENE :
 

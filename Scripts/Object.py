@@ -131,6 +131,8 @@ class GameObject:
         self.walkFrame = 0
         self.walkCycle = 0
 
+        self.fallingFromGround = False
+
     def Resize(self, size: (int, int)):
         """ Modify objects size.
             Args :
