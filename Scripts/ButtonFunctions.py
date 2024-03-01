@@ -13,10 +13,13 @@ def SetPlayer(setPlayer: Object.GameObject):
     global player
     player = setPlayer
 
-def QuitGame():
-    Constants.gameRunning = False
+def ToWorldSelection():
+    Constants.currentScene = "World_Selection"
 
-def PlayLevel_0():
+def ToLevel_0():
     Constants.currentScene = "Level_0"
     Constants.currentLevel = "Level_0"
     player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
+
+def QuitGame():
+    Constants.gameRunning = False

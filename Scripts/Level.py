@@ -17,6 +17,7 @@ def BasePooler() -> Object.Pooler:
 
     PauseMenu(pooler)
     MainMenu(pooler)
+    WorldSelection(pooler)
 
     Level_0(pooler)
 
@@ -36,10 +37,31 @@ def PauseMenu(pooler: Object.Pooler):
 
 def MainMenu(pooler: Object.Pooler):
     """ Adds the Main Menu pooler to the main pooler. """
-    # "Playtest" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 400)
-    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.PlayLevel_0), 0, 0, [0])
+    # Title "Main menu" (placeholder for the true name of the game).
+    mainTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
+    mainTitle = Object.GameObject(mainTitlePos, (0,0), "Main_Menu", "Text", ("Main menu", True), 0, 0, [0])
+    pooler.AddObject(mainTitle, "Text")
+
+    # "Play" button.
+    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 700)
+    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
     pooler.AddObject(button, "Button")
+
+    # "Quit game" button.
+    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 820)
+    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    pooler.AddObject(button, "Button")
+
+    # Debug text.
+    mainTitle = Object.GameObject((0,0), (0,0), "Main_Menu", "Text", ("OOOOOOOO", True), 0, 0, [0])
+    pooler.AddObject(mainTitle, "Text")
+
+def WorldSelection(pooler: Object.Pooler):
+    """ Adds the World Selection pooler to the main pooler. """
+    # Title "World selection".
+    worldTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
+    worldTitle = Object.GameObject(worldTitlePos, (0,0), "World_Selection", "Text", ("World selection", True), 0, 0, [0])
+    pooler.AddObject(worldTitle, "Text")
 
 def Player(pooler: Object.Pooler):
     """ Adds the player to the main pooler (necessary for most scripts to work). """
@@ -80,9 +102,9 @@ def Level_0(pooler: Object.Pooler):
 """ LIST OF EVERY SCENE :
 
     - Main_Menu: the base scene (the one in which we are when we start the game), the main menu.
+    - World_Selection: the world selection scene. Accessible after clicking on "Play" in the main menu.
     - Pause_Menu: the pause menu.
     
     - Level_0: the playtest level.
-
 
 """

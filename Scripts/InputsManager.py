@@ -48,7 +48,8 @@ def CheckInputs():
         The user just pressed a key (only happens the first frame after the user presses said key) ================= """
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = menu différent.
+            if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
+            elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
