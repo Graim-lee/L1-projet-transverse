@@ -2,6 +2,7 @@
 
 # Screen dimension.
 screenDimensions = (1920, 1080)
+playerPos = ((screenDimensions[0] / 2)- 44, (screenDimensions[1] / 2)- 44) # 44 from the size of the player
 
 # Framerate of the game (60 FPS) and time between two frames
 framerate = 60
