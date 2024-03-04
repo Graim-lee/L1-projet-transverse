@@ -5,7 +5,7 @@ import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
 
-initPooler = Object.Pooler(["Text", "Button", "Player", "Wall", "Trajectory","Door"])
+initPooler = Object.Pooler(["Text", "Button", "Player", "Wall", "Trajectory", "Door"])
 
 def BasePooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
@@ -249,11 +249,11 @@ def Level_2(pooler: Object.Pooler):
 
     # The end ?
     #wallPos = (-400, -600)
-    wallPos = ( 1400, 800)
-    wallSize = (75, 80)
+    wallPos = ( 1400, 700)
+    wallSize = (125, 180)
     wallTexture = "Sprites/door.png"
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [2])
-    pooler.AddObject(wall, "Wall")
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 3, [0])
+    pooler.AddObject(wall, "Door")
 
     """
     top
@@ -261,7 +261,7 @@ def Level_2(pooler: Object.Pooler):
     wallPos = (-1000, -1000)
     wallSize = (4000, 500)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Door")
+    pooler.AddObject(wall, "Wall")
 
 
 """ LIST OF EVERY SCENE :
