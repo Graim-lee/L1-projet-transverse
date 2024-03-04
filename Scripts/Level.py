@@ -68,7 +68,7 @@ def Player(pooler: Object.Pooler):
     """ Adds the player to the main pooler (necessary for most scripts to work). """
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/idle.png"
-    player = Object.GameObject((0,0), playerSize, "Level_All", "Real", playerTexture, 1, 1, [0], True, True, True)
+    player = Object.GameObject((0,0), playerSize, "Level_All", "Real", playerTexture, 1, 1, [0, 2], True, True, True)
     pooler.AddObject(player, "Player")
 
 def Level_0(pooler: Object.Pooler):

@@ -5,6 +5,7 @@ import Scripts.Object as Object
 import Scripts.Constants as Constants
 import Scripts.Level as Level
 import Scripts.ButtonFunctions as ButtonFunctions
+import Scripts.Shaders as Shaders
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -106,22 +107,26 @@ while Constants.gameRunning:
     # Displays every object on the screen.
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 
-    for gameObject in EveryObject():
-        if ComputeObject(gameObject):
-            # Rendering 'Real'-type objects.
-            if gameObject.type == "Real":
-                screen.blit(gameObject.surface, gameObject.position.Tuple())
-            # Displaying text for 'Text' objects.
-            elif gameObject.type == "Text":
-                fontToUse = titleFont if gameObject.data[1] else textFont
-                displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
-                screen.blit(displayFont, gameObject.position.Tuple())
-            # Rendering the button and its text for 'Button' objects.
-            elif gameObject.type == "Button":
-                displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
-                screen.blit(pygame.transform.scale(buttonSurface, gameObject.size.Tuple()), gameObject.position.Tuple())
-                textDisplacement = Object.Vector2(Constants.buttonSize[0] * 0.5 - len(gameObject.data[0]) * Constants.buttonCenterCoeff, Constants.buttonTextHeight)
-                screen.blit(displayFont, (gameObject.position + textDisplacement).Tuple())
+    for category in pooler.main:
+        for gameObject in pooler.main[category]:
+            if ComputeObject(gameObject):
+                # Rendering 'Real'-type objects.
+                if gameObject.type == "Real":
+                    screen.blit(gameObject.surface, gameObject.position.Tuple())
+                    if category == "Wall": Shaders.DrawOutline(screen, gameObject)
+
+                # Displaying text for 'Text' objects.
+                elif gameObject.type == "Text":
+                    fontToUse = titleFont if gameObject.data[1] else textFont
+                    displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
+                    screen.blit(displayFont, gameObject.position.Tuple())
+
+                # Rendering the button and its text for 'Button' objects.
+                elif gameObject.type == "Button":
+                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
+                    screen.blit(pygame.transform.scale(buttonSurface, gameObject.size.Tuple()), gameObject.position.Tuple())
+                    textDisplacement = Object.Vector2(Constants.buttonSize[0] * 0.5 - len(gameObject.data[0]) * Constants.buttonCenterCoeff, Constants.buttonTextHeight)
+                    screen.blit(displayFont, (gameObject.position + textDisplacement).Tuple())
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1
