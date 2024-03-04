@@ -87,7 +87,7 @@ def WorldSelection(pooler: Object.Pooler):
     pooler.AddObject(button0, "Button")
 
     # "Level 1" button.
-    buttonPos1 = (Constants.screenDimensions[0] / 2 + 200 , 350)
+    buttonPos1 = (Constants.screenDimensions[0] / 2 + 200, 350)
     button1 = Object.GameObject(buttonPos1, (0,0), "World_Selection", "Button", ("Level 1", ButtonFunctions.ToLevel_1), 0, 0, [0])
     pooler.AddObject(button1, "Button")
 
