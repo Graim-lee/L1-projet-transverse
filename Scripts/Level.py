@@ -128,7 +128,7 @@ def Level_2(pooler: Object.Pooler):
 
     # Left wall border.
     wallPos = (-600, -1000)
-    wallSize = (600, Constants.screenDimensions[1])
+    wallSize = (600, 2500)
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
@@ -182,8 +182,8 @@ def Level_2(pooler: Object.Pooler):
     Transition
     """
     # Left Border
-    wallPos = (2600, -800)
-    wallSize = (100, 2000)
+    wallPos = (2600, -1000)
+    wallSize = (500, 2000)
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
@@ -245,18 +245,26 @@ def Level_2(pooler: Object.Pooler):
 
     # Jump
     wallPos = (300, -500)
-    wallSize = (200, 300)
+    wallSize = (200, 400)
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
     # Floor
-    wallPos = (-400, -400)
-    wallSize = (700, 300)
+    wallPos = (-400, -600)
+    wallSize = (700, 500)
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
+    """
+    top
+    """
+    wallPos = (-1000, -1000)
+    wallSize = (4000, 500)
+    wallTexture = "Sprites/wall.png"
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
 
 
 """ LIST OF EVERY SCENE :
