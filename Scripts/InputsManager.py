@@ -113,10 +113,6 @@ def CheckInputs():
             slingshotArmed = False
 
         if event.type == pygame.K_z: continue
-        if Constants.playerPos[0] and Constants.playerPos[0]: continue
-        if Constants.playerPos[1] and Constants.playerPos[1]: continue
-
-
 
     ApplyInputs()   # We apply the inputs' effects.
 

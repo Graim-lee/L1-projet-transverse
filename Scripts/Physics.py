@@ -154,31 +154,12 @@ def GetCollisionVertices(body: Object.GameObject, other: Object.GameObject) -> [
 
 def MoveCamera():
     """ Used to keep the camera focused on the player. """
-    # X
-    if player.position.x > Constants.playerPos[0]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.x -= player.velocity.x * deltaTime
+    displacement = player.position - Object.Vector2(Constants.screenCenter[0], Constants.screenCenter[1])
 
-    if player.position.x < Constants.playerPos[0] :
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.x -= player.velocity.x * deltaTime
-
-    # Y
-    if player.position.y > Constants.playerPos[1]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.y -= player.velocity.y * deltaTime
-
-    if player.position.y < Constants.playerPos[1]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.y -= player.velocity.y * deltaTime
+    for category in mainPooler.main:
+        for gameObject in mainPooler.main[category]:
+            if not gameObject.active or "Level" not in gameObject.scene: continue
+            gameObject.position -= displacement
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
