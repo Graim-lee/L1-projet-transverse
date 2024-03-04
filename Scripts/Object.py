@@ -98,15 +98,6 @@ class GameObject:
         self.type = _type
         self.data = _data
 
-        # Modifying size and position for 'Text' type objects.
-        if _type == "Text":
-            # Size must match the text's size.
-            fontSize = 9 if _data[1] else 3
-            self.size = fontSize * (Vector2(7, 0) * len(_data[0]) + Vector2(0, 15))
-
-            # The position given by the user must be the position of the center of the text (and not the top-left corner).
-            self.position -= 0.5 * self.size
-
         # Modifying size for 'Button' type objects.
         if _type == "Button":
             self.size = Vector2(Constants.buttonSize[0], Constants.buttonSize[1])

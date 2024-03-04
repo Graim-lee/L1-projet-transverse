@@ -24,8 +24,8 @@ frame = 0
 gameClock = pygame.time.Clock()
 
 # Initializing the text and button objects.
-textFont = pygame.font.Font("Fonts/poland.ttf", 50)
-titleFont = pygame.font.Font("Fonts/poland.ttf", 170)
+textFont = pygame.font.Font("Fonts/hardpixel.otf", 40)
+titleFont = pygame.font.Font("Fonts/hardpixel.otf", 120)
 
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
@@ -120,14 +120,15 @@ while Constants.gameRunning:
                 elif gameObject.type == "Text":
                     fontToUse = titleFont if gameObject.data[1] else textFont
                     displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
-                    screen.blit(displayFont, gameObject.position.Tuple())
+                    textRect = displayFont.get_rect(center = gameObject.position.Tuple())
+                    screen.blit(displayFont, textRect)
 
                 # Rendering the button and its text for 'Button' objects.
                 elif gameObject.type == "Button":
-                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
                     screen.blit(pygame.transform.scale(buttonSurface, gameObject.size.Tuple()), gameObject.position.Tuple())
-                    textDisplacement = Object.Vector2(Constants.buttonSize[0] * 0.5 - len(gameObject.data[0]) * Constants.buttonCenterCoeff, Constants.buttonTextHeight)
-                    screen.blit(displayFont, (gameObject.position + textDisplacement).Tuple())
+                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
+                    textRect = displayFont.get_rect(center = (gameObject.position + 0.5 * gameObject.size).Tuple())
+                    screen.blit(displayFont, textRect)
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1
