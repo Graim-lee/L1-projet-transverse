@@ -58,7 +58,7 @@ class GameObject:
         - layer (int): number to categorize objects. Useful to decide whether objects need collision or not
         - notCollidable (list[int]): list of every layers the object should not collide
                                     (i.e.: if notCollidable = [1,2], then the object will not 
-                                    touch objects from layer 1 ou 2 and will go through them).
+                                    touch objects from layer 1 are 2 and will go through them).
 
         - previousRepelForce (Vector2): stores the previous repel force exerted on the object during a collision (allows
                                     to avoid bouncing off walls and floor).

@@ -103,6 +103,7 @@ def CheckInputs():
                 slingshotArmed = False
                 HideDots()
 
+
         """ LEFT-CLICK RELEASED ========================================================================================
         When the user lets go of left-click ======================================================================== """
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
