@@ -16,6 +16,7 @@ def SetPlayer(setPlayer: Object.GameObject):
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
+
 def ToLevel_0():
     Constants.currentScene = "Level_0"
     Constants.currentLevel = "Level_0"
