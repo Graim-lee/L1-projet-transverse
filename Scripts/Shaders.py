@@ -7,4 +7,4 @@ def DrawOutline(screen: pygame.surface, object: Object.GameObject):
             - screen (Surface): the screen's surface (the game window) to draw on.
             - object (GameObject): the object to draw the outline around.
     """
-    pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(object.position.Tuple(), object.size.Tuple()), 3)
+    pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(object.position.Tuple(), object.size.Tuple()), 5)
