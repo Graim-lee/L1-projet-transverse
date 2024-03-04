@@ -87,7 +87,7 @@ def Level_0(pooler: Object.Pooler):
     wall = Object.GameObject(wallPos, wallSize, "Level_0", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Platform.
+    """# Platform.
     platformPos = (1700, 650)
     platformSize = (300, 100)
     platformTexture = "Sprites/wall.png"
@@ -111,7 +111,7 @@ def Level_0(pooler: Object.Pooler):
     platform3Size = (300, 100)
     platform3Texture = "Sprites/wall.png"
     platform3 = Object.GameObject(platform3Pos, platform3Size, "Level_0", "Real", platform3Texture, 0, 2, [0])
-    pooler.AddObject(platform3, "Wall")
+    pooler.AddObject(platform3, "Wall")"""
 
 def Level_2(pooler: Object.Pooler):
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
@@ -242,8 +242,8 @@ def Level_2(pooler: Object.Pooler):
     pooler.AddObject(wall, "Wall")
 
     # Floor
-    wallPos = (-400, -600)
-    wallSize = (700, 500)
+    wallPos = (0, -300)
+    wallSize = (300, 200)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
@@ -258,7 +258,7 @@ def Level_2(pooler: Object.Pooler):
     """
     top
     """
-    wallPos = (-1000, -1000)
+    wallPos = (-1000, -1500)
     wallSize = (4000, 500)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")

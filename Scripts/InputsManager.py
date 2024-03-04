@@ -5,6 +5,7 @@ import pygame
 import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import Scripts.Physics as Physics
 
 mainPooler = Object.Pooler({})
 player: Object.GameObject
@@ -103,7 +104,6 @@ def CheckInputs():
                 slingshotArmed = False
                 HideDots()
 
-
         """ LEFT-CLICK RELEASED ========================================================================================
         When the user lets go of left-click ======================================================================== """
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
@@ -111,6 +111,11 @@ def CheckInputs():
                 UseSlingshot()
                 HideDots()
             slingshotArmed = False
+
+        if event.type == pygame.K_z: continue
+        if Constants.playerPos[0] and Constants.playerPos[0]: continue
+        if Constants.playerPos[1] and Constants.playerPos[1]: continue
+
 
 
     ApplyInputs()   # We apply the inputs' effects.
