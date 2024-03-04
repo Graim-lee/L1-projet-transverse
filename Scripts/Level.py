@@ -44,7 +44,7 @@ def MainMenu(pooler: Object.Pooler):
 
     # "Play" button.
     buttonPos = (Constants.screenDimensions[0] / 2 - 100, 700)
-    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.ToLevel_0), 0, 0, [0])
     pooler.AddObject(button, "Button")
 
     # "Quit game" button.
