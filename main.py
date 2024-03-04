@@ -22,8 +22,8 @@ frame = 0
 gameClock = pygame.time.Clock()
 
 # Initializing the text and button objects.
-textFont = pygame.font.Font("Fonts/dp.ttf", 50)
-titleFont = pygame.font.Font("Fonts/dp.ttf", 170)
+textFont = pygame.font.Font("Fonts/poland.ttf", 50)
+titleFont = pygame.font.Font("Fonts/poland.ttf", 170)
 
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
