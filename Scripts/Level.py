@@ -133,6 +133,66 @@ def Level_2(pooler: Object.Pooler):
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
+    # Right platform.
+    wallPos = (2000, 500)
+    wallSize = (700, 500)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Walljump platform 1
+    wallPos = (2550, 300)
+    wallSize = (100, 50)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Walljump platform 2
+    wallPos = (2200, 100)
+    wallSize = (100, 50)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Walljump platform 3
+    wallPos = (2550, -50)
+    wallSize = (100, 50)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Upper section block before big jump.
+    wallPos = (1000, -500)
+    wallSize = (200, 400)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Upper section first stair.
+    wallPos = (1800, -300)
+    wallSize = (300, 200)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Upper section second stair.
+    wallPos = (1700, -400)
+    wallSize = (200, 300)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Upper section floor.
+    wallPos = (1000, -200)
+    wallSize = (1250, 100)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Left wall for walljump.
+    wallPos = (2200, -200)
+    wallSize = (50, 500)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Right border.
+    wallPos = (2600, -2000)
+    wallSize = (500, 4000)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
     # Floor.
     floorPos = (0, Constants.screenDimensions[1] - 200)
     floorSize = (Constants.screenDimensions[0] * 5, 800)
@@ -145,107 +205,45 @@ def Level_2(pooler: Object.Pooler):
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Left wall border.
-    wallPos = (-600, -1000)
-    wallSize = (600, 2500)
+    # Jump
+    wallPos = (-100, -500)
+    wallSize = (600, 400)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Platform 1.
+    # Left border.
+    wallPos = (-700, -2000)
+    wallSize = (1000, 4000)
+    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(wall, "Wall")
+
+    # Parkour platform 1.
     platformPos = (900, 550)
     platformSize = (200, 50)
     platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(platform, "Wall")
 
-    # Platform 2.
+    # Parkour platform 2.
     platformPos = (1250, 550)
     platformSize = (200, 50)
     platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(platform, "Wall")
 
-    # Platform 3.
+    # Parkour platform 3.
     platformPos = (1650, 550)
     platformSize = (200, 50)
     platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(platform, "Wall")
 
-    # Left
-    wallPos = (2000, 500)
-    wallSize = (600, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    """
-    Transition
-    """
-    # Left Border
-    wallPos = (2600, -1000)
-    wallSize = (500, 2000)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Left walljump
-    wallPos = (2200, -200)
-    wallSize = (50, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    #platform 1
-    wallPos = (2550, 300)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # platform 2
-    wallPos = (2250, 100)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # platform 3
-    wallPos = (2550, -50)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
     """
     Upper section
     """
-    # Floor
-    wallPos = (1000, -200)
-    wallSize = (1200, 100)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
-    # Block big
-    wallPos = (1000, -500)
-    wallSize = (200, 300)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
-    # Block little
-    wallPos = (1700, -400)
-    wallSize = (200, 300)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
-    # Block little
-    wallPos = (1900, -300)
-    wallSize = (200, 200)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
-    # Jump
-    wallPos = (300, -500)
-    wallSize = (200, 400)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
-    # Floor
-    wallPos = (-400, -600)
-    wallSize = (700, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
 
     # The end ?
     #wallPos = (-400, -600)
@@ -258,10 +256,7 @@ def Level_2(pooler: Object.Pooler):
     """
     top
     """
-    wallPos = (-1000, -1500)
-    wallSize = (4000, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+
 
 
 """ LIST OF EVERY SCENE :
