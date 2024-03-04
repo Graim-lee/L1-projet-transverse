@@ -21,5 +21,10 @@ def ToLevel_0():
     Constants.currentLevel = "Level_0"
     player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
 
+def ToLevel_2():
+    Constants.currentScene = "Level_2"
+    Constants.currentLevel = "Level_2"
+    player.position = Object.Vector2(Constants.screenDimensions[0] / 2 - 20, 700) # position player
+
 def QuitGame():
     Constants.gameRunning = False

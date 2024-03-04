@@ -51,7 +51,7 @@ def ComputeObject(gameObject: Object.GameObject) -> bool:
         Returns :
             - (bool): True if the object has to be rendered etc.
     """
-    return gameObject.active and gameObject.visible and gameObject.scene == Constants.currentScene
+    return gameObject.active and gameObject.visible and (gameObject.scene == Constants.currentScene or gameObject.scene == "Level_All")
 
 def EveryObject() -> [Object.GameObject]:
     """ Returns a list of every GameObject (to avoid having to iterate through the pooler every time).
