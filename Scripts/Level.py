@@ -5,7 +5,7 @@ import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
 
-initPooler = Object.Pooler(["Text", "Button", "Player", "Wall", "Trajectory", "Door"])
+initPooler = Object.Pooler(["Wall", "Door", "Player", "Trajectory", "Button", "Text"])
 
 def BasePooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
