@@ -43,10 +43,14 @@ def ApplyPhysics(body: Object.GameObject, i: int):
     # Checking for collisions.
     for category in mainPooler.main:
         for gameObject in mainPooler.main[category]:
-            if body != gameObject and gameObject.layer not in body.notCollidable and CheckCollision(body, gameObject):
-                CancelCollision(body, gameObject)
-                body.position = previousPosition
-                body.collidedDuringFrame = True
+            if body == gameObject: continue
+            if gameObject.layer in body.notCollidable: continue
+            if gameObject.scene != Constants.currentScene: continue
+            if not CheckCollision(body, gameObject): continue
+
+            CancelCollision(body, gameObject)
+            body.position = previousPosition
+            body.collidedDuringFrame = True
 
 def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
     """ Checks if the two given GameObjects are colliding or not. It works by considering each object as 2 coordinates :
@@ -61,6 +65,7 @@ def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
 
     if (bottomright1.x < topleft2.x) or (bottomright2.x < topleft1.x): return False   # If the objects are horizontally disjoint.
     if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
+    print(other)
     return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
 
 
