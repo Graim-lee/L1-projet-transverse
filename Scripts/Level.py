@@ -127,13 +127,11 @@ def Level_2(pooler: Object.Pooler):
     pooler.AddObject(floor, "Wall")  # We put the floor in the 'Wall' category as they share the same properties.
 
     # Left wall border.
-    wallPos = (-600, 0)
+    wallPos = (-600, -1000)
     wallSize = (600, Constants.screenDimensions[1])
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
-
-    # Right part
 
     # left wall small.
     wallPos = (0, 600)
@@ -184,8 +182,8 @@ def Level_2(pooler: Object.Pooler):
     Transition
     """
     # Left Border
-    wallPos = (2600, -300)
-    wallSize = (100, 1500)
+    wallPos = (2600, -800)
+    wallSize = (100, 2000)
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
@@ -258,6 +256,7 @@ def Level_2(pooler: Object.Pooler):
     wallTexture = "Sprites/wall.png"
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
+
 
 
 """ LIST OF EVERY SCENE :
