@@ -73,7 +73,7 @@ def CheckInputs():
 
             if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
 
-            elif event.key == pygame.K_a: 
+            elif event.key == pygame.K_a:
                 pressingQA = False   # 'A'
             elif event.key == pygame.K_q:
                 pressingQA = False   # 'Q'

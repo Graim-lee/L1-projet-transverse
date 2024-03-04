@@ -17,6 +17,7 @@ pygame.init()
 screenDimensions = Constants.screenDimensions
 screen = pygame.display.set_mode(screenDimensions)
 screen.fill((255, 255, 255))
+
 frame = 0
 
 # Storing pygame's clock (to have a fixed framerate).
