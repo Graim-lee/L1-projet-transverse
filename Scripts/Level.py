@@ -28,17 +28,18 @@ def BasePooler() -> Object.Pooler:
 def PauseMenu(pooler: Object.Pooler):
     """ Adds the Pause Menu pooler to the main pooler. """
     # Title ("Pause").
-    pauseTitlePos = (Constants.screenDimensions[0] / 2 - 38, 270)
-    pauseTitle = Object.GameObject(pauseTitlePos, (0,0), "Pause_Menu", "Text", ("Pause", True), 0, 0, [0])
+    pauseTitlePos = (Constants.screenDimensions[0] / 2, 270)
+    pauseTitle = Object.GameObject(pauseTitlePos, (0, 0), "Pause_Menu", "Text", ("Pause", True), 0, 0, [0])
     pooler.AddObject(pauseTitle, "Text")
 
     # ESC to restart the game
-    restartPos = (Constants.screenDimensions[0] / 2 , 400)
+    restartPos = (Constants.screenDimensions[0] / 2, 400)
     restartT = Object.GameObject(restartPos, (0, 0), "Pause_Menu", "Text", ("Press ESC to get back to the game", False), 0, 0, [0])
     pooler.AddObject(restartT, "Text")
+
     # "Quit game" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 770)
-    button = Object.GameObject(buttonPos, (0,0), "Pause_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    buttonPos = (Constants.screenDimensions[0] / 2, 770)
+    button = Object.GameObject(buttonPos, (100, 30), "Pause_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
     pooler.AddObject(button, "Button")
 
 def MainMenu(pooler: Object.Pooler):
@@ -49,30 +50,26 @@ def MainMenu(pooler: Object.Pooler):
     pooler.AddObject(mainTitle, "Text")
 
     # "Play game" button.
-    gameButtonPos = (Constants.screenDimensions[0] / 2 - 100, 500)
-    gameButton = Object.GameObject(gameButtonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    gameButtonPos = (Constants.screenDimensions[0] / 2, 500)
+    gameButton = Object.GameObject(gameButtonPos, (160, 70), "Main_Menu", "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
     pooler.AddObject(gameButton, "Button")
 
+    # "Quit game" button.
+    buttonPos = (Constants.screenDimensions[0] / 2, 770)
+    button = Object.GameObject(buttonPos, (160, 70), "Main_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    pooler.AddObject(button, "Button")
+
     # Penguin sprite on the left of the screen
-    penguinPos = (Constants.screenDimensions[0]/2 - 400, 450)
+    penguinPos = (Constants.screenDimensions[0] / 2 - 500, 450)
     playerTexture = "Sprites/PlayerMove/player.png"
     image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real",playerTexture,0,0,[0],True,True,False)
     pooler.AddObject(image,"Player")
 
     # Penguin sprite on the right of the screen
-    penguinPos = (Constants.screenDimensions[0]/2 + 200, 450)
+    penguinPos = (Constants.screenDimensions[0] / 2 + 300, 450)
     playerTexture = "Sprites/PlayerMove/player_reverse.png"
     image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real",playerTexture,0,0,[0],True,True,False)
     pooler.AddObject(image,"Player")
-
-    # "Quit game" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 770)
-    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
-    pooler.AddObject(button, "Button")
-
-    # Debug text.
-    mainTitle = Object.GameObject((0,0), (0,0), "Main_Menu", "Text", ("OOOOOOOO", True), 0, 0, [0])
-    pooler.AddObject(mainTitle, "Text")
 
 def WorldSelection(pooler: Object.Pooler):
     """ Adds the World Selection pooler to the main pooler. """
@@ -82,34 +79,34 @@ def WorldSelection(pooler: Object.Pooler):
     pooler.AddObject(worldTitle, "Text")
 
     # "Level 0" button.
-    buttonPos0 = (Constants.screenDimensions[0] / 2 - 400, 350)
-    button0 = Object.GameObject(buttonPos0, (0,0), "World_Selection", "Button", ("Tutorial", ButtonFunctions.ToLevel_0), 0, 0, [0])
+    buttonPos0 = (1 * Constants.screenDimensions[0] / 5 - 300, Constants.screenDimensions[1] / 2 - 100)
+    button0 = Object.GameObject(buttonPos0, (200, 160), "World_Selection", "Button", ("Tutorial", ButtonFunctions.ToLevel_0), 0, 0, [0])
     pooler.AddObject(button0, "Button")
 
     # "Level 1" button.
-    buttonPos1 = (Constants.screenDimensions[0] / 2 + 200, 350)
-    button1 = Object.GameObject(buttonPos1, (0,0), "World_Selection", "Button", ("Level 1", ButtonFunctions.ToLevel_1), 0, 0, [0])
+    buttonPos1 = (2 * Constants.screenDimensions[0] / 5 + 300, Constants.screenDimensions[1] / 2 - 100)
+    button1 = Object.GameObject(buttonPos1, (200, 160), "World_Selection", "Button", ("Level 1", ButtonFunctions.ToLevel_1), 0, 0, [0])
     pooler.AddObject(button1, "Button")
 
     # "Level 2" button.
-    buttonPos2 = (Constants.screenDimensions[0] / 2 - 400, 650)
-    button2 = Object.GameObject(buttonPos2, (0,0), "World_Selection", "Button", ("Level 2", ButtonFunctions.ToLevel_2), 0, 0, [0])
+    buttonPos2 = (3 * Constants.screenDimensions[0] / 5 - 300, Constants.screenDimensions[1] / 2 - 100)
+    button2 = Object.GameObject(buttonPos2, (200, 160), "World_Selection", "Button", ("Level 2", ButtonFunctions.ToLevel_2), 0, 0, [0])
     pooler.AddObject(button2, "Button")
 
     # "Level 3" Button.
-    buttonPos3 = (Constants.screenDimensions[0] / 2 + 200, 650)
-    button3 = Object.GameObject(buttonPos3, (0,0), "World_Selection", "Button", ("Level 3", ButtonFunctions.ToLevel_2), 0, 0, [0])
+    buttonPos3 = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2 - 100)
+    button3 = Object.GameObject(buttonPos3, (200, 160), "World_Selection", "Button", ("Level 3", ButtonFunctions.ToLevel_2), 0, 0, [0])
     pooler.AddObject(button3, "Button")
 
     # Penguin sprite in the middle of the screen.
     penguinPos = (Constants.screenDimensions[0]/2 - 100, 450)
     playerTexture = "Sprites/Player/idle.png"
-    image = Object.GameObject(penguinPos, (200,200), "World_Selection","Real",playerTexture,0,0,[0],True,True,False)
+    image = Object.GameObject(penguinPos, (200, 160), "World_Selection","Real",playerTexture,0,0,[0],True,True,False)
     pooler.AddObject(image,"Player")
 
     # "Quit Game" button.
-    buttonPosQuit = (Constants.screenDimensions[0] / 2 - 100, 770)
-    buttonQuit = Object.GameObject(buttonPosQuit, (0,0), "World_Selection", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    buttonPosQuit = (Constants.screenDimensions[0] / 2, 900)
+    buttonQuit = Object.GameObject(buttonPosQuit, (160, 70), "World_Selection", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
     pooler.AddObject(buttonQuit, "Button")
 
 def Player(pooler: Object.Pooler):

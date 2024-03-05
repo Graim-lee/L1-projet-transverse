@@ -71,9 +71,7 @@ def CheckInputs():
         The user just released a key (only happens on the first frame after releasing the key) ===================== """
         if event.type == pygame.KEYUP:
 
-            if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
-
-            elif event.key == pygame.K_a:
+            if event.key == pygame.K_a:
                 pressingQA = False   # 'A'
             elif event.key == pygame.K_q:
                 pressingQA = False   # 'Q'
@@ -97,8 +95,8 @@ def CheckInputs():
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
                         if button.scene != Constants.currentScene: continue
-                        if button.position.x > mouseX or button.position.x + Constants.buttonSize[0] < mouseX: continue
-                        if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
+                        if button.position.x > mouseX or button.position.x + button.size.x < mouseX: continue
+                        if button.position.y > mouseY or button.position.y + button.size.y < mouseY: continue
                         button.data[1]()    # We call the function associated to the button.
             if event.button == 3:
                 slingshotArmed = False

@@ -90,17 +90,19 @@ class GameObject:
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
 
-        # If the GameObject is of type "Real", we apply the texture.
+        # We fetch the object's texture if needed.
         if _type == "Real":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
+        elif _type == "Button":
+            self.surface = pygame.image.load("Sprites/button.png").convert()
+
+        # We modify the size of the "Real" and "Button" game objects.
+        if _type == "Real" or _type == "Button":
             self.Resize(_size)  # Allows to directly apply the object's new size.
+
         self.type = _type
         self.data = _data
-
-        # Modifying size for 'Button' type objects.
-        if _type == "Button":
-            self.size = Vector2(Constants.buttonSize[0], Constants.buttonSize[1])
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
@@ -238,10 +240,10 @@ class Vector2:
         return Vector2(other * self.x, other * self.y)
 
     def __rmul__(self, other: float):
-        """ __rmul__ fait comme __mul__ mais __mul__ ne gère que le cas k * (a, b) et pas le cas (a, b) * k.
+        """ __rmul__ makes like __mul__ but __mul__ only manages the case k * (a, b) and not (a, b) * k.
             Args :
-                - self: le vecteur concerné.
-                - other (float): le nombre par lequel on multiplie le vecteur.
+                - self: concerned vector.
+                - other (float): the coefficient by which we multiply the vector.
         """
         return Vector2(other * self.x, other * self.y)
 
@@ -251,6 +253,13 @@ class Vector2:
                 - (str): What will be displayed with a print(). It looks like this: 'Vector2(a, b).
         """
         return "Vector2(" + str(self.x) + ", " + str(self.y) + ")"
+
+    def __neg__(self):
+        """ __neg__ returns what the 'negative' of a Vector2 should be. -(a ; b) = (-a ; -b)
+            Args :
+                - self: concerned vector.
+        """
+        return Vector2(-self.x, -self.y)
 
     def Tuple(self) -> (int, int):
         """ Return a tuple of the form (a, b) because pygame's function do not accept the type vector2.

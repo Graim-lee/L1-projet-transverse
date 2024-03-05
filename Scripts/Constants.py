@@ -92,8 +92,7 @@ inMenu = False
 
 """ UI constants =================================================================================================== """
 
-# The size of the buttons. They all share the same size and dimensions.
-buttonSize = (200, 80)
-# Magical font constants to center text in a button. Do not change pls.
-buttonCenterCoeff = 8.5
-buttonTextHeight = 18
+# Buttons constant for drawing screws.
+buttonScrewSize = 8
+buttonScrewDistance = 8
+buttonScrewColor = (150, 150, 150)

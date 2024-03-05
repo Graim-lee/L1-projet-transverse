@@ -114,7 +114,7 @@ while Constants.gameRunning:
                 # Rendering 'Real'-type objects.
                 if gameObject.type == "Real":
                     screen.blit(gameObject.surface, gameObject.position.Tuple())
-                    if category == "Wall": Shaders.DrawOutline(screen, gameObject)
+                    if category == "Wall": Shaders.DrawOutline(screen, gameObject.position, gameObject.size)
 
                 # Displaying text for 'Text' objects.
                 elif gameObject.type == "Text":
@@ -125,10 +125,12 @@ while Constants.gameRunning:
 
                 # Rendering the button and its text for 'Button' objects.
                 elif gameObject.type == "Button":
-                    screen.blit(pygame.transform.scale(buttonSurface, gameObject.size.Tuple()), gameObject.position.Tuple())
+                    screen.blit(gameObject.surface, (gameObject.position - 0.5 * gameObject.size).Tuple())
+                    Shaders.DrawButtonsDots(screen, gameObject.position, gameObject.size)
                     displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
-                    textRect = displayFont.get_rect(center = (gameObject.position + 0.5 * gameObject.size).Tuple())
+                    textRect = displayFont.get_rect(center = gameObject.position.Tuple())
                     screen.blit(displayFont, textRect)
+                    Shaders.DrawOutline(screen, gameObject.position - 0.5 * gameObject.size, gameObject.size)
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1
