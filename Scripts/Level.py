@@ -78,31 +78,30 @@ def WorldSelection(pooler: Object.Pooler):
     worldTitle = Object.GameObject(worldTitlePos, (0,0), "World_Selection", "Text", ("World selection", True), 0, 0, [0])
     pooler.AddObject(worldTitle, "Text")
 
+    # "World 1" button.
+    buttonPos0 = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2 - 100)
+    button0 = Object.GameObject(buttonPos0, (200, 200), "World_Selection", "WorldButton", ("Tutorial", ButtonFunctions.ToLevel_0, "Sprites/world1.png"), 0, 0, [0])
+    pooler.AddObject(button0, "Button")
+
     # "Level 0" button.
-    buttonPos0 = (1 * Constants.screenDimensions[0] / 5 - 300, Constants.screenDimensions[1] / 2 - 100)
+    buttonPos0 = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
     button0 = Object.GameObject(buttonPos0, (200, 160), "World_Selection", "Button", ("Tutorial", ButtonFunctions.ToLevel_0), 0, 0, [0])
     pooler.AddObject(button0, "Button")
 
     # "Level 1" button.
-    buttonPos1 = (2 * Constants.screenDimensions[0] / 5 + 300, Constants.screenDimensions[1] / 2 - 100)
+    buttonPos1 = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
     button1 = Object.GameObject(buttonPos1, (200, 160), "World_Selection", "Button", ("Level 1", ButtonFunctions.ToLevel_1), 0, 0, [0])
     pooler.AddObject(button1, "Button")
 
     # "Level 2" button.
-    buttonPos2 = (3 * Constants.screenDimensions[0] / 5 - 300, Constants.screenDimensions[1] / 2 - 100)
+    buttonPos2 = (3 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
     button2 = Object.GameObject(buttonPos2, (200, 160), "World_Selection", "Button", ("Level 2", ButtonFunctions.ToLevel_2), 0, 0, [0])
     pooler.AddObject(button2, "Button")
 
     # "Level 3" Button.
-    buttonPos3 = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2 - 100)
+    buttonPos3 = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
     button3 = Object.GameObject(buttonPos3, (200, 160), "World_Selection", "Button", ("Level 3", ButtonFunctions.ToLevel_2), 0, 0, [0])
     pooler.AddObject(button3, "Button")
-
-    # Penguin sprite in the middle of the screen.
-    penguinPos = (Constants.screenDimensions[0]/2 - 100, 450)
-    playerTexture = "Sprites/Player/idle.png"
-    image = Object.GameObject(penguinPos, (200, 160), "World_Selection","Real",playerTexture,0,0,[0],True,True,False)
-    pooler.AddObject(image,"Player")
 
     # "Quit Game" button.
     buttonPosQuit = (Constants.screenDimensions[0] / 2, 900)

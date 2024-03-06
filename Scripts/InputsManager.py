@@ -95,9 +95,11 @@ def CheckInputs():
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
                         if button.scene != Constants.currentScene: continue
-                        if button.position.x > mouseX or button.position.x + button.size.x < mouseX: continue
-                        if button.position.y > mouseY or button.position.y + button.size.y < mouseY: continue
+                        if button.position.x - 0.5 * button.size.x > mouseX or button.position.x + 0.5 * button.size.x < mouseX: continue
+                        if button.position.y - 0.5 * button.size.y > mouseY or button.position.y + button.size.y < mouseY: continue
                         button.data[1]()    # We call the function associated to the button.
+                        break   # Top prevent clicking on multiple buttons on the same frame.
+
             if event.button == 3:
                 slingshotArmed = False
                 HideDots()

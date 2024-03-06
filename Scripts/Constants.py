@@ -96,3 +96,6 @@ inMenu = False
 buttonScrewSize = 8
 buttonScrewDistance = 8
 buttonScrewColor = (150, 150, 150)
+
+# This variable tracks whether we pressed a button or not in the frame (prevents pressing multiple button at the same time).
+buttonPressed = False

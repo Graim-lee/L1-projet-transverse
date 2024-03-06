@@ -25,7 +25,8 @@ class GameObject:
                         pause menu.
         - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
                         player or an enemy. A 'Text' object doesn't have any texture, but displays text. A 'Button' object
-                        is only used in UI, it is linked to a specific function to execute when pressed.
+                        is only used in UI, it is linked to a specific function to execute when pressed. A 'WorldButton'
+                        object is like a 'Button' object, but with an image inside.
         - data (): this parameter can take different types for every type of object. For a 'Real' GameObject, this is the
                         path of its texture in the files (it replaces texturePath).
                     For a 'Text' type GameObject, data is a tuple of the form (str, bool). The first element of the tuple
@@ -34,6 +35,8 @@ class GameObject:
                     A 'Button' object takes a tuple of type (str, function). The str (first element of the tuple) is the
                         text displayed on the button. The function (second element) is the function to be executed when
                         the button is clicked.
+                    A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
+                        'Button' object, and the last str is the path to the image inside the button.
 
         - position (Vector2): object's coordinates.
         - size (Vector2): object's size(in pixels).
