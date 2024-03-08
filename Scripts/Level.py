@@ -119,6 +119,7 @@ def Level_2(pooler: Object.Pooler):
     """
     Ground
     """
+
     wallTexture = "Sprites/wall.png"
 
     # Left wall small small.
@@ -249,11 +250,11 @@ def Level_2(pooler: Object.Pooler):
 
     # The end ?
     #wallPos = (-400, -600)
-    wallPos = ( 1400, 700)
-    wallSize = (125, 180)
-    wallTexture = "Sprites/door.png"
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 3, [0])
-    pooler.AddObject(wall, "Door")
+    doorPos = (1400, 700)
+    doorSize = (125, 180)
+    doorTexture = "Sprites/door.png"
+    door = Object.GameObject(doorPos, doorSize, "Level_2", "Real", doorTexture, 0, 3, [0])
+    pooler.AddObject(door, "Door")
 
     """
     top
@@ -262,6 +263,10 @@ def Level_2(pooler: Object.Pooler):
     wallSize = (4000, 500)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
+
+    Constants.currentLevel = 2
+    Constants.levelList[1][1] = doorPos
+    Constants.levelList[1][2] = doorSize
 
 
 """ LIST OF EVERY SCENE :

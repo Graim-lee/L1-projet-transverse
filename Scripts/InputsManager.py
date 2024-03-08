@@ -5,7 +5,8 @@ import pygame
 import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
-import Scripts.Physics as Physics
+
+
 
 mainPooler = Object.Pooler({})
 player: Object.GameObject
@@ -79,6 +80,15 @@ def CheckInputs():
                 pressingQA = False   # 'Q'
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
+            elif event.key == pygame.K_z:
+                door = Constants.levelList[1][1]
+                size = Constants.levelList[1][2]
+                """print(f"X : {player.position.x} > {door[0]} and {player.position.x} < {door[0] + size[0]}")
+                print(f"Y : {player.position.y} > {door[1]} and {player.position.y} < {door[1] + size[1]}")"""
+                player.position.x,player.position.y = 1400, 700
+                if player.position.y > Object.door.position.x and player.position.y < (Object.door.position.x + size[0]) and player.position.y > Object.door.position.y and player.position.y < (Object.door.position.y + size[1]):
+                    print("x: G, y: G")
+
 
         """ LEFT-CLICK PRESSED =========================================================================================
         Activates right after the user presses left-click ========================================================== """
@@ -112,9 +122,6 @@ def CheckInputs():
                 HideDots()
             slingshotArmed = False
 
-        if event.type == pygame.K_z: continue
-        if Constants.playerPos[0] and Constants.playerPos[0]: continue
-        if Constants.playerPos[1] and Constants.playerPos[1]: continue
 
 
 

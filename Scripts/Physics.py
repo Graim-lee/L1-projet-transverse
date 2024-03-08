@@ -65,7 +65,6 @@ def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
 
     if (bottomright1.x < topleft2.x) or (bottomright2.x < topleft1.x): return False   # If the objects are horizontally disjoint.
     if (bottomright1.y < topleft2.y) or (bottomright2.y < topleft1.y): return False     # Same but vertically.
-    print(other)
     return True     # If the objects are neither disjoint vertically nor horizontally, they must overlap (= collision).
 
 

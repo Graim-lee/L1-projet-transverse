@@ -97,3 +97,8 @@ buttonSize = (200, 80)
 # Magical font constants to center text in a button. Do not change pls.
 buttonCenterCoeff = 8.5
 buttonTextHeight = 18
+
+""" Game related =================================================================================================== """
+levelList = [["Level_0", (0,0),[0,0]],
+             ["Level_2", [0,0],[0,0]]]
+currentLevel = 0
