@@ -26,6 +26,7 @@ def BasePooler() -> Object.Pooler:
     Level_1(pooler)
     Level_2(pooler)
     Level_3(pooler)
+    Level_4(pooler)
 
     return pooler
 
@@ -75,14 +76,14 @@ def MainMenu(pooler: Object.Pooler):
 
     # Penguin sprite on the left of the screen
     penguinPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    playerTexture = "Sprites/PlayerMove/player.png"
-    image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real",playerTexture,0,0,[0],True,True,False)
+    playerTexture = "Sprites/Player/idle.png"
+    image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real", playerTexture,0,0,[0],True,True,False)
     pooler.AddObject(image,"Player")
 
     # Penguin sprite on the right of the screen
     penguinPos = (Constants.screenDimensions[0] / 2 + 300, 450)
-    playerTexture = "Sprites/PlayerMove/player_reverse.png"
-    image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real",playerTexture,0,0,[0],True,True,False)
+    playerTexture = "Sprites/Player/reverse.png"
+    image = Object.GameObject(penguinPos, (200,200), "Main_Menu","Real", playerTexture,0,0,[0],True,True,False)
     pooler.AddObject(image,"Player")
 
 def LevelWorldSelection(pooler: Object.Pooler):
@@ -159,7 +160,7 @@ def World_1(pooler: Object.Pooler):
 
     # "Level 4" Button.
     buttonPos3 = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    button3 = Object.GameObject(buttonPos3, (200, 160), "World_1", "Button", ("Level 4", ButtonFunctions.ToLevel_2), 0, 0, [0])
+    button3 = Object.GameObject(buttonPos3, (200, 160), "World_1", "Button", ("Level 4", ButtonFunctions.ToLevel_4), 0, 0, [0])
     pooler.AddObject(button3, "Button")
 
 def Player(pooler: Object.Pooler):
@@ -270,19 +271,19 @@ def Level_3(pooler: Object.Pooler):
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Walljump platform 1
+    # Walljump platform 1.
     wallPos = (2550, 300)
     wallSize = (100, 50)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Walljump platform 2
+    # Walljump platform 2.
     wallPos = (2200, 100)
     wallSize = (100, 50)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(wall, "Wall")
 
-    # Walljump platform 3
+    # Walljump platform 3.
     wallPos = (2550, -50)
     wallSize = (100, 50)
     wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
@@ -364,6 +365,18 @@ def Level_3(pooler: Object.Pooler):
     platformPos = (1650, 550)
     platformSize = (200, 50)
     platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(platform, "Wall")
+
+def Level_4(pooler: Object.Pooler):
+    """for i in range(100):
+        platformPos = (500 + 44 * i, 800)
+        platformSize = (44, 44)
+        platform = Object.GameObject(platformPos, platformSize, "Level_4", "Real", "Sprites/wall.png", 0, 2, [0])
+        pooler.AddObject(platform, "Wall")"""
+
+    platformPos = (500, 800)
+    platformSize = (44 * 100, 44)
+    platform = Object.GameObject(platformPos, platformSize, "Level_4", "Real", "Sprites/wall.png", 0, 2, [0])
     pooler.AddObject(platform, "Wall")
 
 

@@ -99,3 +99,15 @@ buttonScrewColor = (150, 150, 150)
 
 # This variable tracks whether we pressed a button or not in the frame (prevents pressing multiple button at the same time).
 buttonPressed = False
+
+""" Animation constants ============================================================================================ """
+
+# To keep track of whether the sprite of the player is flipped or not.
+playerSpriteFlipped = False
+
+# These variables track the actions of the player throughout the scripts to animate it properly.
+playerMovingDirection = 0
+playerSquishing = False
+
+# Constants for how many frames each sprite must stay in the player's animations.
+playerWalkDuration = 5

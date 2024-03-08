@@ -6,6 +6,7 @@ import Scripts.Constants as Constants
 import Scripts.Level as Level
 import Scripts.ButtonFunctions as ButtonFunctions
 import Scripts.Shaders as Shaders
+import Scripts.Animations as Animations
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -103,7 +104,8 @@ while Constants.gameRunning:
         # We play the animations of the objects.
         for category in pooler.main:
             for gameObject in pooler.main[category]:
-                if ComputeObject(gameObject) and gameObject.hasAnimation: gameObject.Animation(category)
+                if ComputeObject(gameObject) and gameObject.hasAnimation:
+                    if gameObject == player: Animations.AnimatePlayer(gameObject)
 
     # Displays every object on the screen.
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.

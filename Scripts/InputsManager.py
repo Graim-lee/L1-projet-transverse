@@ -67,13 +67,15 @@ def CheckInputs():
 
             elif event.key == pygame.K_a:
                 pressingQA = True  # 'A'
-                player.moving = -1
+                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
-                player.moving = -1
+                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
-                player.moving = 1
+                Constants.playerMovingDirection = 1
+            elif event.key == pygame.K_s:
+                Constants.playerSquishing = True
 
         """ KEYUP ======================================================================================================
         The user just released a key (only happens on the first frame after releasing the key) ===================== """
@@ -85,6 +87,8 @@ def CheckInputs():
                 pressingQA = False   # 'Q'
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
+            elif event.key == pygame.K_s:
+                Constants.playerSquishing = False
 
         """ LEFT-CLICK PRESSED =========================================================================================
         Activates right after the user presses left-click ========================================================== """
@@ -135,7 +139,7 @@ def ApplyInputs():
         if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
         if pressingD: MovePlayer(1)     # 'D'
 
-    if not pressingQA and not pressingD: player.moving = 0
+    if not pressingQA and not pressingD: Constants.playerMovingDirection = 0
 
     if jumpBufferTimer > 0:
         JumpPlayer()    # 'Space'

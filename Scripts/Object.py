@@ -134,11 +134,6 @@ class GameObject:
 
         self.hasAnimation = _hasAnimation
         self.png = _png
-        self.moving = 0
-        self.previousDirection = 1
-        self.spriteFlipped = False
-        self.walkFrame = 0
-        self.walkCycle = 0
 
         self.fallingFromGround = False
 
@@ -150,47 +145,18 @@ class GameObject:
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
 
-    def Animation(self, category):
-        """ Modify objects sprite
-            Args :
-                - path (string): the name of the object sprite
-                - direction (list of string): [is moving, the direction]
-
-        """
-        # Idle animation.
-        if self.moving == 0:
-            self.SetSprite("Sprites/" + category + "/idle.png")
-
-        # Walk animation.
-        else:
-            self.previousDirection = self.moving
-            self.walkFrame += 1
-
-            # Changes the animation frame.
-            if self.walkFrame > 5:
-                self.walkFrame = 0
-                self.walkCycle += 1
-                if self.walkCycle >= 2: self.walkCycle = 0
-                self.SetSprite("Sprites/" + category + "/move_" + str(self.walkCycle + 1)+".png")
-
-        # Makes the player face the right direction.
-        if self.previousDirection == -1 and not self.spriteFlipped:
-            self.surface = pygame.transform.flip(self.surface, True, False)
-            self.spriteFlipped = True
-
-        self.Resize((44, 44))
-
-    def SetSprite(self, path: str):
+    def SetSprite(self, path: str, isPlayer: bool = False):
         """ Changes the object's sprite located at the given path. Changes either by a png if the object has the _png
         tag activated or a normal image otherwise.
             Args := pygame
                 - path (str): the path where the image is located.
+                - isPlayer (bool): must be set to true when the object is the player. Allows for correct player animations.
             Returns :
                 - (Surface): the pygame surface for the player.
         """
         if self.png: self.surface = pygame.image.load(path)
         else: self.surface = pygame.image.load(path).convert()
-        self.spriteFlipped = False
+        if isPlayer: Constants.playerSpriteFlipped = False
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
