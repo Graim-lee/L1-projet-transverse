@@ -97,7 +97,7 @@ class GameObject:
         if _type == "Real":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
-        elif _type == "Button":
+        elif _type == "Button" or _type == "WorldButton":
             self.surface = pygame.image.load("Sprites/button.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
@@ -106,6 +106,11 @@ class GameObject:
 
         self.type = _type
         self.data = _data
+
+        if _type == "WorldButton":
+            worldSurface = pygame.image.load(_data[2]).convert()
+            worldSurface = pygame.transform.scale(worldSurface, _size)
+            self.data = (_data[0], _data[1], worldSurface)
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)

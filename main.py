@@ -132,6 +132,15 @@ while Constants.gameRunning:
                     screen.blit(displayFont, textRect)
                     Shaders.DrawOutline(screen, gameObject.position - 0.5 * gameObject.size, gameObject.size)
 
+                # Rendering the button, its text and its image for the 'WorldButton' objects.
+                elif gameObject.type == "WorldButton":
+                    screen.blit(gameObject.surface, (gameObject.position - 0.5 * gameObject.size).Tuple())
+                    screen.blit(gameObject.data[2], (gameObject.position - 0.5 * gameObject.size).Tuple())
+                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
+                    textRect = displayFont.get_rect(center = (gameObject.position + Object.Vector2(0, 0.6 * gameObject.size.y)).Tuple())
+                    screen.blit(displayFont, textRect)
+                    Shaders.DrawOutline(screen, gameObject.position - 0.5 * gameObject.size, gameObject.size)
+
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1
 

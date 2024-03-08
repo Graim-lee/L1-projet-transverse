@@ -13,9 +13,19 @@ def SetPlayer(setPlayer: Object.GameObject):
     global player
     player = setPlayer
 
+def ToMainMenu():
+    Constants.currentScene = "Main_Menu"
+
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
+def ToLevel_WorldSelection():
+    Constants.currentScene = "Level_World_Selection"
+    Constants.currentLevel = "Level_World_Selection"
+    player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
+
+def ToWorld_1():
+    Constants.currentScene = "World_1"
 
 def ToLevel_0():
     Constants.currentScene = "Level_0"
