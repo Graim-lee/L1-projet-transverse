@@ -27,6 +27,11 @@ def ToLevel_WorldSelection():
 def ToWorld_1():
     Constants.currentScene = "World_1"
 
+def ToLevel_World1():
+    Constants.currentScene = "Level_World_1"
+    Constants.currentLevel = "Level_World_1"
+    player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
+
 def ToLevel_0():
     Constants.currentScene = "Level_0"
     Constants.currentLevel = "Level_0"

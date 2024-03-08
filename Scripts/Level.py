@@ -5,7 +5,7 @@ import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
 
-initPooler = Object.Pooler(["Wall", "Door", "Player", "Trajectory", "Button", "Text"])
+initPooler = Object.Pooler(["Door", "Wall", "Player", "Trajectory", "Button", "Text"])
 
 def BasePooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
@@ -19,6 +19,7 @@ def BasePooler() -> Object.Pooler:
     WorldSelection(pooler)
     LevelWorldSelection(pooler)
     World_1(pooler)
+    LevelWorld_1(pooler)
 
     PauseMenu(pooler)
 
@@ -87,29 +88,34 @@ def MainMenu(pooler: Object.Pooler):
 def LevelWorldSelection(pooler: Object.Pooler):
     """ Adds the World Selection lobby to the main pooler. """
     wallTexture = "Sprites/wall.png"
+    doorTexture = "Sprites/door.png"
 
-    # Right stair 2.
-    blockPos = (1400, Constants.screenDimensions[1] - 600)
-    blockSize = (200, 100)
-    block = Object.GameObject(blockPos, blockSize, "Level_World_Selection", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(block, "Wall")
+    # World 1 door.
+    blockPos = (1450, Constants.screenDimensions[1] - 650)
+    blockSize = (100, 200)
+    block = Object.GameObject(blockPos, blockSize, "Level_World_Selection", "Door", (doorTexture, ButtonFunctions.ToLevel_World1), 0, 3, [0])
+    pooler.AddObject(block, "Door")
 
-    # Right stair 1.
-    blockPos = (1300, Constants.screenDimensions[1] - 550)
-    blockSize = (300, 100)
-    block = Object.GameObject(blockPos, blockSize, "Level_World_Selection", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(block, "Wall")
-
-    # Right platform.
-    blockPos = (1500, Constants.screenDimensions[1] - 650)
-    blockSize = (500, 200)
-    block = Object.GameObject(blockPos, blockSize, "Level_World_Selection", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(block, "Wall")
+    # World 1 door "WORLD 1" text.
+    blockPos = (1500, Constants.screenDimensions[1] - 700)
+    block = Object.GameObject(blockPos, (0, 0), "Level_World_Selection", "Text", ("WORLD 1", False), 0, 0, [0])
+    pooler.AddObject(block, "Door")
 
     # Floor.
     floorPos = (0, Constants.screenDimensions[1] - 500)
     floorSize = (Constants.screenDimensions[0] * 5, 800)
     floor = Object.GameObject(floorPos, floorSize, "Level_World_Selection", "Real", wallTexture, 0, 2, [0])
+    pooler.AddObject(floor, "Wall")
+
+def LevelWorld_1(pooler: Object.Pooler):
+    """ Adds the World 1 lobby pooler to the main pooler. """
+    wallTexture = "Sprites/wall.png"
+    doorTexture = "Sprites/door.png"
+
+    # Floor.
+    floorPos = (0, Constants.screenDimensions[1] - 500)
+    floorSize = (Constants.screenDimensions[0] * 5, 800)
+    floor = Object.GameObject(floorPos, floorSize, "Level_World_1", "Real", wallTexture, 0, 2, [0])
     pooler.AddObject(floor, "Wall")
 
 def WorldSelection(pooler: Object.Pooler):

@@ -24,11 +24,16 @@ class GameObject:
                         scene when in another. For example, you should not be able to see the player when looking in the
                         pause menu.
         - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
-                        player or an enemy. A 'Text' object doesn't have any texture, but displays text. A 'Button' object
+                        player or an enemy. A 'Door' object is like a 'Real' object, but it has a function associated to
+                        it that activates when the player interacts with the door. A 'Text' object doesn't have any
+                        texture, but displays text. A 'Button' object
                         is only used in UI, it is linked to a specific function to execute when pressed. A 'WorldButton'
                         object is like a 'Button' object, but with an image inside.
         - data (): this parameter can take different types for every type of object. For a 'Real' GameObject, this is the
                         path of its texture in the files (it replaces texturePath).
+                    For a 'Door' object, it is a tuple of the form (str, function), where the first string is the path to
+                        the door's texture, and the function is the function that should be executed when interacting with
+                        the door.
                     For a 'Text' type GameObject, data is a tuple of the form (str, bool). The first element of the tuple
                         is the text to be displayed, and the second one is whether the text is a title or not (titles are
                         just bigger).
@@ -97,11 +102,13 @@ class GameObject:
         if _type == "Real":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
+        elif _type == "Door":
+            self.surface = pygame.image.load(_data[0]).convert()
         elif _type == "Button" or _type == "WorldButton":
             self.surface = pygame.image.load("Sprites/button.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
-        if _type == "Real" or _type == "Button":
+        if _type == "Real" or _type == "Door" or _type == "Button":
             self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.type = _type

@@ -111,10 +111,12 @@ while Constants.gameRunning:
     for category in pooler.main:
         for gameObject in pooler.main[category]:
             if ComputeObject(gameObject):
-                # Rendering 'Real'-type objects.
-                if gameObject.type == "Real":
+                # Rendering 'Real'-type and 'Door'-type objects.
+                if gameObject.type == "Real" or gameObject.type == "Door":
                     screen.blit(gameObject.surface, gameObject.position.Tuple())
-                    if category == "Wall": Shaders.DrawOutline(screen, gameObject.position, gameObject.size)
+                    # Drawing outline.
+                    if category == "Wall" or category == "Door":
+                        Shaders.DrawOutline(screen, gameObject.position, gameObject.size)
 
                 # Displaying text for 'Text' objects.
                 elif gameObject.type == "Text":

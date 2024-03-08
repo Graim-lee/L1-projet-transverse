@@ -158,7 +158,8 @@ def MoveCamera():
 
     for category in mainPooler.main:
         for gameObject in mainPooler.main[category]:
-            if not gameObject.active or "Level" not in gameObject.scene: continue
+            if not gameObject.active: continue
+            if gameObject.scene != Constants.currentLevel and gameObject.scene != "Level_All": continue
             gameObject.position -= displacement
 
 def PhysicsCalculations(body: Object.GameObject):

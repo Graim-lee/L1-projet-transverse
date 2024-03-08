@@ -52,6 +52,14 @@ def CheckInputs():
             if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
+            elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
+                for door in mainPooler.main["Door"]:
+                    if not door.active: continue
+                    if door.scene != Constants.currentScene: continue
+                    if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
+                    if door.position.y + door.size.y < player.position.y or door.position.y > player.position.y + player.size.y: continue
+                    door.data[1]()
+                    break
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
@@ -245,7 +253,7 @@ def DisplayDots():
 
     if len(mainPooler.main["Trajectory"]) == 0:
         for i in range(5):
-            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), Constants.currentLevel, "Real", "Sprites/dot.png", 0, 0, [0, 1, 2])
+            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Level_All", "Real", "Sprites/dot.png", 0, 0, [0, 1, 2])
             mainPooler.AddObject(newDot, "Trajectory")
 
     for dot in mainPooler.main["Trajectory"]:
