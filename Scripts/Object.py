@@ -261,47 +261,66 @@ class Vector2:
 
 
 class Pooler:
-    """ this clas creates a pooler, which is a dictionary of the form {nom : liste de GameObjects} thus {str: [GameObject]}.
-    The point is to centralize the stockage of every object to iterate them faster, easier to use for us and use less RAM.
-
-    Cette classe permet de créer un pooler, c'est-à-dire un dictionnaire de la forme {nom : liste de GameObjects},
-    soit {str: [GameObject]}. L'objectif du pooler est de centraliser le stockage de tous les objets pour pouvoir
-    les itérer rapidement, d'avoir un stockage ordonné et de pouvoir libérer un peu de mémoire RAM (pas sûr de ça).
-    J'ai fait un objet spécial pour le pooler pour pouvoir lui mettre des méthodes (= des fonctions).
-        - main ({str: [GameObject]}): main structure of the pooler, a dictionary containing every GameObjects.
+    """ This class creates a pooler, which is a dictionary of dictionary of the form:
+     {name_of_level: {name_of_category: list_of_objects} } thus {str: {str: [GameObject]}}.
+    The point is to centralize the storage of every object to iterate them faster, easier to use for us and use less RAM.
+    We made a custom object specifically for this to use methods (= functions) specific to it.
+        - main ({str: {str: [GameObject]}}): main structure of the pooler, a dictionary where keys are level names, and
+                                            values are dictionaries of the form {name_of_the_category: list_of_objects}.
     """
 
-    def __init__(self, categories: [str]):
-        """ creates the object.
-            Args :
-                - categories ([str]): name of each category in the pooler (i.e.: ["Player", "Wall", "Enemy"] made
-                                        if we want to separate categories of objects).
-        """
+    def __init__(self):
+        """ Creates an empty pooler. """
         self.main = {}
-        for name in categories:
-            self.main[name] = []    # Initialise toutes les catégories comme ça {'nom_de_la_catégorie': []}.
 
-    def AddCategory(self, category: str):
-        """ Let us add a new category to the pooler.
-            Args :
-                - category (str): the category's name.
+    def SetScene(self, scene: str, objects: {str: GameObject}):
+        """ Will fill the dictionary of the specified scene in the pooler using the 'objects' dictionary. We do it object
+        by object to avoid linking the lists (we want the scene to be a copy of the original 'objects' dictionary).
+            Args:
+                - scene (str): the name of the scene to fill.
+                - objects ({str: GameObject}): the dictionary used to fill the scene. Of the form {name_of_category: list_of_objects}.
         """
-        self.main[category] = []
+        self.main[scene] = {}
+        for category in objects:
+            self.main[scene][category] = []
+            for gameObject in objects[category]:
+                self.main[scene][category].append(gameObject)
 
-    def AddObject(self, gameObject: GameObject, category: str):
-        """ Let us add a new object to the pooler.
-            Args :
-                - gameObject (GameObject): object to add in the pooler.
-                - category (str): object's category.
+    def GetCategoriesIn(self, scene: str) -> [str]:
+        """ Returns the list of every category contained in the given scene OR in the 'Level_All' scene.
+            Args:
+                - scene (str): the scene to retrieve the categories from.
+            Returns:
+                - ([str]): a list containing the names of every category.
         """
-        self.main[category].append(gameObject)
+        result = []
+        for category in self.main[scene]: result.append(category)
+        for category in self.main["Level_All"]:
+            if category not in result: result.append(category)
+        return result
+
+    def GetObjectsIn(self, scene: str, category: str) -> [GameObject]:
+        """ Returns a list of every object contained in the specific category of the given level OR the 'Level_All' scene.
+            Args:
+                - scene (str): the scene to retrieve the objects from.
+                - category (str): the category to retrieve the objects from.
+            Returns:
+                - ([GameObject]): the game objects to retrieve.
+        """
+        result = []
+        for gameObject in self.main[scene][category]: result.append(gameObject)
+        for gameObject in self.main["Level_All"][category]:
+            if gameObject not in result: result.append(gameObject)
+        return result
 
     def Copy(self):
-        copied = Pooler({})
-        for category in self.main:
-            copied.main[category] = []
-            for gameObject in self.main[category]:
-                copied.main[category].append(gameObject)
+        copied = Pooler()
+        for scene in self.main:
+            copied.main[scene] = {}
+            for category in self.main[scene]:
+                copied.main[category] = []
+                for gameObject in self.main[scene][category]:
+                    copied.main[scene][category].append(gameObject)
         return copied
 
     def __add__(self, other):
@@ -310,18 +329,22 @@ class Pooler:
                 - self: concerned pooler.
                 - other: second pooler.
         """
-        result = Pooler([])
+        result = Pooler()
 
         # Concatenating elements from the first pooler.
-        for category in self.main:
-            result.AddCategory(category)
-            for gameObject in self.main[category]:
-                result.AddObject(gameObject, category)
+        for scene in self.main:
+            result.main[scene] = {}
+            for category in self.main[scene]:
+                result.main[scene][category] = []
+                for gameObject in self.main[scene][category]:
+                    result.main[scene][category].append(gameObject)
 
         # Concatenating elements from the second pooler.
-        for category in other.main:
-            if category not in result.main: result.AddCategory(category)
-            for gameObject in other.main[category]:
-                result.AddObject(gameObject, category)
+        for scene in other.main:
+            if scene not in result.main: result.main[scene] = {}
+            for category in other.main[scene]:
+                if category not in result.main[scene]: result.main[scene][category] = []
+                for gameObject in other.main[category]:
+                    result.main[scene][category].append(gameObject)
 
         return result

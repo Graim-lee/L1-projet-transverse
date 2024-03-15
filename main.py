@@ -31,8 +31,8 @@ titleFont = pygame.font.Font("Fonts/hardpixel.otf", 120)
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
 # Initializing the pooler and the player.
-pooler = Level.BasePooler()
-player = pooler.main["Player"][0]
+pooler = Level.GetPooler()
+player = pooler.main["Level_All"]["Player"][0]
 
 # We link different objects to different scripts.
 InputsManager.SetPooler(pooler)
@@ -56,15 +56,20 @@ def ComputeObject(gameObject: Object.GameObject) -> bool:
     """
     return gameObject.active and gameObject.visible and (gameObject.scene == Constants.currentScene or gameObject.scene == "Level_All")
 
-def EveryObject() -> [Object.GameObject]:
-    """ Returns a list of every GameObject (to avoid having to iterate through the pooler every time).
+def EveryObject(scene: str) -> [Object.GameObject]:
+    """ Returns a list of every GameObject in the current scene (to avoid having to iterate through the pooler every time).
         Returns :
             - ([GameObject]): a list containing every GameObject.
     """
     result = []
-    for category in pooler.main:
-        for gameObject in pooler.main[category]:
-            result.append(gameObject)
+    for poolerCategory in pooler.main[scene]:
+        for poolerGameObject in pooler.main[scene][poolerCategory]:
+            result.append(poolerGameObject)
+
+    for poolerCategory in pooler.main["Level_All"]:
+        for poolerGameObject in pooler.main["Level_All"][poolerCategory]:
+            result.append(poolerGameObject)
+
     return result
 
 # Main loop of the game.
@@ -74,10 +79,12 @@ while Constants.gameRunning:
 
     # Only runs when we are in the Main Game (and not in a Pause Menu or in the Main Menu).
     if not Constants.inMenu:
+        objectsInScene = EveryObject(Constants.currentScene)
 
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
         # object to prepare it for the collision detection.
-        for gameObject in EveryObject():
+        for gameObject in objectsInScene:
+            print("cool")
             if ComputeObject(gameObject) and gameObject.mass != 0:
                 Physics.PhysicsCalculations(gameObject)
                 gameObject.collidedDuringFrame = False
@@ -86,7 +93,7 @@ while Constants.gameRunning:
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
         # (see in Constants.py, physicsTimeDivision).
         for timeDiv in range(Constants.physicsTimeDivision):
-            for gameObject in EveryObject():
+            for gameObject in EveryObject(Constants.currentScene):
                 if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
                     Physics.ApplyPhysics(gameObject, timeDiv)
 
@@ -94,7 +101,7 @@ while Constants.gameRunning:
         Physics.MoveCamera()
 
         # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
-        for gameObject in EveryObject():
+        for gameObject in objectsInScene:
             topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
             if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + Constants.screenDimensions[0]:
                 if not gameObject.alwaysLoaded: gameObject.visible = False
@@ -102,16 +109,16 @@ while Constants.gameRunning:
                 gameObject.visible = True
 
         # We play the animations of the objects.
-        for category in pooler.main:
-            for gameObject in pooler.main[category]:
+        for category in pooler.main[Constants.currentScene]:
+            for gameObject in pooler.main[Constants.currentScene][category]:
                 if ComputeObject(gameObject) and gameObject.hasAnimation:
                     if gameObject == player: Animations.AnimatePlayer(gameObject)
 
     # Displays every object on the screen.
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 
-    for category in pooler.main:
-        for gameObject in pooler.main[category]:
+    for category in pooler.main[Constants.currentScene]:
+        for gameObject in pooler.main[Constants.currentScene][category]:
             if ComputeObject(gameObject):
                 # Rendering 'Real'-type and 'Door'-type objects.
                 if gameObject.type == "Real" or gameObject.type == "Door":

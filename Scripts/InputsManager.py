@@ -7,7 +7,7 @@ import Scripts.Object as Object
 import Scripts.Constants as Constants
 import Scripts.Physics as Physics
 
-mainPooler = Object.Pooler({})
+mainPooler = Object.Pooler()
 player: Object.GameObject
 
 pressingQA = False
@@ -53,7 +53,7 @@ def CheckInputs():
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
             elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
             elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
-                for door in mainPooler.main["Door"]:
+                for door in mainPooler.main[Constants.currentScene]["Door"]:
                     if not door.active: continue
                     if door.scene != Constants.currentScene: continue
                     if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
@@ -103,7 +103,7 @@ def CheckInputs():
                 # If we are in a menu, we click on a button.
                 else:
                     mouseX, mouseY = pygame.mouse.get_pos()
-                    for button in mainPooler.main["Button"]:
+                    for button in mainPooler.main[Constants.currentScene]["Button"]:
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
                         if button.scene != Constants.currentScene: continue
@@ -121,7 +121,7 @@ def CheckInputs():
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if slingshotArmed:
                 UseSlingshot()
-                HideDots()
+                #HideDots()
             slingshotArmed = False
 
         if event.type == pygame.K_z: continue
@@ -248,23 +248,16 @@ def ShowSlingshotTrajectory():
 
     # Showing the dots.
     for i in range(5):
-        currentDot = mainPooler.main["Trajectory"][i]
+        currentDot = mainPooler.main["Level_All"]["Trajectory"][i]
         currentDot.position = dotsPosition[i] - 0.5 * currentDot.size
         currentDot.active = True
 
 def DisplayDots():
     global mainPooler
-
-    if len(mainPooler.main["Trajectory"]) == 0:
-        for i in range(5):
-            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), "Level_All", "Real", "Sprites/dot.png", 0, 0, [0, 1, 2])
-            mainPooler.AddObject(newDot, "Trajectory")
-
-    for dot in mainPooler.main["Trajectory"]:
+    for dot in mainPooler.main["Level_All"]["Trajectory"]:
         dot.active = True
 
 def HideDots():
     global mainPooler
-
-    for dot in mainPooler.main["Trajectory"]:
+    for dot in mainPooler.main["Level_All"]["Trajectory"]:
         dot.active = False

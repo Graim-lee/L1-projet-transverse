@@ -3,7 +3,7 @@ import Scripts.Object as Object
 import Scripts.Constants as Constants
 
 deltaTime = Constants.deltaTime
-mainPooler = Object.Pooler([])
+mainPooler = Object.Pooler()
 player: Object.GameObject
 
 def SetPooler(pooler: Object.Pooler):
@@ -41,8 +41,8 @@ def ApplyPhysics(body: Object.GameObject, i: int):
     body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
     # Checking for collisions.
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in mainPooler.main[Constants.currentScene]:
+        for gameObject in mainPooler.main[Constants.currentScene][category]:
             if body == gameObject: continue
             if gameObject.layer in body.notCollidable: continue
             if gameObject.scene != Constants.currentScene: continue
@@ -156,8 +156,8 @@ def MoveCamera():
     """ Used to keep the camera focused on the player. """
     displacement = player.position - Object.Vector2(Constants.screenCenter[0], Constants.screenCenter[1])
 
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in mainPooler.main[Constants.currentScene]:
+        for gameObject in mainPooler.main[Constants.currentScene][category]:
             if not gameObject.active: continue
             if gameObject.scene != Constants.currentLevel and gameObject.scene != "Level_All": continue
             gameObject.position -= displacement
@@ -207,12 +207,11 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
     groundedRight = body.position + body.size + Object.Vector2(-Constants.groundedHitboxBorder, Constants.maxGroundedDistance)
 
     global mainPooler
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in mainPooler.main[Constants.currentScene]:
+        for gameObject in mainPooler.main[Constants.currentScene][category]:
             if gameObject == body: continue
             if not gameObject.active: continue
             if gameObject.layer in body.notCollidable: continue
-            if gameObject.scene != Constants.currentScene: continue
 
             if CheckGroundedCollision(groundedLeft, groundedRight, gameObject): 
                 body.fallingFromGround = False
@@ -282,8 +281,8 @@ def ManageCollisions(body: Object.GameObject):
     repelForce = Object.Vector2(0, 0)   # The force applied to the object to simulate collision.
     applyForce = False                          # Stores whether to apply the repelForce or not (only apply when there is a collision).
 
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in mainPooler.main[Constants.currentScene]:
+        for gameObject in mainPooler.main[Constants.currentScene][category]:
 
             # I am using 'continue' everywhere to avoid spamming indentations and prevent tons of nested 'if if if'.
             # 'continue' allows to skip the current iteration of the loop, directly going to the next one.

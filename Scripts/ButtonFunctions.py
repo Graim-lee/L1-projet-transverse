@@ -32,11 +32,6 @@ def ToLevel_World1():
     Constants.currentLevel = "Level_World_1"
     player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
 
-def ToLevel_0():
-    Constants.currentScene = "Level_0"
-    Constants.currentLevel = "Level_0"
-    player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
-
 def ToLevel_1():
     Constants.currentScene = "Level_1"
     Constants.currentLevel = "Level_1"
@@ -45,7 +40,12 @@ def ToLevel_1():
 def ToLevel_2():
     Constants.currentScene = "Level_2"
     Constants.currentLevel = "Level_2"
-    player.position = Object.Vector2(Constants.screenDimensions[0] / 2 - 20, 700) # position player
+    player.position = Object.Vector2(Constants.screenDimensions[0] / 2 - 20, 700)
+
+def ToLevel_3():
+    Constants.currentScene = "Level_3"
+    Constants.currentLevel = "Level_3"
+    player.position = Object.Vector2(Constants.screenDimensions[0] / 2 - 20, 700)
 
 def ToLevel_4():
     Constants.currentScene = "Level_4"
