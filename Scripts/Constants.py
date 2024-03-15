@@ -1,4 +1,5 @@
 """ Meta informations ============================================================================================== """
+import pygame.font
 
 # Screen dimension.
 screenDimensions = (1920, 1080)
@@ -91,6 +92,10 @@ currentLevel = "Level_0"
 inMenu = False
 
 """ UI constants =================================================================================================== """
+
+# Text fonts. The "title" font is just bigger than the "text" font.
+textFont: pygame.font
+titleFont: pygame.font
 
 # Buttons constant for drawing screws.
 buttonScrewSize = 8

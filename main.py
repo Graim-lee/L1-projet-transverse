@@ -25,8 +25,8 @@ frame = 0
 gameClock = pygame.time.Clock()
 
 # Initializing the text and button objects.
-textFont = pygame.font.Font("Fonts/hardpixel.otf", 40)
-titleFont = pygame.font.Font("Fonts/hardpixel.otf", 120)
+Constants.textFont = pygame.font.Font("Fonts/hardpixel.otf", 40)
+Constants.titleFont = pygame.font.Font("Fonts/hardpixel.otf", 120)
 
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
@@ -84,7 +84,6 @@ while Constants.gameRunning:
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
         # object to prepare it for the collision detection.
         for gameObject in objectsInScene:
-            print("cool")
             if ComputeObject(gameObject) and gameObject.mass != 0:
                 Physics.PhysicsCalculations(gameObject)
                 gameObject.collidedDuringFrame = False
@@ -93,7 +92,7 @@ while Constants.gameRunning:
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
         # (see in Constants.py, physicsTimeDivision).
         for timeDiv in range(Constants.physicsTimeDivision):
-            for gameObject in EveryObject(Constants.currentScene):
+            for gameObject in objectsInScene:
                 if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
                     Physics.ApplyPhysics(gameObject, timeDiv)
 
@@ -114,43 +113,18 @@ while Constants.gameRunning:
                 if ComputeObject(gameObject) and gameObject.hasAnimation:
                     if gameObject == player: Animations.AnimatePlayer(gameObject)
 
-    # Displays every object on the screen.
+    # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 
     for category in pooler.main[Constants.currentScene]:
         for gameObject in pooler.main[Constants.currentScene][category]:
             if ComputeObject(gameObject):
-                # Rendering 'Real'-type and 'Door'-type objects.
-                if gameObject.type == "Real" or gameObject.type == "Door":
-                    screen.blit(gameObject.surface, gameObject.position.Tuple())
-                    # Drawing outline.
-                    if category == "Wall" or category == "Door":
-                        Shaders.DrawOutline(screen, gameObject.position, gameObject.size)
+                Shaders.RenderObject(screen, gameObject, category)
 
-                # Displaying text for 'Text' objects.
-                elif gameObject.type == "Text":
-                    fontToUse = titleFont if gameObject.data[1] else textFont
-                    displayFont = fontToUse.render(gameObject.data[0], True, (0, 0, 0))
-                    textRect = displayFont.get_rect(center = gameObject.position.Tuple())
-                    screen.blit(displayFont, textRect)
-
-                # Rendering the button and its text for 'Button' objects.
-                elif gameObject.type == "Button":
-                    screen.blit(gameObject.surface, (gameObject.position - 0.5 * gameObject.size).Tuple())
-                    Shaders.DrawButtonsDots(screen, gameObject.position, gameObject.size)
-                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
-                    textRect = displayFont.get_rect(center = gameObject.position.Tuple())
-                    screen.blit(displayFont, textRect)
-                    Shaders.DrawOutline(screen, gameObject.position - 0.5 * gameObject.size, gameObject.size)
-
-                # Rendering the button, its text and its image for the 'WorldButton' objects.
-                elif gameObject.type == "WorldButton":
-                    screen.blit(gameObject.surface, (gameObject.position - 0.5 * gameObject.size).Tuple())
-                    screen.blit(gameObject.data[2], (gameObject.position - 0.5 * gameObject.size).Tuple())
-                    displayFont = textFont.render(gameObject.data[0], True, (0, 0, 0))
-                    textRect = displayFont.get_rect(center = (gameObject.position + Object.Vector2(0, 0.6 * gameObject.size.y)).Tuple())
-                    screen.blit(displayFont, textRect)
-                    Shaders.DrawOutline(screen, gameObject.position - 0.5 * gameObject.size, gameObject.size)
+    for category in pooler.main["Level_All"]:
+        for gameObject in pooler.main["Level_All"][category]:
+            if ComputeObject(gameObject):
+                Shaders.RenderObject(screen, gameObject, category)
 
     pygame.display.flip()   # Updates the screen's visuals.
     frame += 1

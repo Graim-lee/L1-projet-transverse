@@ -33,8 +33,7 @@ def GetPooler() -> Object.Pooler:
 
 def PauseMenu():
     """ Adds the Pause Menu pooler to the main pooler. """
-    global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     # Title ("Pause").
     objectPos = (Constants.screenDimensions[0] / 2, 270)
@@ -61,7 +60,7 @@ def PauseMenu():
 def MainMenu():
     """ Adds the Main Menu pooler to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
@@ -98,7 +97,7 @@ def MainMenu():
 def LevelWorldSelection():
     """ Adds the World Selection lobby to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
     doorTexture = "Sprites/door.png"
@@ -125,7 +124,7 @@ def LevelWorldSelection():
 def LevelWorld_1():
     """ Adds the World 1 lobby pooler to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
     doorTexture = "Sprites/door.png"
@@ -141,7 +140,7 @@ def LevelWorld_1():
 def WorldSelection():
     """ Adds the World Selection pooler to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     # Title "World selection".
     objectPos = (Constants.screenDimensions[0] / 2, 240)
@@ -163,7 +162,7 @@ def WorldSelection():
 def World_1():
     """ Adds the World 1 level selection menu pooler to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     # Title "World 1".
     objectPos = (Constants.screenDimensions[0] / 2, 240)
@@ -172,7 +171,7 @@ def World_1():
 
     # "Level 1" button.
     objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "World_1", "Button", ("Level 1", ButtonFunctions.ToLevel_1), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (200, 160), "World_1", "Button", ("Level 1", ButtonFunctions.ToLevel_World1), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Level 2" button.
@@ -195,7 +194,7 @@ def World_1():
 def All():
     """ Adds the objects that are always loaded to the pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     # Player.
     playerSize = (44, 44)
@@ -213,7 +212,7 @@ def All():
 def Level_1():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -257,7 +256,7 @@ def Level_1():
 def Level_2():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -301,7 +300,7 @@ def Level_2():
 def Level_3():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -423,7 +422,7 @@ def Level_3():
 
 def Level_4():
     global initDictionary
-    result = initDictionary.copy()
+    result = CopyDict(initDictionary)
 
     for i in range(100):
         for j in range(10):
@@ -432,6 +431,23 @@ def Level_4():
             gameObject = Object.GameObject(objectPos, platformSize, "Level_4", "Real", "Sprites/wall.png", 0, 2, [0])
             result["Wall"].append(gameObject)
 
+    return result
+
+
+
+
+
+def CopyDict(dictionary: {}) -> {}:
+    """ Returns an UNLINKED copy of the given dictionary, meaning changing the value of the new dictionary (the copy)
+    won't affect the initial dictionary.
+        Args:
+            - dictionary ({}): the dictionary to copy.
+        Returns:
+            - ({}): a copy of the dictionary.
+    """
+    result = {}
+    for category in dictionary:
+        result[category] = list(dictionary[category])
     return result
 
 """ LIST OF EVERY SCENE :
