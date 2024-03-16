@@ -6,7 +6,7 @@ import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
 
 initPooler = Object.Pooler()
-initDictionary = {"Door": [], "Wall": [], "Player": [], "Trajectory": [], "Button": [], "Text": []}
+initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
 # We keep track of the original objects in each scene.
 scenes = {"Main_Menu", "World_Selection"}

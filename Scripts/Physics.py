@@ -174,7 +174,7 @@ def PhysicsCalculations(body: Object.GameObject):
 
     ManageCollisions(body)  # Collisions.
 
-    if not body.fallingFromGround and (body.instantVelocity.x > 6 or body.instantVelocity.y >6 or body.instantVelocity.x < -6 or body.instantVelocity.x < -6):
+    if not body.fallingFromGround and (body.instantVelocity.x ** 2 > 36 or body.instantVelocity.y ** 2 > 36):
         body.velocity = body.instantVelocity
     elif not body.fallingFromGround:
         body.velocity = body.continuousVelocity

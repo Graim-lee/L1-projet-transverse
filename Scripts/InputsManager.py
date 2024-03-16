@@ -121,7 +121,7 @@ def CheckInputs():
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if slingshotArmed:
                 UseSlingshot()
-                #HideDots()
+                HideDots()
             slingshotArmed = False
 
         if event.type == pygame.K_z: continue
@@ -242,7 +242,7 @@ def ShowSlingshotTrajectory():
     # The trajectory equation is x(t) = x0 + v0*t*sV - sG*g*t^sGP.
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t     # Time between two dots.
+        timeSplit = t * 0.8     # Time between two dots.
         pos = x0 + timeSplit * v0 * sV + sG * Constants.G * Object.Vector2(0, timeSplit ** sGP)
         dotsPosition.append(pos)
 
