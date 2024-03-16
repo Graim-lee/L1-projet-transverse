@@ -37,7 +37,6 @@ player = pooler.main["Level_All"]["Player"][0]
 # We link different objects to different scripts.
 InputsManager.SetPooler(pooler)
 InputsManager.SetPlayer(player)
-Physics.SetPooler(pooler)
 Physics.SetPlayer(player)
 ButtonFunctions.SetPlayer(player)
 
@@ -54,75 +53,59 @@ def ComputeObject(gameObject: Object.GameObject) -> bool:
         Returns :
             - (bool): True if the object has to be rendered etc.
     """
-    return gameObject.active and gameObject.visible and (gameObject.scene == Constants.currentScene or gameObject.scene == "Level_All")
-
-def EveryObject(scene: str) -> [Object.GameObject]:
-    """ Returns a list of every GameObject in the current scene (to avoid having to iterate through the pooler every time).
-        Returns :
-            - ([GameObject]): a list containing every GameObject.
-    """
-    result = []
-    for poolerCategory in pooler.main[scene]:
-        for poolerGameObject in pooler.main[scene][poolerCategory]:
-            result.append(poolerGameObject)
-
-    for poolerCategory in pooler.main["Level_All"]:
-        for poolerGameObject in pooler.main["Level_All"][poolerCategory]:
-            result.append(poolerGameObject)
-
-    return result
+    return gameObject.active and gameObject.visible
 
 # Main loop of the game.
 while Constants.gameRunning:
-    # Retrieves and manages user inputs.
-    gameRunning = InputsManager.CheckInputs()
+    # Manages user inputs.
+    InputsManager.CheckInputs()
+
+    # We retrieve every object and category that we want to access during the frame.
+    Constants.objectsInScene = pooler.SceneConcat([Constants.currentScene, "Level_All"])
 
     # Only runs when we are in the Main Game (and not in a Pause Menu or in the Main Menu).
     if not Constants.inMenu:
-        objectsInScene = EveryObject(Constants.currentScene)
 
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
         # object to prepare it for the collision detection.
-        for gameObject in objectsInScene:
-            if ComputeObject(gameObject) and gameObject.mass != 0:
-                Physics.PhysicsCalculations(gameObject)
-                gameObject.collidedDuringFrame = False
+        for category in Constants.objectsInScene:
+            for gameObject in Constants.objectsInScene[category]:
+                if ComputeObject(gameObject) and gameObject.mass != 0:
+                    Physics.PhysicsCalculations(gameObject)
+                    gameObject.collidedDuringFrame = False
 
         # Updates every object's position after the calculations (updating it after every calculation is useful for
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
         # (see in Constants.py, physicsTimeDivision).
         for timeDiv in range(Constants.physicsTimeDivision):
-            for gameObject in objectsInScene:
-                if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
-                    Physics.ApplyPhysics(gameObject, timeDiv)
+            for category in Constants.objectsInScene:
+                for gameObject in Constants.objectsInScene[category]:
+                    if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
+                        Physics.ApplyPhysics(gameObject, timeDiv)
 
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.
         Physics.MoveCamera()
 
         # We check that the object is still in the neighborhood of the camera. If not, we deactivate it.
-        for gameObject in objectsInScene:
-            topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
-            if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + Constants.screenDimensions[0]:
-                if not gameObject.alwaysLoaded: gameObject.visible = False
-            else:
-                gameObject.visible = True
+        for category in Constants.objectsInScene:
+            for gameObject in Constants.objectsInScene[category]:
+                topLeft, bottomRight = gameObject.position, gameObject.position + gameObject.size
+                if bottomRight.x < -Constants.cameraUnloadDistance or topLeft.x > Constants.cameraUnloadDistance + Constants.screenDimensions[0]:
+                    if not gameObject.alwaysLoaded: gameObject.visible = False
+                else:
+                    gameObject.visible = True
 
         # We play the animations of the objects.
-        for category in pooler.main[Constants.currentScene]:
-            for gameObject in pooler.main[Constants.currentScene][category]:
+        for category in Constants.objectsInScene:
+            for gameObject in Constants.objectsInScene[category]:
                 if ComputeObject(gameObject) and gameObject.hasAnimation:
                     if gameObject == player: Animations.AnimatePlayer(gameObject)
 
     # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
 
-    for category in pooler.main[Constants.currentScene]:
-        for gameObject in pooler.main[Constants.currentScene][category]:
-            if ComputeObject(gameObject):
-                Shaders.RenderObject(screen, gameObject, category)
-
-    for category in pooler.main["Level_All"]:
-        for gameObject in pooler.main["Level_All"][category]:
+    for category in Constants.objectsInScene:
+        for gameObject in Constants.objectsInScene[category]:
             if ComputeObject(gameObject):
                 Shaders.RenderObject(screen, gameObject, category)
 

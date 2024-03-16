@@ -313,6 +313,21 @@ class Pooler:
             if gameObject not in result: result.append(gameObject)
         return result
 
+    def SceneConcat(self, scenes: [str]) -> {str: [GameObject]}:
+        """ Returns a concatenated version of every scene given, that is, a dictionary of the form
+        {name_of_category : list_of_gameobjects} containing each category and game object of every scene given in the
+        'scenes' list.
+            Args:
+                - scenes ([str]): list of every scene to be concatenated.
+        """
+        result = {}
+        for scene in scenes:
+            for category in self.main[scene]:
+                if category not in result: result[category] = []
+                for gameObject in self.main[scene][category]:
+                    result[category].append(gameObject)
+        return result
+
     def Copy(self):
         copied = Pooler()
         for scene in self.main:

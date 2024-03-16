@@ -1,5 +1,6 @@
+import pygame
+
 """ Meta informations ============================================================================================== """
-import pygame.font
 
 # Screen dimension.
 screenDimensions = (1920, 1080)
@@ -81,6 +82,11 @@ cameraUnloadDistance = 500
 """ Scene & game state constants =================================================================================== """
 
 # Go at the end of Level.py for a list of every scene so far.
+
+# Dictionary of the form {name_of_category: list_of_objects} containing every object to compute at a specific moment in
+# the game. These objects often consist of the ones contained in the game's current scene + the objects in the 'Level_All'
+# scene (the scene that is loaded everywhere).
+objectsInScene: {str: []}
 
 # The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
 # pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
