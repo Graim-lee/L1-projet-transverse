@@ -61,7 +61,8 @@ while Constants.gameRunning:
     InputsManager.CheckInputs()
 
     # We retrieve every object and category that we want to access during the frame.
-    Constants.objectsInScene = pooler.SceneConcat([Constants.currentScene, "Level_All"])
+    concatScene = [Constants.currentScene] if Constants.inMenu else [Constants.currentScene, "Level_All"]
+    Constants.objectsInScene = pooler.SceneConcat(concatScene)
 
     # Only runs when we are in the Main Game (and not in a Pause Menu or in the Main Menu).
     if not Constants.inMenu:

@@ -8,9 +8,6 @@ import Scripts.ButtonFunctions as ButtonFunctions
 initPooler = Object.Pooler()
 initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
-# We keep track of the original objects in each scene.
-scenes = {"Main_Menu", "World_Selection"}
-
 def GetPooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
      and it seems that having that many objects at the same time in the pooler isn't bad. What matters is how many objects
