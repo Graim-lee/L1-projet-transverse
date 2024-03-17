@@ -26,12 +26,6 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_3", Level_3())
     pooler.SetScene("Level_4", Level_4())
 
-    for scene in pooler.main:
-        print("==========================================================================\n" + scene + "\n")
-        for category in pooler.main[scene]:
-            for obj in pooler.main[scene][category]:
-                print(category + " : " + str(obj))
-
     return pooler
 
 def All():
