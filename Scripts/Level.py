@@ -26,6 +26,12 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_3", Level_3())
     pooler.SetScene("Level_4", Level_4())
 
+    for scene in pooler.main:
+        print("==========================================================================\n" + scene + "\n")
+        for category in pooler.main[scene]:
+            for obj in pooler.main[scene][category]:
+                print(category + " : " + str(obj))
+
     return pooler
 
 def PauseMenu():
@@ -216,36 +222,36 @@ def Level_1():
     # Floor.
     objectPos = (0, Constants.screenDimensions[1] - 200)
     floorSize = (Constants.screenDimensions[0] * 5, 100)
-    gameObject = Object.GameObject(objectPos, floorSize, "Level_0", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, floorSize, "Level_1", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left wall.
     objectPos = (-600, 0)
     wallSize = (600, Constants.screenDimensions[1])
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_0", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_1", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Platform.
     objectPos = (1700, 650)
     platformSize = (300, 100)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_0", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_1", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # "Fuck u" debug text.
     objectPos = (Constants.screenDimensions[0] / 2 - 100, 600)
-    gameObject = Object.GameObject(objectPos, (0,0), "Level_0", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (0,0), "Level_1", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     # Platform 2.
     objectPos = (2200, 650)
     platformSize = (300, 100)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_0", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_1", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Platform 3.
     objectPos = (2200, 400)
     platformSize = (300, 100)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_0", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_1", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     return result
@@ -260,36 +266,36 @@ def Level_2():
     # Floor.
     objectPos = (0, Constants.screenDimensions[1] - 200)
     floorSize = (Constants.screenDimensions[0] * 5, 100)
-    gameObject = Object.GameObject(objectPos, floorSize, "Level_1", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, floorSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left wall.
     objectPos = (-600, 0)
     wallSize = (600, Constants.screenDimensions[1])
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_1", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # "Fuck u" debug text.
     objectPos = (Constants.screenDimensions[0] / 2 - 100, 600)
-    gameObject = Object.GameObject(objectPos, (0,0), "Level_1", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (0,0), "Level_2", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
     result["Wall"].append(gameObject)
 
     # Platform 1.
     objectPos = (1700, 650)
     platformSize = (300, 100)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_1", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Platform 2.
     objectPos = (2200, 650)
     platform2Size = (300, 100)
-    gameObject = Object.GameObject(objectPos, platform2Size, "Level_1", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platform2Size, "Level_2", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Platform 3.
     objectPos = (2200, 400)
     platform3Size = (300, 100)
-    gameObject = Object.GameObject(objectPos, platform3Size, "Level_1", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platform3Size, "Level_2", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     return result
@@ -304,115 +310,115 @@ def Level_3():
     # Left stair n°2.
     objectPos = (500, 680)
     wallSize = (200, 200)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left stair n°1.
     objectPos = (500, 780)
     wallSize = (300, 200)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Right platform.
     objectPos = (2000, 500)
     wallSize = (700, 500)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Walljump platform 1.
     objectPos = (2550, 300)
     wallSize = (100, 50)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Walljump platform 2.
     objectPos = (2200, 100)
     wallSize = (100, 50)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Walljump platform 3.
     objectPos = (2550, -50)
     wallSize = (100, 50)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Upper section block before big jump.
     objectPos = (1000, -500)
     wallSize = (200, 400)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Upper section first stair.
     objectPos = (1800, -300)
     wallSize = (300, 200)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Upper section second stair.
     objectPos = (1700, -400)
     wallSize = (200, 300)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Upper section floor.
     objectPos = (1000, -200)
     wallSize = (1250, 100)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left wall for walljump.
     objectPos = (2200, -200)
     wallSize = (50, 500)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Right border.
     objectPos = (2600, -2000)
     wallSize = (500, 4000)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Floor.
     objectPos = (0, Constants.screenDimensions[1] - 200)
     floorSize = (Constants.screenDimensions[0] * 5, 800)
-    gameObject = Object.GameObject(objectPos, floorSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, floorSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left platform.
     objectPos = (-100, 600)
     wallSize = (700, 800)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Jump
     objectPos = (-100, -500)
     wallSize = (600, 400)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left border.
     objectPos = (-700, -2000)
     wallSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, wallSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Parkour platform 1.
     objectPos = (900, 550)
     platformSize = (200, 50)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Parkour platform 2.
     objectPos = (1250, 550)
     platformSize = (200, 50)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Parkour platform 3.
     objectPos = (1650, 550)
     platformSize = (200, 50)
-    gameObject = Object.GameObject(objectPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_3", "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     return result
@@ -421,12 +427,10 @@ def Level_4():
     global initDictionary
     result = CopyDict(initDictionary)
 
-    for i in range(100):
-        for j in range(10):
-            objectPos = (500 + 44 * i, 800 + 44 * j)
-            platformSize = (44, 44)
-            gameObject = Object.GameObject(objectPos, platformSize, "Level_4", "Real", "Sprites/wall.png", 0, 2, [0])
-            result["Wall"].append(gameObject)
+    objectPos = (544, 844)
+    platformSize = (1000, 1000)
+    gameObject = Object.GameObject(objectPos, platformSize, "Level_4", "Real", "Sprites/wall.png", 0, 2, [0])
+    result["Wall"].append(gameObject)
 
     return result
 
