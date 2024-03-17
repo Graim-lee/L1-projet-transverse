@@ -39,7 +39,8 @@ class GameObject:
                     A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
                         'Button' object, and the last str is the path to the image inside the button.
 
-        - position (Vector2): object's coordinates.
+        - position (Vector2): object's current coordinates.
+        - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).
         - size (Vector2): object's size(in pixels).
         - surface (Surface): object's surface in pygame (texture)
 
@@ -90,6 +91,7 @@ class GameObject:
         self.alwaysLoaded = _alwaysLoaded
 
         self.position = Vector2(_position[0], _position[1])
+        self.initialPosition = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
 
         # We fetch the object's texture if needed.

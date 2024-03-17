@@ -8,48 +8,41 @@ import Scripts.ButtonFunctions as ButtonFunctions
 initPooler = Object.Pooler()
 initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
-# This dictionary keeps the initial scenes as they are to be able to reset the levels.
-scenes = {"Level_All": {}, "Main_Menu": {}, "World_Selection": {}, "Level_World_Selection": {}, "World_1": {}, "Level_World_1": {}, "Level_1_1": {}, "Level_1_2": {}, "Level_1_3": {}, "Level_1_4": {}}
-
 mainPooler: Object.Pooler
 
 def GetPooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
      and it seems that having that many objects at the same time in the pooler isn't bad. What matters is how many objects
      are on-screen at the same time. """
-    global mainPooler, scenes
+    global mainPooler
     pooler = initPooler.Copy()
 
-    # We keep a reference to every scene's initial pooler (where the objects haven't moved) to be able to reset them later.
-    scenes["Level_All"] = All()
-    scenes["Main_Menu"] = MainMenu()
-    scenes["World_Selection"] = WorldSelection()
-    scenes["Level_World_Selection"] = LevelWorldSelection()
-    scenes["World_1"] = World_1()
-    scenes["Level_World_1"] = LevelWorld_1()
-    scenes["Pause_Menu"] = PauseMenu()
-    scenes["Level_1_1"] = Level_1_1()
-    scenes["Level_1_2"] = Level_1_2()
-    scenes["Level_1_3"] = Level_1_3()
-    scenes["Level_1_4"] = Level_1_4()
-
-    # We then put these scenes in the main pooler of the game. After some quick research, doing this apparently doesn't
-    # cause memory leaks, so we're fine for now I guess?
-    for scene in scenes:
-        pooler.SetScene(scene, CopyDict(scenes[scene]))
+    pooler.SetScene("Level_All", All())
+    pooler.SetScene("Main_Menu", MainMenu())
+    pooler.SetScene("World_Selection", WorldSelection())
+    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
+    pooler.SetScene("World_1", World_1())
+    pooler.SetScene("Level_World_1", LevelWorld_1())
+    pooler.SetScene("Pause_Menu", PauseMenu())
+    pooler.SetScene("Level_1_1", Level_1_1())
+    pooler.SetScene("Level_1_2", Level_1_2())
+    pooler.SetScene("Level_1_3", Level_1_3())
+    pooler.SetScene("Level_1_4", Level_1_4())
 
     mainPooler = pooler
     return pooler
 
 def ResetScene(scene: str):
     """ Resets the given scene. As said above, it apparently does not cause any memory leak. """
-    global mainPooler, scenes
-    mainPooler.SetScene(scene, CopyDict(scenes[scene]))
+    global mainPooler
+    for category in mainPooler.main[scene]:
+        for gameObject in mainPooler.main[scene][category]:
+            gameObject.position = gameObject.initialPosition
 
 def All():
     """ Adds the objects that are always loaded to the pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     # Player.
     playerSize = (44, 44)
@@ -67,7 +60,7 @@ def All():
 
 def PauseMenu():
     """ Adds the Pause Menu pooler to the main pooler. """
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     # Title ("Pause").
     objectPos = (Constants.screenDimensions[0] / 2, 270)
@@ -81,7 +74,7 @@ def PauseMenu():
 
     # "Back to menu" button.
     objectPos = (Constants.screenDimensions[0] / 2, 600)
-    gameObject = Object.GameObject(objectPos, (200, 80), "Button", ("Back to menu", ButtonFunctions.ToMainMenu), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (350, 80), "Button", ("Back to menu", ButtonFunctions.PauseToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Quit game" button.
@@ -94,7 +87,7 @@ def PauseMenu():
 def MainMenu():
     """ Adds the Main Menu pooler to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
@@ -131,7 +124,7 @@ def MainMenu():
 def LevelWorldSelection():
     """ Adds the World Selection lobby to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
     doorTexture = "Sprites/door.png"
@@ -158,7 +151,7 @@ def LevelWorldSelection():
 def LevelWorld_1():
     """ Adds the World 1 lobby pooler to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
     doorTexture = "Sprites/door.png"
@@ -174,7 +167,7 @@ def LevelWorld_1():
 def WorldSelection():
     """ Adds the World Selection pooler to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     # Title "World selection".
     objectPos = (Constants.screenDimensions[0] / 2, 240)
@@ -196,7 +189,7 @@ def WorldSelection():
 def World_1():
     """ Adds the World 1 level selection menu pooler to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     # Title "World 1".
     objectPos = (Constants.screenDimensions[0] / 2, 240)
@@ -228,7 +221,7 @@ def World_1():
 def Level_1_1():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -255,7 +248,7 @@ def Level_1_1():
 def Level_1_2():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -376,7 +369,7 @@ def Level_1_2():
     # End door.
     objectPos = (-950, -1350)
     objectSize = (100, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.ToWorld_1), 0, 3, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel_1_2), 0, 3, [0])
     result["Door"].append(gameObject)
 
     return result
@@ -384,7 +377,7 @@ def Level_1_2():
 def Level_1_3():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -410,7 +403,7 @@ def Level_1_3():
 
 def Level_1_4():
     global initDictionary
-    result = CopyDict(initDictionary)
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
@@ -433,22 +426,31 @@ def Level_1_4():
     result["Wall"].append(gameObject)
 
     return result
-
-
-
-
-
-def CopyDict(dictionary: {}) -> {}:
+def CopyEmptyDict(dictionary: {}) -> {}:
     """ Returns an UNLINKED copy of the given dictionary, meaning changing the value of the new dictionary (the copy)
-    won't affect the initial dictionary.
+    won't affect the initial dictionary. The given dictionary must be empty, that is of the form {name_of_category: []}.
         Args:
-            - dictionary ({}): the dictionary to copy.
+            - dictionary ({str: []}): the dictionary to copy.
         Returns:
-            - ({}): a copy of the dictionary.
+            - ({str: []}): a copy of the dictionary.
     """
     result = {}
     for category in dictionary:
-        result[category] = list(dictionary[category])
+        result[category] = []
+    return result
+
+def CopyFullDict(dictionary: {}) -> {}:
+    """ Same as the last function, but with a filled dictionary, that is, a dictionary of the form
+    {name_of_category: list_of_objects}. I created two functions as this one is a little bit slower to run (so using the
+    first one when possible saves performances).
+        Args:
+            - dictionary ({str: [GameObject]}): the dictionary to copy.
+        Returns:
+            - ({str: [GameObject]}): a copy of the given dictionary.
+    """
+    result = {}
+    for category in dictionary:
+        result[category] = []
     return result
 
 """ LIST OF EVERY SCENE :

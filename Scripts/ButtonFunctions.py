@@ -14,7 +14,8 @@ def SetPlayer(setPlayer: Object.GameObject):
     global player
     player = setPlayer
 
-def ToMainMenu():
+def PauseToMainMenu():
+    Level.ResetScene(Constants.currentLevel)
     Constants.currentScene = "Main_Menu"
 
 def ToWorldSelection():
@@ -46,6 +47,7 @@ def ToLevel_1_2():
 def EndLevel_1_2():
     Constants.currentScene = "World_1"
     Level.ResetScene("Level_1_2")
+    ToWorld_1()
 
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
