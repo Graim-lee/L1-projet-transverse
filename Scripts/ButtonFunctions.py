@@ -5,6 +5,7 @@
 
 import Scripts.Constants as Constants
 import Scripts.Object as Object
+import Scripts.Level as Level
 
 player: Object.GameObject
 
@@ -32,24 +33,28 @@ def ToLevel_World1():
     Constants.currentLevel = "Level_World_1"
     player.position = Object.Vector2(0, 0)
 
-def ToLevel_1():
-    Constants.currentScene = "Level_1"
-    Constants.currentLevel = "Level_1"
+def ToLevel_1_1():
+    Constants.currentScene = "Level_1_1"
+    Constants.currentLevel = "Level_1_1"
     player.position = Object.Vector2(0, 0)
 
-def ToLevel_2():
-    Constants.currentScene = "Level_2"
-    Constants.currentLevel = "Level_2"
+def ToLevel_1_2():
+    Constants.currentScene = "Level_1_2"
+    Constants.currentLevel = "Level_1_2"
     player.position = Object.Vector2(0, 135)
 
-def ToLevel_3():
-    Constants.currentScene = "Level_3"
-    Constants.currentLevel = "Level_3"
+def EndLevel_1_2():
+    Constants.currentScene = "World_1"
+    Level.ResetScene("Level_1_2")
+
+def ToLevel_1_3():
+    Constants.currentScene = "Level_1_3"
+    Constants.currentLevel = "Level_1_3"
     player.position = Object.Vector2(0, 0)
 
-def ToLevel_4():
-    Constants.currentScene = "Level_4"
-    Constants.currentLevel = "Level_4"
+def ToLevel_1_4():
+    Constants.currentScene = "Level_1_4"
+    Constants.currentLevel = "Level_1_4"
     player.position = Object.Vector2(0, 0)
 
 def QuitGame():

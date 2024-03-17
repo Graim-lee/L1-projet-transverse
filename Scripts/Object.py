@@ -19,10 +19,6 @@ class GameObject:
         - visible (bool): if the object is outside the camera's field of view, this is False and allows not to lose time
                             calculating these objects.
         - alwaysLoaded (bool): if True, prevents the object from being unloaded by the camera.
-        - scene (str): the name (ID) of the scene the object is in. The scene can be named 'Level_1_1', 'Pause_Menu',
-                        etc. (find the list in Constants.py), and allows not to show objects that aren't in a specific
-                        scene when in another. For example, you should not be able to see the player when looking in the
-                        pause menu.
         - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
                         player or an enemy. A 'Door' object is like a 'Real' object, but it has a function associated to
                         it that activates when the player interacts with the door. A 'Text' object doesn't have any
@@ -74,13 +70,12 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _scene: str, _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
                 - _position (tuple (int, int)): object's position.
                 - _size (tuple (int, int)): object's size.
-                - _scene (str): the name of the scene to which the GameObject belongs.
                 - _type (str): the type of the object (a Real, a Text, or a Button...).
                 - _data (): the object's data (depends on its type). See the description above.
                 - _mass (float): object's mass.
@@ -93,7 +88,6 @@ class GameObject:
         self.active = True
         self.visible = True
         self.alwaysLoaded = _alwaysLoaded
-        self.scene = _scene
 
         self.position = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])

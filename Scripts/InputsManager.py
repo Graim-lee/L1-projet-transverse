@@ -52,7 +52,6 @@ def CheckInputs():
             elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
                 for door in mainPooler.main[Constants.currentScene]["Door"]:
                     if not door.active: continue
-                    if door.scene != Constants.currentScene: continue
                     if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
                     if door.position.y + door.size.y < player.position.y or door.position.y > player.position.y + player.size.y: continue
                     door.data[1]()
@@ -103,7 +102,6 @@ def CheckInputs():
                     for button in mainPooler.main[Constants.currentScene]["Button"]:
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
-                        if button.scene != Constants.currentScene: continue
                         if button.position.x - 0.5 * button.size.x > mouseX or button.position.x + 0.5 * button.size.x < mouseX: continue
                         if button.position.y - 0.5 * button.size.y > mouseY or button.position.y + button.size.y < mouseY: continue
                         button.data[1]()    # We call the function associated to the button.

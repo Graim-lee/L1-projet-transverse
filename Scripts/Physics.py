@@ -34,7 +34,6 @@ def ApplyPhysics(body: Object.GameObject, i: int):
         for gameObject in Constants.objectsInScene[category]:
             if body == gameObject: continue
             if gameObject.layer in body.notCollidable: continue
-            if gameObject.scene != Constants.currentScene: continue
             if not CheckCollision(body, gameObject): continue
 
             CancelCollision(body, gameObject)
@@ -148,7 +147,6 @@ def MoveCamera():
     for category in Constants.objectsInScene:
         for gameObject in Constants.objectsInScene[category]:
             if not gameObject.active: continue
-            if gameObject.scene != Constants.currentLevel and gameObject.scene != "Level_All": continue
             gameObject.position -= displacement
 
 def PhysicsCalculations(body: Object.GameObject):
