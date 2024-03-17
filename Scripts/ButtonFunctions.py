@@ -44,11 +44,6 @@ def ToLevel_1_2():
     Constants.currentLevel = "Level_1_2"
     player.position = Object.Vector2(0, 135)
 
-def EndLevel_1_2():
-    Constants.currentScene = "World_1"
-    Level.ResetScene("Level_1_2")
-    ToWorld_1()
-
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
     Constants.currentLevel = "Level_1_3"
@@ -58,6 +53,11 @@ def ToLevel_1_4():
     Constants.currentScene = "Level_1_4"
     Constants.currentLevel = "Level_1_4"
     player.position = Object.Vector2(0, 0)
+
+def EndLevel():
+    Constants.currentScene = "World_Selection"
+    Level.ResetScene(Constants.currentLevel)
+    ToWorldSelection()
 
 def QuitGame():
     Constants.gameRunning = False

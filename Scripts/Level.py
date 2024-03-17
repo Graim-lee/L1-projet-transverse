@@ -21,8 +21,8 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_All", All())
     pooler.SetScene("Main_Menu", MainMenu())
     pooler.SetScene("World_Selection", WorldSelection())
-    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
     pooler.SetScene("World_1", World_1())
+    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
     pooler.SetScene("Level_World_1", LevelWorld_1())
     pooler.SetScene("Pause_Menu", PauseMenu())
     pooler.SetScene("Level_1_1", Level_1_1())
@@ -56,32 +56,6 @@ def All():
         gameObject = Object.GameObject((0, 0), (10 - i, 10 - i), "Real", "Sprites/dot.png", 0, 0, [0, 1, 2, 3])
         gameObject.active = False
         result["Trajectory"].append(gameObject)
-
-    return result
-
-def PauseMenu():
-    """ Adds the Pause Menu pooler to the main pooler. """
-    result = CopyEmptyDict(initDictionary)
-
-    # Title ("Pause").
-    objectPos = (Constants.screenDimensions[0] / 2, 270)
-    gameObject = Object.GameObject(objectPos, (0, 0), "Text", ("Pause", True), 0, 0, [0])
-    result["Text"].append(gameObject)
-
-    # ESC to restart the game
-    objectPos = (Constants.screenDimensions[0] / 2, 400)
-    gameObject = Object.GameObject(objectPos, (0, 0),  "Text", ("Press ESC to get back to the game", False), 0, 0, [0])
-    result["Text"].append(gameObject)
-
-    # "Back to menu" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 600)
-    gameObject = Object.GameObject(objectPos, (350, 80), "Button", ("Back to menu", ButtonFunctions.PauseToMainMenu), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    # "Quit game" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 770)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
-    result["Button"].append(gameObject)
 
     return result
 
@@ -219,6 +193,32 @@ def World_1():
 
     return result
 
+def PauseMenu():
+    """ Adds the Pause Menu pooler to the main pooler. """
+    result = CopyEmptyDict(initDictionary)
+
+    # Title ("Pause").
+    objectPos = (Constants.screenDimensions[0] / 2, 270)
+    gameObject = Object.GameObject(objectPos, (0, 0), "Text", ("Pause", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # ESC to restart the game
+    objectPos = (Constants.screenDimensions[0] / 2, 400)
+    gameObject = Object.GameObject(objectPos, (0, 0),  "Text", ("Press ESC to get back to the game", False), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "Back to menu" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 600)
+    gameObject = Object.GameObject(objectPos, (350, 80), "Button", ("Back to menu", ButtonFunctions.PauseToMainMenu), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Quit game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 770)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
 def Level_1_1():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
@@ -226,15 +226,27 @@ def Level_1_1():
 
     wallTexture = "Sprites/wall.png"
 
-    # Right border.
-    objectPos = (1660, -2700)
-    objectSize = (500, 4000)
+    # Little block.
+    objectPos = (250, 80)
+    objectSize = (100, 200)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    # Floor.
-    objectPos = (-940, 180)
-    objectSize = (Constants.screenDimensions[0] * 5, 800)
+    # Big block.
+    objectPos = (900, -20)
+    objectSize = (100, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Final platform.
+    objectPos = (1400, -200)
+    objectSize = (400, 100)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right border.
+    objectPos = (1660, -2700)
+    objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
@@ -243,6 +255,18 @@ def Level_1_1():
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # End door.
+    objectPos = (1500, -350)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
 
     return result
 
@@ -370,7 +394,7 @@ def Level_1_2():
     # End door.
     objectPos = (-950, -1350)
     objectSize = (100, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel_1_2), 0, 3, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
     result["Door"].append(gameObject)
 
     return result
@@ -384,19 +408,19 @@ def Level_1_3():
 
     # Right border.
     objectPos = (1660, -2700)
-    objectSize = (500, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Floor.
-    objectPos = (-940, 180)
-    objectSize = (Constants.screenDimensions[0] * 5, 800)
+    objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left border.
-    objectPos = (-1640, -2700)
+    objectPos = (-1200, -2700)
     objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
@@ -410,19 +434,19 @@ def Level_1_4():
 
     # Right border.
     objectPos = (1660, -2700)
-    objectSize = (500, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Floor.
-    objectPos = (-940, 180)
-    objectSize = (Constants.screenDimensions[0] * 5, 800)
+    objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left border.
-    objectPos = (-1640, -2700)
+    objectPos = (-1200, -2700)
     objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
