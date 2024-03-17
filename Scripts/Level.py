@@ -17,6 +17,7 @@ def GetPooler() -> Object.Pooler:
     global mainPooler
     pooler = initPooler.Copy()
 
+    # We individually initiate each of the game's scene in the pooler.
     pooler.SetScene("Level_All", All())
     pooler.SetScene("Main_Menu", MainMenu())
     pooler.SetScene("World_Selection", WorldSelection())
