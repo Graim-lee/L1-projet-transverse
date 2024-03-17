@@ -15,8 +15,6 @@ pressingD = False
 slingshotArmed = False
 slingshotStart = Object.Vector2(0, 0)
 
-jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
-
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
     modifying the main.py pooler will directly modify this one too. This pooler is useful to move objects according to
@@ -51,7 +49,6 @@ def CheckInputs():
 
             if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
-            elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
             elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
                 for door in mainPooler.main[Constants.currentScene]["Door"]:
                     if not door.active: continue
@@ -141,10 +138,6 @@ def ApplyInputs():
 
     if not pressingQA and not pressingD: Constants.playerMovingDirection = 0
 
-    if jumpBufferTimer > 0:
-        JumpPlayer()    # 'Space'
-        jumpBufferTimer -= Constants.deltaTime
-    
     if slingshotArmed: ShowSlingshotTrajectory()
 
 def MovePlayer(direction: int):
@@ -158,12 +151,6 @@ def MovePlayer(direction: int):
     if Sign(direction * Constants.maxPlayerSpeed - player.continuousVelocity.x) != Sign(direction): return True
     # Increases the velocity of the player.
     player.continuousVelocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
-
-def StartJumpBufferTimer():
-    """ Sets the jumpBufferTimer to a constant. While the jump buffer timer is active (that is, greater than 0), the
-    player will jump as soon as he is grounded. """
-    global jumpBufferTimer
-    jumpBufferTimer = Constants.maxJumpBufferTimer
 
 def PressEscape():
     """ Is executed when the player pressing 'Escape'. """
@@ -181,12 +168,6 @@ def JumpPlayer():
     if player.grounded:
         player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
         jumpBufferTimer = 0
-
-def PlayerReleaseJump():
-    """ Slows down the y velocity of the player when the user releases the 'Space' key. This helps the user by leaving
-    him more control over the height of the jump (quickly pressing 'Space' = short jump, long press = high jump). """
-    if player.instantVelocity.y < 0:
-        player.instantVelocity.y *= Constants.playerStopJumpCoeff
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
