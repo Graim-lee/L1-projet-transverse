@@ -18,11 +18,11 @@ def AnimatePlayer(player: Object.GameObject):
 
         # Idle animation.
         if not Constants.playerSquishing:
-            player.SetSprite("Sprites/Player/idle.png", True)
+            player.SetSprite("Sprites/Player/"+Constants.skin+"/idle.png", True)
 
         # Squishing animation.
         else:
-            player.SetSprite("Sprites/Player/squish_1.png", True)
+            player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_1.png", True)
 
     # Walk animation.
     else:
@@ -34,8 +34,8 @@ def AnimatePlayer(player: Object.GameObject):
             playerWalkFrame = 0
             playerWalkSprite += 1
             if playerWalkSprite >= 2: playerWalkSprite = 0
-            if not Constants.playerSquishing: player.SetSprite("Sprites/Player/move_" + str(playerWalkSprite + 1)+".png", True)
-            else: player.SetSprite("Sprites/Player/squish_" + str(playerWalkSprite + 1)+".png", True)
+            if not Constants.playerSquishing: player.SetSprite("Sprites/Player/"+Constants.skin+"/move_" + str(playerWalkSprite + 1)+".png", True)
+            else: player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_" + str(playerWalkSprite + 1)+".png", True)
 
     # Makes the player face the right direction.
     if playerPreviousDirection == -1 and not Constants.playerSpriteFlipped:

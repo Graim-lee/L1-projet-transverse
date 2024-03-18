@@ -49,12 +49,13 @@ def CheckInputs():
 
             if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
-            elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
+            elif event.key == pygame.K_z:          # 'Enter' = interact with a door.
                 for door in mainPooler.main[Constants.currentScene]["Door"]:
                     if not door.active: continue
                     if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
                     if door.position.y + door.size.y < player.position.y or door.position.y > player.position.y + player.size.y: continue
                     door.data[1]()
+                    Constants.groundedFrictionCoeff = 0.7
                     break
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact

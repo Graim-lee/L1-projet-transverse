@@ -122,3 +122,5 @@ playerSquishing = False
 
 # Constants for how many frames each sprite must stay in the player's animations.
 playerWalkDuration = 5
+
+skin = "default"
