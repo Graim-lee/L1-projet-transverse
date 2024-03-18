@@ -5,274 +5,484 @@ import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
 
-initPooler = Object.Pooler(["Wall", "Door", "Player", "Trajectory", "Button", "Text"])
+initPooler = Object.Pooler()
+initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
-def BasePooler() -> Object.Pooler:
+mainPooler: Object.Pooler
+
+def GetPooler() -> Object.Pooler:
     """ Returns the whole game's pooler by calling each scene's pooler individually. I checked for performance issues,
      and it seems that having that many objects at the same time in the pooler isn't bad. What matters is how many objects
      are on-screen at the same time. """
+    global mainPooler
     pooler = initPooler.Copy()
 
-    Player(pooler)
+    # We individually initiate each of the game's scene in the pooler.
+    pooler.SetScene("Level_All", All())
+    pooler.SetScene("Main_Menu", MainMenu())
+    pooler.SetScene("World_Selection", WorldSelection())
+    pooler.SetScene("World_1", World_1())
+    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
+    pooler.SetScene("Level_World_1", LevelWorld_1())
+    pooler.SetScene("Pause_Menu", PauseMenu())
+    pooler.SetScene("Level_1_1", Level_1_1())
+    pooler.SetScene("Level_1_2", Level_1_2())
+    pooler.SetScene("Level_1_3", Level_1_3())
+    pooler.SetScene("Level_1_4", Level_1_4())
 
-    PauseMenu(pooler)
-    MainMenu(pooler)
-    WorldSelection(pooler)
-
-    Level_0(pooler)
-    Level_2(pooler)
-
+    mainPooler = pooler
     return pooler
 
-def PauseMenu(pooler: Object.Pooler):
-    """ Adds the Pause Menu pooler to the main pooler. """
-    # Title ("Pause").
-    pauseTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
-    pauseTitle = Object.GameObject(pauseTitlePos, (0,0), "Pause_Menu", "Text", ("Pause", True), 0, 0, [0])
-    pooler.AddObject(pauseTitle, "Text")
+def ResetScene(scene: str):
+    """ Resets the given scene. As said above, it apparently does not cause any memory leak. """
+    global mainPooler
+    for category in mainPooler.main[scene]:
+        for gameObject in mainPooler.main[scene][category]:
+            gameObject.position = gameObject.initialPosition
 
-    # "Quit game" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 600)
-    button = Object.GameObject(buttonPos, (0,0), "Pause_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
-    pooler.AddObject(button, "Button")
+def All():
+    """ Adds the objects that are always loaded to the pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
 
-def MainMenu(pooler: Object.Pooler):
-    """ Adds the Main Menu pooler to the main pooler. """
-    # Title "Main menu" (placeholder for the true name of the game).
-    mainTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
-    mainTitle = Object.GameObject(mainTitlePos, (0,0), "Main_Menu", "Text", ("Main menu", True), 0, 0, [0])
-    pooler.AddObject(mainTitle, "Text")
-
-    # "Play" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 700)
-    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Play", ButtonFunctions.ToLevel_2), 0, 0, [0])
-    pooler.AddObject(button, "Button")
-
-    # "Quit game" button.
-    buttonPos = (Constants.screenDimensions[0] / 2 - 100, 820)
-    button = Object.GameObject(buttonPos, (0,0), "Main_Menu", "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
-    pooler.AddObject(button, "Button")
-
-    # Debug text.
-    mainTitle = Object.GameObject((0,0), (0,0), "Main_Menu", "Text", ("OOOOOOOO", True), 0, 0, [0])
-    pooler.AddObject(mainTitle, "Text")
-
-def WorldSelection(pooler: Object.Pooler):
-    """ Adds the World Selection pooler to the main pooler. """
-    # Title "World selection".
-    worldTitlePos = (Constants.screenDimensions[0] / 2 - 140, 200)
-    worldTitle = Object.GameObject(worldTitlePos, (0,0), "World_Selection", "Text", ("World selection", True), 0, 0, [0])
-    pooler.AddObject(worldTitle, "Text")
-
-def Player(pooler: Object.Pooler):
-    """ Adds the player to the main pooler (necessary for most scripts to work). """
+    # Player.
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/idle.png"
-    player = Object.GameObject((0,0), playerSize, "Level_All", "Real", playerTexture, 1, 1, [0, 3], True, True, True)
-    pooler.AddObject(player, "Player")
+    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3], True, True, True)
+    result["Player"].append(gameObject)
 
-def Level_0(pooler: Object.Pooler):
-    """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
-    # Floor.
-    floorPos = (0, Constants.screenDimensions[1] - 200)
-    floorSize = (Constants.screenDimensions[0] * 5, 100)
-    floorTexture = "Sprites/floor.png"
-    floor = Object.GameObject(floorPos, floorSize, "Level_0", "Real", floorTexture, 0, 2, [0])
-    pooler.AddObject(floor, "Wall")  # We put the floor in the 'Wall' category as they share the same properties.
+    # Trajectory dots.
+    for i in range(5):
+        gameObject = Object.GameObject((0, 0), (10 - i, 10 - i), "Real", "Sprites/dot.png", 0, 0, [0, 1, 2, 3])
+        gameObject.active = False
+        result["Trajectory"].append(gameObject)
 
-    # Left wall.
-    wallPos = (-600, 0)
-    wallSize = (600, Constants.screenDimensions[1])
+    return result
+
+def MainMenu():
+    """ Adds the Main Menu pooler to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Title of the game.
+    objectPos = (Constants.screenDimensions[0] / 2, 270)
+    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Penguin Run", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "Play game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 500)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "World selection test menu" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 625)
+    gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("World select", ButtonFunctions.ToLevel_WorldSelection), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Quit game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 770)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Penguin sprite on the left of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/idle.png", 0, 0, [0],True,True,False)
+    result["Text"].append(gameObject)
+
+    # Penguin sprite on the right of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/idle.png", 0, 0, [0],True,True,False)
+    result["Text"].append(gameObject)
+
+    return result
+
+def LevelWorldSelection():
+    """ Adds the World Selection lobby to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
     wallTexture = "Sprites/wall.png"
-    wall = Object.GameObject(wallPos, wallSize, "Level_0", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    doorTexture = "Sprites/door.png"
 
-    """# Platform.
-    platformPos = (1700, 650)
-    platformSize = (300, 100)
-    platformTexture = "Sprites/wall.png"
-    platform = Object.GameObject(platformPos, platformSize, "Level_0", "Real", platformTexture, 0, 2, [0])
-    pooler.AddObject(platform, "Wall")
+    # World 1 door.
+    objectPos = (490, -70)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", (doorTexture, ButtonFunctions.ToLevel_World1), 0, 3, [0])
+    result["Door"].append(gameObject)
 
-    # "Fuck u" debug text.
-    fuckPos = (Constants.screenDimensions[0] / 2 - 100, 600)
-    fuck = Object.GameObject(fuckPos, (0,0), "Level_0", "Text", ("fuck u lol (for debug purposes)", False), 0, 0, [0])
-    pooler.AddObject(fuck, "Text")
+    # World 1 door "WORLD 1" text.
+    objectPos = (540, -120)
+    gameObject = Object.GameObject(objectPos, (0, 0), "Text", ("WORLD 1", False), 0, 0, [0])
+    result["Text"].append(gameObject)
 
-    # platform 2.
-    platform2Pos = (2200, 650)
-    platform2Size = (300, 100)
-    platform2Texture = "Sprites/wall.png"
-    platform2 = Object.GameObject(platform2Pos, platform2Size, "Level_0", "Real", platform2Texture, 0, 2, [0])
-    pooler.AddObject(platform2, "Wall")
+    # Floor.
+    objectPos = (-960, 80)
+    objectSize = (Constants.screenDimensions[0] * 5, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # platform 3.
-    platform3Pos = (2200, 400)
-    platform3Size = (300, 100)
-    platform3Texture = "Sprites/wall.png"
-    platform3 = Object.GameObject(platform3Pos, platform3Size, "Level_0", "Real", platform3Texture, 0, 2, [0])
-    pooler.AddObject(platform3, "Wall")"""
+    return result
 
-def Level_2(pooler: Object.Pooler):
+def LevelWorld_1():
+    """ Adds the World 1 lobby pooler to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+    doorTexture = "Sprites/door.png"
+
+    # Floor.
+    objectPos = (-960, 80)
+    objectSize = (1000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def WorldSelection():
+    """ Adds the World Selection pooler to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Title "World selection".
+    objectPos = (Constants.screenDimensions[0] / 2, 240)
+    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("World selection", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "World 1" button.
+    objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2 - 100)
+    gameObject = Object.GameObject(objectPos, (200, 200), "WorldButton", ("WORLD 1", ButtonFunctions.ToWorld_1, "Sprites/Worlds/world1.png"), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Quit Game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 900)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
+def World_1():
+    """ Adds the World 1 level selection menu pooler to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Title "World 1".
+    objectPos = (Constants.screenDimensions[0] / 2, 240)
+    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("World 1", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "Level 1" button.
+    objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 1", ButtonFunctions.ToLevel_1_1), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 2" button.
+    objectPos = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 2", ButtonFunctions.ToLevel_1_2), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 3" button.
+    objectPos = (3 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 3", ButtonFunctions.ToLevel_1_3), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 4" Button.
+    objectPos = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 4", ButtonFunctions.ToLevel_1_4), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
+def PauseMenu():
+    """ Adds the Pause Menu pooler to the main pooler. """
+    result = CopyEmptyDict(initDictionary)
+
+    # Title ("Pause").
+    objectPos = (Constants.screenDimensions[0] / 2, 270)
+    gameObject = Object.GameObject(objectPos, (0, 0), "Text", ("Pause", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # ESC to restart the game
+    objectPos = (Constants.screenDimensions[0] / 2, 400)
+    gameObject = Object.GameObject(objectPos, (0, 0),  "Text", ("Press ESC to get back to the game", False), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "Back to menu" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 600)
+    gameObject = Object.GameObject(objectPos, (350, 80), "Button", ("Back to menu", ButtonFunctions.PauseToMainMenu), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Quit game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 770)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
+def Level_1_1():
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
-
-    """
-    Ground
-    """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
 
-    # Left wall small small.
-    wallPos = (500, 680)
-    wallSize = (200, 200)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    # Little block.
+    objectPos = (250, 80)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Left wall small.
-    wallPos = (500, 780)
-    wallSize = (300, 200)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    # Big block.
+    objectPos = (900, -20)
+    objectSize = (100, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Final platform.
+    objectPos = (1400, -200)
+    objectSize = (400, 100)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right border.
+    objectPos = (1660, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
     # Floor.
-    floorPos = (0, Constants.screenDimensions[1] - 200)
-    floorSize = (Constants.screenDimensions[0] * 5, 800)
-    floor = Object.GameObject(floorPos, floorSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(floor, "Wall")
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # End door.
+    objectPos = (1500, -350)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
+
+    return result
+
+def Level_1_2():
+    """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Left stair n°2.
+    objectPos = (-775, -20)
+    objectSize = (200, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left stair n°1.
+    objectPos = (-775, 80)
+    objectSize = (300, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right platform.
+    objectPos = (725, -200)
+    objectSize = (700, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Walljump platform 1.
+    objectPos = (1275, -400)
+    objectSize = (100, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Walljump platform 2.
+    objectPos = (925, -600)
+    objectSize = (100, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Walljump platform 3.
+    objectPos = (1275, -750)
+    objectSize = (100, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper section block before big jump.
+    objectPos = (-275, -1200)
+    objectSize = (200, 400)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper section first stair.
+    objectPos = (525, -1000)
+    objectSize = (300, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper section second stair.
+    objectPos = (425, -1100)
+    objectSize = (200, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper section floor.
+    objectPos = (-275, -900)
+    objectSize = (1225, 100)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left wall for walljump.
+    objectPos = (925, -900)
+    objectSize = (50, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Final platform.
+    objectPos = (-1375, -1200)
+    objectSize = (600, 400)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
     # Left platform.
-    wallPos = (-100, 600)
-    wallSize = (700, 800)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    objectPos = (-1375, -100)
+    objectSize = (700, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Left wall border.
-    wallPos = (-600, -1000)
-    wallSize = (600, 2500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    # Right border.
+    objectPos = (1325, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Platform 1.
-    platformPos = (900, 550)
-    platformSize = (200, 50)
-    platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(platform, "Wall")
+    # Left border.
+    objectPos = (-1975, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Platform 2.
-    platformPos = (1250, 550)
-    platformSize = (200, 50)
-    platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(platform, "Wall")
+    # Floor.
+    objectPos = (-1835, 180)
+    objectSize = (4000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Platform 3.
-    platformPos = (1650, 550)
-    platformSize = (200, 50)
-    platform = Object.GameObject(platformPos, platformSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(platform, "Wall")
+    # Parkour platform 1.
+    objectPos = (-375, -150)
+    objectSize = (200, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
-    # Left
-    wallPos = (2000, 500)
-    wallSize = (600, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
+    # Parkour platform 2.
+    objectPos = (0, -150)
+    objectSize = (200, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
 
+    # Parkour platform 3.
+    objectPos = (375, -150)
+    objectSize = (200, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # End door.
+    objectPos = (-950, -1350)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
+
+    return result
+
+def Level_1_3():
+    """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Right border.
+    objectPos = (1660, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def Level_1_4():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Right border.
+    objectPos = (1660, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+def CopyEmptyDict(dictionary: {}) -> {}:
+    """ Returns an UNLINKED copy of the given dictionary, meaning changing the value of the new dictionary (the copy)
+    won't affect the initial dictionary. The given dictionary must be empty, that is of the form {name_of_category: []}.
+        Args:
+            - dictionary ({str: []}): the dictionary to copy.
+        Returns:
+            - ({str: []}): a copy of the dictionary.
     """
-    Transition
+    result = {}
+    for category in dictionary:
+        result[category] = []
+    return result
+
+def CopyFullDict(dictionary: {}) -> {}:
+    """ Same as the last function, but with a filled dictionary, that is, a dictionary of the form
+    {name_of_category: list_of_objects}. I created two functions as this one is a little bit slower to run (so using the
+    first one when possible saves performances).
+        Args:
+            - dictionary ({str: [GameObject]}): the dictionary to copy.
+        Returns:
+            - ({str: [GameObject]}): a copy of the given dictionary.
     """
-    # Left Border
-    wallPos = (2600, -1000)
-    wallSize = (500, 2000)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Left walljump
-    wallPos = (2200, -200)
-    wallSize = (50, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    #platform 1
-    wallPos = (2550, 300)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # platform 2
-    wallPos = (2250, 100)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # platform 3
-    wallPos = (2550, -50)
-    wallSize = (50, 50)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    """
-    Upper section
-    """
-    # Floor
-    wallPos = (1000, -200)
-    wallSize = (1200, 100)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Block big
-    wallPos = (1000, -500)
-    wallSize = (200, 300)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Block little
-    wallPos = (1700, -400)
-    wallSize = (200, 300)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Block little little
-    wallPos = (1900, -300)
-    wallSize = (200, 200)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Jump
-    wallPos = (300, -500)
-    wallSize = (200, 400)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # Floor
-    wallPos = (0, -300)
-    wallSize = (300, 200)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    # The end ?
-    #wallPos = (-400, -600)
-    doorPos = (1400, 700)
-    doorSize = (125, 180)
-    doorTexture = "Sprites/door.png"
-    door = Object.GameObject(doorPos, doorSize, "Level_2", "Real", doorTexture, 0, 3, [0])
-    pooler.AddObject(door, "Door")
-
-    """
-    top
-    """
-    wallPos = (-1000, -1500)
-    wallSize = (4000, 500)
-    wall = Object.GameObject(wallPos, wallSize, "Level_2", "Real", wallTexture, 0, 2, [0])
-    pooler.AddObject(wall, "Wall")
-
-    Constants.currentLevel = 2
-    Constants.levelList[1][1] = doorPos
-    Constants.levelList[1][2] = doorSize
-
+    result = {}
+    for category in dictionary:
+        result[category] = []
+    return result
 
 """ LIST OF EVERY SCENE :
 
     - Main_Menu: the base scene (the one in which we are when we start the game), the main menu.
     - World_Selection: the world selection scene. Accessible after clicking on "Play" in the main menu.
+    - World_1: the level selection menu of world 1.
     - Pause_Menu: the pause menu.
     
     - Level_0: the playtest level.

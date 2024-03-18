@@ -5,6 +5,7 @@
 
 import Scripts.Constants as Constants
 import Scripts.Object as Object
+import Scripts.Level as Level
 
 player: Object.GameObject
 
@@ -13,18 +14,50 @@ def SetPlayer(setPlayer: Object.GameObject):
     global player
     player = setPlayer
 
+def PauseToMainMenu():
+    Level.ResetScene(Constants.currentLevel)
+    Constants.currentScene = "Main_Menu"
+
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
-def ToLevel_0():
-    Constants.currentScene = "Level_0"
-    Constants.currentLevel = "Level_0"
-    player.position = Object.Vector2(Constants.screenDimensions[0] / 2, 500)
+def ToLevel_WorldSelection():
+    Constants.currentScene = "Level_World_Selection"
+    Constants.currentLevel = "Level_World_Selection"
+    player.position = Object.Vector2(0, 0)
 
-def ToLevel_2():
-    Constants.currentScene = "Level_2"
-    Constants.currentLevel = "Level_2"
-    player.position = Object.Vector2(Constants.screenDimensions[0] / 2 - 20, 700) # position player
+def ToWorld_1():
+    Constants.currentScene = "World_1"
+
+def ToLevel_World1():
+    Constants.currentScene = "Level_World_1"
+    Constants.currentLevel = "Level_World_1"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_1_1():
+    Constants.currentScene = "Level_1_1"
+    Constants.currentLevel = "Level_1_1"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_1_2():
+    Constants.currentScene = "Level_1_2"
+    Constants.currentLevel = "Level_1_2"
+    player.position = Object.Vector2(0, 135)
+
+def ToLevel_1_3():
+    Constants.currentScene = "Level_1_3"
+    Constants.currentLevel = "Level_1_3"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_1_4():
+    Constants.currentScene = "Level_1_4"
+    Constants.currentLevel = "Level_1_4"
+    player.position = Object.Vector2(0, 0)
+
+def EndLevel():
+    Constants.currentScene = "World_Selection"
+    Level.ResetScene(Constants.currentLevel)
+    ToWorldSelection()
 
 def QuitGame():
     Constants.gameRunning = False

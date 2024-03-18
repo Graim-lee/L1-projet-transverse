@@ -3,17 +3,8 @@ import Scripts.Object as Object
 import Scripts.Constants as Constants
 
 deltaTime = Constants.deltaTime
-mainPooler = Object.Pooler([])
+mainPooler = Object.Pooler()
 player: Object.GameObject
-
-def SetPooler(pooler: Object.Pooler):
-    """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
-    modifying the main.py pooler will directly modify this one too. This pooler is useful for managing collisions.
-        Args :
-            - pooler (Pooler): the main.py pooler.
-    """
-    global mainPooler
-    mainPooler = pooler
 
 def SetPlayer(playerChar: Object.GameObject):
     """ Allows to retrieve and copy the player GameObject from main.py. Also mutable, so it will be shared directly
@@ -31,8 +22,6 @@ def ApplyPhysics(body: Object.GameObject, i: int):
         Args :
             - body (GameObject): GameObject to move.
     """
-    global mainPooler
-
     # In case of collision cancelling the movement, we keep track of the previous position.
     previousPosition = body.position
 
@@ -41,11 +30,10 @@ def ApplyPhysics(body: Object.GameObject, i: int):
     body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
     # Checking for collisions.
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in Constants.objectsInScene:
+        for gameObject in Constants.objectsInScene[category]:
             if body == gameObject: continue
             if gameObject.layer in body.notCollidable: continue
-            if gameObject.scene != Constants.currentScene: continue
             if not CheckCollision(body, gameObject): continue
 
             CancelCollision(body, gameObject)
@@ -154,31 +142,12 @@ def GetCollisionVertices(body: Object.GameObject, other: Object.GameObject) -> [
 
 def MoveCamera():
     """ Used to keep the camera focused on the player. """
-    # X
-    if player.position.x > Constants.playerPos[0]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.x -= player.velocity.x * deltaTime
+    displacement = player.position - Object.Vector2(Constants.screenCenter[0], Constants.screenCenter[1])
 
-    if player.position.x < Constants.playerPos[0] :
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.x -= player.velocity.x * deltaTime
-
-    # Y
-    if player.position.y > Constants.playerPos[1]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.y -= player.velocity.y * deltaTime
-
-    if player.position.y < Constants.playerPos[1]:
-        for category in mainPooler.main:
-            for gameObject in mainPooler.main[category]:
-                if not gameObject.active or "Level" not in gameObject.scene: continue
-                gameObject.position.y -= player.velocity.y * deltaTime
+    for category in Constants.objectsInScene:
+        for gameObject in Constants.objectsInScene[category]:
+            if not gameObject.active: continue
+            gameObject.position -= displacement
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -203,9 +172,9 @@ def PhysicsCalculations(body: Object.GameObject):
 
     ManageCollisions(body)  # Collisions.
 
-    if not(body.fallingFromGround) and (body.instantVelocity.x > 6 or body.instantVelocity.y >6 or body.instantVelocity.x < -6 or body.instantVelocity.x < -6):
+    if not body.fallingFromGround and (body.instantVelocity.x ** 2 > 36 or body.instantVelocity.y ** 2 > 36):
         body.velocity = body.instantVelocity
-    elif not(body.fallingFromGround):
+    elif not body.fallingFromGround:
         body.velocity = body.continuousVelocity
     else:
         body.velocity = body.instantVelocity + body.continuousVelocity
@@ -224,9 +193,8 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
     groundedLeft = body.position + Object.Vector2(Constants.groundedHitboxBorder, body.size.y + Constants.maxGroundedDistance)
     groundedRight = body.position + body.size + Object.Vector2(-Constants.groundedHitboxBorder, Constants.maxGroundedDistance)
 
-    global mainPooler
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in Constants.objectsInScene:
+        for gameObject in Constants.objectsInScene[category]:
             if gameObject == body: continue
             if not gameObject.active: continue
             if gameObject.layer in body.notCollidable: continue
@@ -294,13 +262,12 @@ def ManageCollisions(body: Object.GameObject):
         Args :
             - body (GameObject): the given GameObject.
     """
-    global mainPooler
     body.collisionPos = body.position
     repelForce = Object.Vector2(0, 0)   # The force applied to the object to simulate collision.
     applyForce = False                          # Stores whether to apply the repelForce or not (only apply when there is a collision).
 
-    for category in mainPooler.main:
-        for gameObject in mainPooler.main[category]:
+    for category in Constants.objectsInScene:
+        for gameObject in Constants.objectsInScene[category]:
 
             # I am using 'continue' everywhere to avoid spamming indentations and prevent tons of nested 'if if if'.
             # 'continue' allows to skip the current iteration of the loop, directly going to the next one.

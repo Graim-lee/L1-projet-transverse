@@ -1,8 +1,10 @@
+import pygame
+
 """ Meta informations ============================================================================================== """
 
 # Screen dimension.
 screenDimensions = (1920, 1080)
-playerPos = ((screenDimensions[0] / 2)- 44, (screenDimensions[1] / 2)- 44) # 44 from the size of the player
+screenCenter = ((screenDimensions[0] / 2), (screenDimensions[1] / 2))
 
 # Framerate of the game (60 FPS) and time between two frames
 framerate = 60
@@ -81,6 +83,11 @@ cameraUnloadDistance = 500
 
 # Go at the end of Level.py for a list of every scene so far.
 
+# Dictionary of the form {name_of_category: list_of_objects} containing every object to compute at a specific moment in
+# the game. These objects often consist of the ones contained in the game's current scene + the objects in the 'Level_All'
+# scene (the scene that is loaded everywhere).
+objectsInScene: {str: []}
+
 # The scene in which the game is currently in. 0 = MainGame (where the player can move and jump etc.); 1 = PauseMenu (the
 # pause menu) ; 2 = MainMenu (the game's main menu) ; 3 = WorldSelector (where we can see each world and select the world
 # we want).
@@ -92,13 +99,26 @@ inMenu = False
 
 """ UI constants =================================================================================================== """
 
-# The size of the buttons. They all share the same size and dimensions.
-buttonSize = (200, 80)
-# Magical font constants to center text in a button. Do not change pls.
-buttonCenterCoeff = 8.5
-buttonTextHeight = 18
+# Text fonts. The "title" font is just bigger than the "text" font.
+textFont: pygame.font
+titleFont: pygame.font
 
-""" Game related =================================================================================================== """
-levelList = [["Level_0", (0,0),[0,0]],
-             ["Level_2", [0,0],[0,0]]]
-currentLevel = 0
+# Buttons constant for drawing screws.
+buttonScrewSize = 8
+buttonScrewDistance = 8
+buttonScrewColor = (150, 150, 150)
+
+# This variable tracks whether we pressed a button or not in the frame (prevents pressing multiple button at the same time).
+buttonPressed = False
+
+""" Animation constants ============================================================================================ """
+
+# To keep track of whether the sprite of the player is flipped or not.
+playerSpriteFlipped = False
+
+# These variables track the actions of the player throughout the scripts to animate it properly.
+playerMovingDirection = 0
+playerSquishing = False
+
+# Constants for how many frames each sprite must stay in the player's animations.
+playerWalkDuration = 5

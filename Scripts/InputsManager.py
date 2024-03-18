@@ -5,18 +5,15 @@ import pygame
 import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import Scripts.Physics as Physics
 
-
-
-mainPooler = Object.Pooler({})
+mainPooler = Object.Pooler()
 player: Object.GameObject
 
 pressingQA = False
 pressingD = False
 slingshotArmed = False
 slingshotStart = Object.Vector2(0, 0)
-
-jumpBufferTimer = 0     # Allows the player to press 'Space' a little before actually landing, and still jump.
 
 def SetPooler(pooler: Object.Pooler):
     """ Allows to retrieve and copy the pooler from main.py. As the Pooler object is mutable (just like lists),
@@ -52,7 +49,13 @@ def CheckInputs():
 
             if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
-            elif event.key == pygame.K_SPACE: StartJumpBufferTimer()     # 'Space' = jump (start of the jump buffer timer).
+            elif event.key == pygame.K_RETURN:          # 'Enter' = interact with a door.
+                for door in mainPooler.main[Constants.currentScene]["Door"]:
+                    if not door.active: continue
+                    if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
+                    if door.position.y + door.size.y < player.position.y or door.position.y > player.position.y + player.size.y: continue
+                    door.data[1]()
+                    break
 
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
@@ -60,35 +63,28 @@ def CheckInputs():
 
             elif event.key == pygame.K_a:
                 pressingQA = True  # 'A'
-                player.moving = -1
+                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
-                player.moving = -1
+                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
-                player.moving = 1
+                Constants.playerMovingDirection = 1
+            elif event.key == pygame.K_s:
+                Constants.playerSquishing = True
 
         """ KEYUP ======================================================================================================
         The user just released a key (only happens on the first frame after releasing the key) ===================== """
         if event.type == pygame.KEYUP:
 
-            if event.key == pygame.K_SPACE: PlayerReleaseJump()     # Slows down the jump when the player releases the key.
-
-            elif event.key == pygame.K_a: 
+            if event.key == pygame.K_a:
                 pressingQA = False   # 'A'
             elif event.key == pygame.K_q:
                 pressingQA = False   # 'Q'
             elif event.key == pygame.K_d:
                 pressingD = False   # 'D'
-            elif event.key == pygame.K_z:
-                door = Constants.levelList[1][1]
-                size = Constants.levelList[1][2]
-                """print(f"X : {player.position.x} > {door[0]} and {player.position.x} < {door[0] + size[0]}")
-                print(f"Y : {player.position.y} > {door[1]} and {player.position.y} < {door[1] + size[1]}")"""
-                player.position.x,player.position.y = 1400, 700
-                if player.position.y > Object.door.position.x and player.position.y < (Object.door.position.x + size[0]) and player.position.y > Object.door.position.y and player.position.y < (Object.door.position.y + size[1]):
-                    print("x: G, y: G")
-
+            elif event.key == pygame.K_s:
+                Constants.playerSquishing = False
 
         """ LEFT-CLICK PRESSED =========================================================================================
         Activates right after the user presses left-click ========================================================== """
@@ -103,13 +99,14 @@ def CheckInputs():
                 # If we are in a menu, we click on a button.
                 else:
                     mouseX, mouseY = pygame.mouse.get_pos()
-                    for button in mainPooler.main["Button"]:
+                    for button in mainPooler.main[Constants.currentScene]["Button"]:
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
-                        if button.scene != Constants.currentScene: continue
-                        if button.position.x > mouseX or button.position.x + Constants.buttonSize[0] < mouseX: continue
-                        if button.position.y > mouseY or button.position.y + Constants.buttonSize[1] < mouseY: continue
+                        if button.position.x - 0.5 * button.size.x > mouseX or button.position.x + 0.5 * button.size.x < mouseX: continue
+                        if button.position.y - 0.5 * button.size.y > mouseY or button.position.y + button.size.y < mouseY: continue
                         button.data[1]()    # We call the function associated to the button.
+                        break   # Top prevent clicking on multiple buttons on the same frame.
+
             if event.button == 3:
                 slingshotArmed = False
                 HideDots()
@@ -122,8 +119,7 @@ def CheckInputs():
                 HideDots()
             slingshotArmed = False
 
-
-
+        if event.type == pygame.K_z: continue
 
     ApplyInputs()   # We apply the inputs' effects.
 
@@ -138,12 +134,8 @@ def ApplyInputs():
         if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
         if pressingD: MovePlayer(1)     # 'D'
 
-    if not pressingQA and not pressingD: player.moving = 0
+    if not pressingQA and not pressingD: Constants.playerMovingDirection = 0
 
-    if jumpBufferTimer > 0:
-        JumpPlayer()    # 'Space'
-        jumpBufferTimer -= Constants.deltaTime
-    
     if slingshotArmed: ShowSlingshotTrajectory()
 
 def MovePlayer(direction: int):
@@ -157,12 +149,6 @@ def MovePlayer(direction: int):
     if Sign(direction * Constants.maxPlayerSpeed - player.continuousVelocity.x) != Sign(direction): return True
     # Increases the velocity of the player.
     player.continuousVelocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
-
-def StartJumpBufferTimer():
-    """ Sets the jumpBufferTimer to a constant. While the jump buffer timer is active (that is, greater than 0), the
-    player will jump as soon as he is grounded. """
-    global jumpBufferTimer
-    jumpBufferTimer = Constants.maxJumpBufferTimer
 
 def PressEscape():
     """ Is executed when the player pressing 'Escape'. """
@@ -180,12 +166,6 @@ def JumpPlayer():
     if player.grounded:
         player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
         jumpBufferTimer = 0
-
-def PlayerReleaseJump():
-    """ Slows down the y velocity of the player when the user releases the 'Space' key. This helps the user by leaving
-    him more control over the height of the jump (quickly pressing 'Space' = short jump, long press = high jump). """
-    if player.instantVelocity.y < 0:
-        player.instantVelocity.y *= Constants.playerStopJumpCoeff
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
@@ -241,29 +221,22 @@ def ShowSlingshotTrajectory():
     # The trajectory equation is x(t) = x0 + v0*t*sV - sG*g*t^sGP.
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t     # Time between two dots.
+        timeSplit = t * 0.8     # Time between two dots.
         pos = x0 + timeSplit * v0 * sV + sG * Constants.G * Object.Vector2(0, timeSplit ** sGP)
         dotsPosition.append(pos)
 
     # Showing the dots.
     for i in range(5):
-        currentDot = mainPooler.main["Trajectory"][i]
+        currentDot = mainPooler.main["Level_All"]["Trajectory"][i]
         currentDot.position = dotsPosition[i] - 0.5 * currentDot.size
         currentDot.active = True
 
 def DisplayDots():
     global mainPooler
-
-    if len(mainPooler.main["Trajectory"]) == 0:
-        for i in range(5):
-            newDot = Object.GameObject((0, 0), (10 - i, 10 - i), Constants.currentLevel, "Real", "Sprites/dot.png", 0, 0, [0, 1, 2])
-            mainPooler.AddObject(newDot, "Trajectory")
-
-    for dot in mainPooler.main["Trajectory"]:
+    for dot in mainPooler.main["Level_All"]["Trajectory"]:
         dot.active = True
 
 def HideDots():
     global mainPooler
-
-    for dot in mainPooler.main["Trajectory"]:
+    for dot in mainPooler.main["Level_All"]["Trajectory"]:
         dot.active = False

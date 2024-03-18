@@ -19,23 +19,28 @@ class GameObject:
         - visible (bool): if the object is outside the camera's field of view, this is False and allows not to lose time
                             calculating these objects.
         - alwaysLoaded (bool): if True, prevents the object from being unloaded by the camera.
-        - scene (str): the name (ID) of the scene the object is in. The scene can be named 'Level_1_1', 'Pause_Menu',
-                        etc. (find the list in Constants.py), and allows not to show objects that aren't in a specific
-                        scene when in another. For example, you should not be able to see the player when looking in the
-                        pause menu.
         - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
-                        player or an enemy. A 'Text' object doesn't have any texture, but displays text. A 'Button' object
-                        is only used in UI, it is linked to a specific function to execute when pressed.
+                        player or an enemy. A 'Door' object is like a 'Real' object, but it has a function associated to
+                        it that activates when the player interacts with the door. A 'Text' object doesn't have any
+                        texture, but displays text. A 'Button' object
+                        is only used in UI, it is linked to a specific function to execute when pressed. A 'WorldButton'
+                        object is like a 'Button' object, but with an image inside.
         - data (): this parameter can take different types for every type of object. For a 'Real' GameObject, this is the
                         path of its texture in the files (it replaces texturePath).
+                    For a 'Door' object, it is a tuple of the form (str, function), where the first string is the path to
+                        the door's texture, and the function is the function that should be executed when interacting with
+                        the door.
                     For a 'Text' type GameObject, data is a tuple of the form (str, bool). The first element of the tuple
                         is the text to be displayed, and the second one is whether the text is a title or not (titles are
                         just bigger).
                     A 'Button' object takes a tuple of type (str, function). The str (first element of the tuple) is the
                         text displayed on the button. The function (second element) is the function to be executed when
                         the button is clicked.
+                    A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
+                        'Button' object, and the last str is the path to the image inside the button.
 
-        - position (Vector2): object's coordinates.
+        - position (Vector2): object's current coordinates.
+        - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).
         - size (Vector2): object's size(in pixels).
         - surface (Surface): object's surface in pygame (texture)
 
@@ -66,13 +71,12 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _scene: str, _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
                 - _position (tuple (int, int)): object's position.
                 - _size (tuple (int, int)): object's size.
-                - _scene (str): the name of the scene to which the GameObject belongs.
                 - _type (str): the type of the object (a Real, a Text, or a Button...).
                 - _data (): the object's data (depends on its type). See the description above.
                 - _mass (float): object's mass.
@@ -85,31 +89,31 @@ class GameObject:
         self.active = True
         self.visible = True
         self.alwaysLoaded = _alwaysLoaded
-        self.scene = _scene
 
         self.position = Vector2(_position[0], _position[1])
+        self.initialPosition = Vector2(_position[0], _position[1])
         self.size = Vector2(_size[0], _size[1])
 
-        # If the GameObject is of type "Real", we apply the texture.
+        # We fetch the object's texture if needed.
         if _type == "Real":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
+        elif _type == "Door":
+            self.surface = pygame.image.load(_data[0]).convert()
+        elif _type == "Button" or _type == "WorldButton":
+            self.surface = pygame.image.load("Sprites/button.png").convert()
+
+        # We modify the size of the "Real" and "Button" game objects.
+        if _type == "Real" or _type == "Door" or _type == "Button":
             self.Resize(_size)  # Allows to directly apply the object's new size.
+
         self.type = _type
         self.data = _data
 
-        # Modifying size and position for 'Text' type objects.
-        if _type == "Text":
-            # Size must match the text's size.
-            fontSize = 9 if _data[1] else 3
-            self.size = fontSize * (Vector2(7, 0) * len(_data[0]) + Vector2(0, 15))
-
-            # The position given by the user must be the position of the center of the text (and not the top-left corner).
-            self.position -= 0.5 * self.size
-
-        # Modifying size for 'Button' type objects.
-        if _type == "Button":
-            self.size = Vector2(Constants.buttonSize[0], Constants.buttonSize[1])
+        if _type == "WorldButton":
+            worldSurface = pygame.image.load(_data[2]).convert()
+            worldSurface = pygame.transform.scale(worldSurface, _size)
+            self.data = (_data[0], _data[1], worldSurface)
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
@@ -126,11 +130,6 @@ class GameObject:
 
         self.hasAnimation = _hasAnimation
         self.png = _png
-        self.moving = 0
-        self.previousDirection = 1
-        self.spriteFlipped = False
-        self.walkFrame = 0
-        self.walkCycle = 0
 
         self.fallingFromGround = False
 
@@ -142,47 +141,18 @@ class GameObject:
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
 
-    def Animation(self, category):
-        """ Modify objects sprite
-            Args :
-                - path (string): the name of the object sprite
-                - direction (list of string): [is moving, the direction]
-
-        """
-        # Idle animation.
-        if self.moving == 0:
-            self.SetSprite("Sprites/" + category + "/idle.png")
-
-        # Walk animation.
-        else:
-            self.previousDirection = self.moving
-            self.walkFrame += 1
-
-            # Changes the animation frame.
-            if self.walkFrame > 5:
-                self.walkFrame = 0
-                self.walkCycle += 1
-                if self.walkCycle >= 2: self.walkCycle = 0
-                self.SetSprite("Sprites/" + category + "/move_" + str(self.walkCycle + 1)+".png")
-
-        # Makes the player face the right direction.
-        if self.previousDirection == -1 and not self.spriteFlipped:
-            self.surface = pygame.transform.flip(self.surface, True, False)
-            self.spriteFlipped = True
-
-        self.Resize((44, 44))
-
-    def SetSprite(self, path: str):
+    def SetSprite(self, path: str, isPlayer: bool = False):
         """ Changes the object's sprite located at the given path. Changes either by a png if the object has the _png
         tag activated or a normal image otherwise.
             Args := pygame
                 - path (str): the path where the image is located.
+                - isPlayer (bool): must be set to true when the object is the player. Allows for correct player animations.
             Returns :
                 - (Surface): the pygame surface for the player.
         """
         if self.png: self.surface = pygame.image.load(path)
         else: self.surface = pygame.image.load(path).convert()
-        self.spriteFlipped = False
+        if isPlayer: Constants.playerSpriteFlipped = False
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
@@ -247,10 +217,10 @@ class Vector2:
         return Vector2(other * self.x, other * self.y)
 
     def __rmul__(self, other: float):
-        """ __rmul__ fait comme __mul__ mais __mul__ ne gère que le cas k * (a, b) et pas le cas (a, b) * k.
+        """ __rmul__ makes like __mul__ but __mul__ only manages the case k * (a, b) and not (a, b) * k.
             Args :
-                - self: le vecteur concerné.
-                - other (float): le nombre par lequel on multiplie le vecteur.
+                - self: concerned vector.
+                - other (float): the coefficient by which we multiply the vector.
         """
         return Vector2(other * self.x, other * self.y)
 
@@ -260,6 +230,13 @@ class Vector2:
                 - (str): What will be displayed with a print(). It looks like this: 'Vector2(a, b).
         """
         return "Vector2(" + str(self.x) + ", " + str(self.y) + ")"
+
+    def __neg__(self):
+        """ __neg__ returns what the 'negative' of a Vector2 should be. -(a ; b) = (-a ; -b)
+            Args :
+                - self: concerned vector.
+        """
+        return Vector2(-self.x, -self.y)
 
     def Tuple(self) -> (int, int):
         """ Return a tuple of the form (a, b) because pygame's function do not accept the type vector2.
@@ -280,47 +257,81 @@ class Vector2:
 
 
 class Pooler:
-    """ this clas creates a pooler, which is a dictionary of the form {nom : liste de GameObjects} thus {str: [GameObject]}.
-    The point is to centralize the stockage of every object to iterate them faster, easier to use for us and use less RAM.
-
-    Cette classe permet de créer un pooler, c'est-à-dire un dictionnaire de la forme {nom : liste de GameObjects},
-    soit {str: [GameObject]}. L'objectif du pooler est de centraliser le stockage de tous les objets pour pouvoir
-    les itérer rapidement, d'avoir un stockage ordonné et de pouvoir libérer un peu de mémoire RAM (pas sûr de ça).
-    J'ai fait un objet spécial pour le pooler pour pouvoir lui mettre des méthodes (= des fonctions).
-        - main ({str: [GameObject]}): main structure of the pooler, a dictionary containing every GameObjects.
+    """ This class creates a pooler, which is a dictionary of dictionary of the form:
+     {name_of_level: {name_of_category: list_of_objects} } thus {str: {str: [GameObject]}}.
+    The point is to centralize the storage of every object to iterate them faster, easier to use for us and use less RAM.
+    We made a custom object specifically for this to use methods (= functions) specific to it.
+        - main ({str: {str: [GameObject]}}): main structure of the pooler, a dictionary where keys are level names, and
+                                            values are dictionaries of the form {name_of_the_category: list_of_objects}.
     """
 
-    def __init__(self, categories: [str]):
-        """ creates the object.
-            Args :
-                - categories ([str]): name of each category in the pooler (i.e.: ["Player", "Wall", "Enemy"] made
-                                        if we want to separate categories of objects).
-        """
+    def __init__(self):
+        """ Creates an empty pooler. """
         self.main = {}
-        for name in categories:
-            self.main[name] = []    # Initialise toutes les catégories comme ça {'nom_de_la_catégorie': []}.
 
-    def AddCategory(self, category: str):
-        """ Let us add a new category to the pooler.
-            Args :
-                - category (str): the category's name.
+    def SetScene(self, scene: str, objects: {str: GameObject}):
+        """ Will fill the dictionary of the specified scene in the pooler using the 'objects' dictionary. We do it object
+        by object to avoid linking the lists (we want the scene to be a copy of the original 'objects' dictionary).
+            Args:
+                - scene (str): the name of the scene to fill.
+                - objects ({str: GameObject}): the dictionary used to fill the scene. Of the form {name_of_category: list_of_objects}.
         """
-        self.main[category] = []
+        self.main[scene] = {}
+        for category in objects:
+            self.main[scene][category] = []
+            for gameObject in objects[category]:
+                self.main[scene][category].append(gameObject)
 
-    def AddObject(self, gameObject: GameObject, category: str):
-        """ Let us add a new object to the pooler.
-            Args :
-                - gameObject (GameObject): object to add in the pooler.
-                - category (str): object's category.
+    def GetCategoriesIn(self, scene: str) -> [str]:
+        """ Returns the list of every category contained in the given scene OR in the 'Level_All' scene.
+            Args:
+                - scene (str): the scene to retrieve the categories from.
+            Returns:
+                - ([str]): a list containing the names of every category.
         """
-        self.main[category].append(gameObject)
+        result = []
+        for category in self.main[scene]: result.append(category)
+        for category in self.main["Level_All"]:
+            if category not in result: result.append(category)
+        return result
+
+    def GetObjectsIn(self, scene: str, category: str) -> [GameObject]:
+        """ Returns a list of every object contained in the specific category of the given level OR the 'Level_All' scene.
+            Args:
+                - scene (str): the scene to retrieve the objects from.
+                - category (str): the category to retrieve the objects from.
+            Returns:
+                - ([GameObject]): the game objects to retrieve.
+        """
+        result = []
+        for gameObject in self.main[scene][category]: result.append(gameObject)
+        for gameObject in self.main["Level_All"][category]:
+            if gameObject not in result: result.append(gameObject)
+        return result
+
+    def SceneConcat(self, scenes: [str]) -> {str: [GameObject]}:
+        """ Returns a concatenated version of every scene given, that is, a dictionary of the form
+        {name_of_category : list_of_gameobjects} containing each category and game object of every scene given in the
+        'scenes' list.
+            Args:
+                - scenes ([str]): list of every scene to be concatenated.
+        """
+        result = {}
+        for scene in scenes:
+            for category in self.main[scene]:
+                if category not in result: result[category] = []
+                for gameObject in self.main[scene][category]:
+                    result[category].append(gameObject)
+        return result
 
     def Copy(self):
-        copied = Pooler({})
-        for category in self.main:
-            copied.main[category] = []
-            for gameObject in self.main[category]:
-                copied.main[category].append(gameObject)
+        copied = Pooler()
+        for scene in self.main:
+            copied.main[scene] = {}
+            for category in self.main[scene]:
+                copied.main[category] = []
+                for gameObject in self.main[scene][category]:
+                    copied.main[scene][category].append(gameObject)
         return copied
 
     def __add__(self, other):
@@ -329,18 +340,22 @@ class Pooler:
                 - self: concerned pooler.
                 - other: second pooler.
         """
-        result = Pooler([])
+        result = Pooler()
 
         # Concatenating elements from the first pooler.
-        for category in self.main:
-            result.AddCategory(category)
-            for gameObject in self.main[category]:
-                result.AddObject(gameObject, category)
+        for scene in self.main:
+            result.main[scene] = {}
+            for category in self.main[scene]:
+                result.main[scene][category] = []
+                for gameObject in self.main[scene][category]:
+                    result.main[scene][category].append(gameObject)
 
         # Concatenating elements from the second pooler.
-        for category in other.main:
-            if category not in result.main: result.AddCategory(category)
-            for gameObject in other.main[category]:
-                result.AddObject(gameObject, category)
+        for scene in other.main:
+            if scene not in result.main: result.main[scene] = {}
+            for category in other.main[scene]:
+                if category not in result.main[scene]: result.main[scene][category] = []
+                for gameObject in other.main[category]:
+                    result.main[scene][category].append(gameObject)
 
         return result
