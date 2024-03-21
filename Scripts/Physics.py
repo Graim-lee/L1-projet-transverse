@@ -46,7 +46,7 @@ def CheckCollision(body: Object.GameObject, other: Object.GameObject) -> bool:
         Args :
             - body, other (GameObject): the two GameObjects to check.
         Returns :
-            - (bool): True if the two objects are colliding, False otherwise.
+            - (bool): True if the two objects are colliding, False otherwise. 
     """
     topleft1, topleft2 = body.position, other.position
     bottomright1, bottomright2 = body.position + body.size, other.position + other.size
