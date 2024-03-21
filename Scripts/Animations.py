@@ -7,6 +7,9 @@ playerWalkSprite = 0
 playerSpriteFlipped = False
 playerPreviousDirection = 1
 
+waterFrame = 0
+waterSprite = 0
+
 def AnimatePlayer(player: Object.GameObject):
     """ Sets the right sprite for the player and manages its animations.
         Args:
@@ -33,7 +36,7 @@ def AnimatePlayer(player: Object.GameObject):
         if playerWalkFrame > Constants.playerWalkDuration:
             playerWalkFrame = 0
             playerWalkSprite += 1
-            if playerWalkSprite >= 2: playerWalkSprite = 0
+            playerWalkSprite %= 2
             if not Constants.playerSquishing: player.SetSprite("Sprites/Player/"+Constants.skin+"/move_" + str(playerWalkSprite + 1)+".png", True)
             else: player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_" + str(playerWalkSprite + 1)+".png", True)
 
@@ -43,3 +46,19 @@ def AnimatePlayer(player: Object.GameObject):
         Constants.playerSpriteFlipped = True
 
     player.Resize((44, 44))
+
+def AnimateWater(water: [Object.GameObject]):
+    """ Sets the right sprite for every water object and manages their animations.
+            Args:
+                - water ([GameObject]): the water game object.
+    """
+    global waterFrame, waterSprite
+
+    waterFrame += 1
+    if waterFrame >= Constants.waterAnimDuration:
+        waterFrame = 0
+        waterSprite += 1
+        waterSprite %= 3
+        for wat in water:
+            wat.SetSprite("Sprites/Water/water_" + str(waterSprite + 1) + ".png", True)
+            wat.Resize(wat.size.Tuple())

@@ -98,9 +98,8 @@ while Constants.gameRunning:
 
         # We play the animations of the objects.
         for category in Constants.objectsInScene:
-            for gameObject in Constants.objectsInScene[category]:
-                if ComputeObject(gameObject) and gameObject.hasAnimation:
-                    if gameObject == player: Animations.AnimatePlayer(gameObject)
+            if category == "Water": Animations.AnimateWater(Constants.objectsInScene[category])
+            if category == "Player": Animations.AnimatePlayer(Constants.objectsInScene[category][0])
 
     # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.

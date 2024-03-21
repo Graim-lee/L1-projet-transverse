@@ -7,7 +7,7 @@ import Scripts.ButtonFunctions as ButtonFunctions
 import random
 
 initPooler = Object.Pooler()
-initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
+initDictionary = {"Door": [], "Water": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
 mainPooler: Object.Pooler
 
@@ -52,12 +52,12 @@ def All():
     # Player.
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/default/idle.png"
-    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3], True, True, True)
+    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3, 4], True, True, True)
     result["Player"].append(gameObject)
 
     # Trajectory dots.
     for i in range(5):
-        gameObject = Object.GameObject((0, 0), (10 - i, 10 - i), "Real", "Sprites/dot.png", 0, 0, [0, 1, 2, 3])
+        gameObject = Object.GameObject((0, 0), (10 - i, 10 - i), "Real", "Sprites/dot.png", 0, 0, [0, 1, 2, 3, 4])
         gameObject.active = False
         result["Trajectory"].append(gameObject)
 
@@ -547,9 +547,21 @@ def Level_1_4():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    # Bottom.
+    objectPos = (100, 300)
+    objectSize = (2000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Water.
+    objectPos = (100, 200)
+    objectSize = (500, 250)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/Water/water_1.png", 0, 4, [0, 1], _png=True, _hasAnimation=True)
+    result["Water"].append(gameObject)
+
     # Floor.
     objectPos = (-1800, 180)
-    objectSize = (5000, 800)
+    objectSize = (2000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
