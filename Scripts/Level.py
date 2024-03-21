@@ -464,23 +464,65 @@ def Level_1_3():
 
     wallTexture = "Sprites/wall.png"
 
+    # Right platform.
+    objectPos = (600, -150)
+    objectSize = (500, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left stair.
+    objectPos = (-300, 200)
+    objectSize = (200, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left platform.
+    objectPos = (-700, 100)
+    objectSize = (500, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Final platform.
+    objectPos = (-20, -600)
+    objectSize = (600, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Ceiling.
+    objectPos = (-1800, -2700)
+    objectSize = (5000, 1750)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper left wall.
+    objectPos = (-700, -2700)
+    objectSize = (800, 2149)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
     # Right border.
-    objectPos = (1660, -2700)
+    objectPos = (960, -2700)
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Left border.
-    objectPos = (-1200, -2700)
+    objectPos = (-1600, -2700)
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
     # Floor.
-    objectPos = (-1800, 180)
+    objectPos = (-1800, 300)
     objectSize = (5000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+
+    # End door.
+    objectPos = (200, -750)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
 
     return result
 
