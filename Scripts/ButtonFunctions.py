@@ -106,7 +106,7 @@ def ToLevel_1_2():
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
     Constants.currentLevel = "Level_1_3"
-    player.position = Object.Vector2(0, 0)
+    player.position = Object.Vector2(300, 250)
 
 def ToLevel_1_4():
     Constants.currentScene = "Level_1_4"

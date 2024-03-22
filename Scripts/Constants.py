@@ -120,8 +120,9 @@ playerSpriteFlipped = False
 playerMovingDirection = 0
 playerSquishing = False
 
-# Constants for how many frames each sprite must stay in the player's animations.
+# Constants for how many frames each sprite must stay in the animations.
 playerWalkDuration = 5
+waterAnimDuration = 20
 
 """ Skin constants ================================================================================================= """
 
