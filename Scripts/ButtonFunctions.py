@@ -27,13 +27,58 @@ def ToWorldSelection():
 def ToSkinMenu():
     Constants.currentScene = "Skin_Menu"
 
-def ToChangeSkin():
-    skin_list = ["default", "black"]
-    index = skin_list.index(Constants.skin)
-    if index + 1 == len(skin_list):
-        Constants.skin = skin_list[0]
+def ToCloset():
+    Constants.currentScene = "Closet_Menu"
+
+def ToChangeSkinRight():
+    """
+        This function find the next Skin to his right (in list and display), update the skin display in the menu with UpdateDisplaySkin()
+        Finally change the skin with his next skin on his right side
+    """
+    index = Constants.skinList.index(Constants.skin)
+    if index + 1 == len(Constants.skinList):
+        newSkin = Constants.skinList[0]
     else:
-        Constants.skin = skin_list[index + 1]
+        newSkin = Constants.skinList[index + 1]
+    UpdateDisplaySkin(newSkin)
+    Constants.skin = newSkin
+
+def ToChangeSkinLeft():
+    """
+        This function find the next Skin to his left (in list and display), update the skin display in the menu with UpdateDisplaySkin()
+        Finally change the skin with his next skin on his left side
+    """
+    index = Constants.skinList.index(Constants.skin)
+    if index - 1 == -1:
+        newSkin = Constants.skinList[len(Constants.skinList) - 1]
+    else:
+        newSkin = Constants.skinList[index - 1]
+    UpdateDisplaySkin(newSkin)
+    Constants.skin = newSkin
+
+def UpdateDisplaySkin(skin : (str)):
+    """
+        This function update the skin display on the menu by looking at every sprite in the pooler (to reduce the range we only look in Text where there is all the skin only
+        Then we compare his data to the value of the new skin and update the skin to selected.png otherwise, we update the skin to idle.png so we see what we have selected
+        We resize to fit well on the screen otherwise size = (44,44)
+        Args:
+            - skin : (str) the new skin find thanks to ToChangeSkinLeft/Right()
+    """
+    for gameObject in Constants.objectsInScene["Text"]:
+        if gameObject.data == "Sprites/Player/" + skin + "/idle.png" or gameObject.data == "Sprites/Player/" + skin + "/selected.png":
+            gameObject.SetSprite("Sprites/Player/" + skin + "/selected.png")
+            gameObject.Resize((201,201))
+        else:
+            listData = gameObject.data.split("/")
+            gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png")
+            gameObject.Resize((201, 201))
+
+def ToLootBox():
+    """
+        This function Should display on a new scene the animation of an box opening, for example like brawl star with the background color of the player color
+        But I still don't figured out how to do it
+    """
+    Constants.currentScene = "Loot_Box"
 
 def ToLevel_WorldSelection():
     Constants.currentScene = "Level_World_Selection"

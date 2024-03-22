@@ -4,7 +4,6 @@ import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
-import random
 
 initPooler = Object.Pooler()
 initDictionary = {"Door": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
@@ -27,6 +26,8 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_World_1", LevelWorld_1())
     pooler.SetScene("Pause_Menu", PauseMenu())
     pooler.SetScene("Skin_Menu", SkinMenu())
+    pooler.SetScene("Closet_Menu", ClosetMenu())
+    pooler.SetScene("Loot_Box", LootBox())
     pooler.SetScene("Level_1_1", Level_1_1())
     pooler.SetScene("Level_1_2", Level_1_2())
     pooler.SetScene("Level_1_3", Level_1_3())
@@ -51,7 +52,7 @@ def All():
 
     # Player.
     playerSize = (44, 44)
-    playerTexture = "Sprites/Player/default/idle.png"
+    playerTexture = "Sprites/Player/blue/idle.png"
     gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3], True, True, True)
     result["Player"].append(gameObject)
 
@@ -95,12 +96,12 @@ def MainMenu():
 
     # Penguin sprite on the left of the screen
     objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/default/idle.png", 0, 0, [0],True,True,False)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/blue/idle.png", 0, 0, [0],True,True,False)
     result["Text"].append(gameObject)
 
     # Penguin sprite on the right of the screen
     objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
-    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/default/idle.png", 0, 0, [0],True,True,False)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/blue/reverse.png", 0, 0, [0],True,True,False)
     result["Text"].append(gameObject)
 
     return result
@@ -112,17 +113,18 @@ def SkinMenu():
 
     # Penguin sprite on the left of the screen
     objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0], True, True,False)
-    result["Text"].append(gameObject)
+    game0bject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0], True, True,False)
+    result["Text"].append(game0bject)
 
     # Change skin button.
     objectPos = (Constants.screenDimensions[0] / 2 - 400, 725)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Change", ButtonFunctions.ToChangeSkin), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Change", ButtonFunctions.ToCloset), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # Open button.
+    # ToLootBox not finish
     objectPos = (Constants.screenDimensions[0] / 2, 625)
-    gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("Open", ButtonFunctions.ToLevel_WorldSelection), 0,0, [0])
+    gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("Open", ButtonFunctions.ToLootBox), 0,0, [0])
     result["Button"].append(gameObject)
 
     # Chest in the middle the screen
@@ -135,10 +137,58 @@ def SkinMenu():
     gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
-    """def loot_box():
-        with open("data_player.txt", "r")as data:
-            line = 
-        return"""
+    return result
+
+
+def ClosetMenu():
+    """ Adds the Skin Menu Selection lobby to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Penguin black sprite on the left of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
+    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/black/idle.png", 0,
+                                   0, [0], True, True, False)
+    result["Text"].append(gameObject)
+
+    # Change skin to the right button.
+    objectPos = (Constants.screenDimensions[0] / 2 + 50, 725)
+    gameObject = Object.GameObject(objectPos, (70, 70), "Button", (">", ButtonFunctions.ToChangeSkinRight), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Change skin to the left button.
+    objectPos = (Constants.screenDimensions[0] / 2 - 50, 725)
+    gameObject = Object.GameObject(objectPos, (70, 70), "Button", ("<", ButtonFunctions.ToChangeSkinLeft), 0, 0,[0])
+    result["Button"].append(gameObject)
+
+    # Penguin blue sprite on the left of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
+    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/blue/selected.png", 0,0, [0], True, True, False)
+    result["Text"].append(gameObject)
+
+    # Penguin Iren sprite on the left of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 - 100, 450)
+    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/Iren/idle.png", 0, 0, [0],True, True, False)
+    result["Text"].append(gameObject)
+
+    # "Quit Game" button.
+    objectPos = (Constants.screenDimensions[0] / 2, 900)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
+
+def LootBox():
+    # scene not finish at all
+    """ Adds the Skin Menu Selection lobby to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Animation of the open  box in the middle the screen
+    objectPos = (Constants.screenDimensions[0] / 2 - 150, 450)
+    gameObject = Object.GameObject(objectPos, (350, 500), "Real", "Sprites/Chest_open.png", 0, 0, [0], True, True, False)
+    result["Text"].append(gameObject)
 
     return result
 
