@@ -97,12 +97,13 @@ def MainMenu():
 
     # Penguin sprite on the left of the screen
     objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/blue/idle.png", 0, 0, [0],True,True,False)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0],True,True,False)
     result["Text"].append(gameObject)
 
     # Penguin sprite on the right of the screen
     objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
-    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/blue/reverse.png", 0, 0, [0],True,True,False)
+    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0],True,True,False)
+    gameObject.surface = pygame.transform.flip(gameObject.surface, True, False)
     result["Text"].append(gameObject)
 
     return result
@@ -112,9 +113,9 @@ def SkinMenu():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
-    # Penguin sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    game0bject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0], True, True,False)
+    # Hanger sprite on the left of the screen
+    objectPos = (Constants.screenDimensions[0] / 2 - 500, 400)
+    game0bject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/hanger.png", 0, 0, [0], True, True,False)
     result["Text"].append(game0bject)
 
     # Change skin button.
@@ -123,12 +124,12 @@ def SkinMenu():
     result["Button"].append(gameObject)
 
     # Open button.
-    # ToLootBox not finish
+    # ToLootBox not finish.
     objectPos = (Constants.screenDimensions[0] / 2, 625)
     gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("Open", ButtonFunctions.ToLootBox), 0,0, [0])
     result["Button"].append(gameObject)
 
-    # Chest in the middle the screen
+    # Chest in the middle the screen.
     objectPos = (Constants.screenDimensions[0] / 2 - 100, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Chest.png", 0, 0, [0], True, True,False)
     result["Text"].append(gameObject)
@@ -172,9 +173,9 @@ def ClosetMenu():
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/Iren/idle.png", 0, 0, [0],True, True, False)
     result["Text"].append(gameObject)
 
-    # "Quit Game" button.
+    # "Select skin button.
     objectPos = (Constants.screenDimensions[0] / 2, 900)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     return result

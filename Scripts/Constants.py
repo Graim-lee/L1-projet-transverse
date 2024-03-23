@@ -119,9 +119,11 @@ playerSpriteFlipped = False
 # These variables track the actions of the player throughout the scripts to animate it properly.
 playerMovingDirection = 0
 playerSquishing = False
+playerFlyingDirection = 1
 
 # Constants for how many frames each sprite must stay in the animations.
 playerWalkDuration = 5
+playerGrounded = True
 waterAnimDuration = 20
 
 """ Skin constants ================================================================================================= """

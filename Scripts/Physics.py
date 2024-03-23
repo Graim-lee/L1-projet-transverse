@@ -156,6 +156,7 @@ def PhysicsCalculations(body: Object.GameObject):
     """
     # Gravity.
     grounded = CheckIfGrounded(body)
+    Constants.playerGrounded = grounded
     if body.grounded and not grounded and body.velocity.y >= 0:
         body.gravity = Constants.fallInitialGravity
         body.fallingFromGround = True
@@ -199,7 +200,7 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
             if not gameObject.active: continue
             if gameObject.layer in body.notCollidable: continue
 
-            if CheckGroundedCollision(groundedLeft, groundedRight, gameObject): 
+            if CheckGroundedCollision(groundedLeft, groundedRight, gameObject):
                 body.fallingFromGround = False
                 return True
     return False

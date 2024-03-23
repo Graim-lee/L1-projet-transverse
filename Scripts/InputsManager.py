@@ -192,6 +192,11 @@ def UseSlingshot():
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
+    if mousePos.x < player.position.x:
+        Constants.playerFlyingDirection = 1
+    else:
+        Constants.playerFlyingDirection = -1
+
     # We limit the force of the slingshot for it not to be too strong.
     if propulsionForce.x ** 2 + propulsionForce.y ** 2 > Constants.maxSlingshotForce ** 2:
         reductionCoeff = Constants.maxSlingshotForce / math.sqrt(propulsionForce.x ** 2 + propulsionForce.y ** 2)

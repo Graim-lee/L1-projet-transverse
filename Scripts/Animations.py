@@ -17,8 +17,21 @@ def AnimatePlayer(player: Object.GameObject):
     """
     global playerWalkFrame, playerWalkSprite, playerSpriteFlipped, playerPreviousDirection
 
-    if Constants.playerMovingDirection == 0:
+    # Flying moving animation.
+    if not Constants.playerGrounded:
+        playerPreviousDirection = Constants.playerFlyingDirection
+        playerWalkFrame += 1
 
+        # Changes the animation frame.
+        if playerWalkFrame > Constants.playerWalkDuration:
+            playerWalkFrame = 0
+            playerWalkSprite += 1
+            playerWalkSprite %= 2
+            if not Constants.playerSquishing:
+                player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_" + str(playerWalkSprite + 1) + ".png",True)
+            else:
+                player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_" + str(playerWalkSprite + 1) + ".png",True)
+    elif Constants.playerMovingDirection == 0 and Constants.playerGrounded:
         # Idle animation.
         if not Constants.playerSquishing:
             player.SetSprite("Sprites/Player/"+Constants.skin+"/idle.png", True)
