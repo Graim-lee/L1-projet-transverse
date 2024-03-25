@@ -7,7 +7,7 @@ import Scripts.ButtonFunctions as ButtonFunctions
 import random
 
 initPooler = Object.Pooler()
-initDictionary = {"Door": [], "Water": [], "Wall": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
+initDictionary = {"Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": []}
 
 mainPooler: Object.Pooler
 
@@ -33,6 +33,7 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_1_4", Level_1_4())
     pooler.SetScene("World_2", World_2())
     pooler.SetScene("Level_2_1", Level_2_1())
+    pooler.SetScene("Level_2_2", Level_2_2())
 
     mainPooler = pooler
     return pooler
@@ -582,6 +583,11 @@ def World_2():
     gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 1", ButtonFunctions.ToLevel_2_1), 0, 0, [0])
     result["Button"].append(gameObject)
 
+    # "Level 2" button.
+    objectPos = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 2", ButtonFunctions.ToLevel_2_2), 0, 0, [0])
+    result["Button"].append(gameObject)
+
     return result
 
 def Level_2_1():
@@ -607,6 +613,308 @@ def Level_2_1():
     # Right platform.
     objectPos = (725, 100)
     objectSize = (200, 10)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def Level_2_2():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    #Constants.groundedFrictionCoeff = 0.95
+
+    coinSize = (32, 32)
+    coinTexture = "Sprites/coins.png"
+    wallTexture = "Sprites/wall.png"
+
+    # Floor.
+    objectPos = (-1000, 200)
+    objectSize = (7900, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1900, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #TestCoin
+    gameObject = Object.GameObject((0, 150), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Tricky Left platform.
+    objectPos = (-900, -250)
+    objectSize = (100, 10)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Stair 1
+    objectPos = (500, 0)
+    objectSize = (30, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (500, 0)
+    objectSize = (600, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Stair 2
+    objectPos = (1070, -170)
+    objectSize = (30, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (1070, -170)
+    objectSize = (200, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Stair 3
+    objectPos = (1240, -340)
+    objectSize = (30, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (1240, -340)
+    objectSize = (200, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Big Step
+    objectPos = (1410, -660)
+    objectSize = (30, 350)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (1410, -660)
+    objectSize = (200, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Left Platform
+    objectPos = (1000, -860)
+    objectSize = (100, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Big Step Wall
+    objectPos = (1580, -660)
+    objectSize = (30, 350)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Under Platform
+    objectPos = (1410, -100)
+    objectSize = (200, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Platfrom after big stair
+    objectPos = (2000, -470)
+    objectSize = (200, 670)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #2nd Platfrom after big stair
+    objectPos = (1800, -200)
+    objectSize = (200, 400)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Big hole in wall
+    objectPos = (2400, -2000)
+    objectSize = (80, 1800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (2400, -100)
+    objectSize = (80, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Platform
+    objectPos = (2360, -100)
+    objectSize = (160, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Big hole in wall 2
+    objectPos = (2800, -2000)
+    objectSize = (80, 1500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    objectPos = (2800, -400)
+    objectSize = (80, 600)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Platform
+    objectPos = (2760, -400)
+    objectSize = (160, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Left platform with coin
+    objectPos = (2440, -2000)
+    objectSize = (80, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Platfrom on the wall
+    objectPos = (2875, -300)
+    objectSize = (300, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Long platform
+    objectPos = (3100, -100)
+    objectSize = (1100, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Top Platform
+    objectPos = (3800, -500)
+    objectSize = (200, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Wall
+    objectPos = (3500, -1400)
+    objectSize = (80, 1200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Big Wall
+    objectPos = (4200, -1400)
+    objectSize = (80, 1500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Wall bottom
+    objectPos = (3200, 0)
+    objectSize = (40, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Wall top
+    objectPos = (3450, -70)
+    objectSize = (40, 170)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Wall bottom
+    objectPos = (3700, 0)
+    objectSize = (40, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Wall top
+    objectPos = (3950, -70)
+    objectSize = (40, 170)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    #Bottom block
+    objectPos = (5000, -100)
+    objectSize = (300, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Platform
+    objectPos = (5000, -500)
+    objectSize = (300, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Platform
+    objectPos = (5000, -900)
+    objectSize = (300, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Big Platform
+    objectPos = (4800, -1300)
+    objectSize = (700, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Platform
+    objectPos = (5000, -1700)
+    objectSize = (300, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Medium Block
+    objectPos = (6000, -1300)
+    objectSize = (300, 1500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Final Block
+    objectPos = (6300, -2000)
+    objectSize = (300, 2200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+    #D
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2, objectPos[1]-30), objectSize, "Door", (coinTexture, ButtonFunctions.ToLevel_World1), 0, 3, [0], _png=True)
+    result["Door"].append(gameObject)
+
+    # Right Border
+    objectPos = (6600, -4000)
+    objectSize = (300, 4200)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 

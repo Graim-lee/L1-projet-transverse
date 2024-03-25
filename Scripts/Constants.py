@@ -67,6 +67,11 @@ playerJumpCount = 2
 # example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
 maxJumpBufferTimer = 50
 
+# Collectables
+
+#number of coin
+coin_counter = 0
+
 """" Camera constants ============================================================================================== """
 
 # The x coordinates between which the player can move without moving the camera.

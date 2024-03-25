@@ -76,6 +76,11 @@ def ToLevel_2_1():
     Constants.currentLevel = "Level_2_1"
     player.position = Object.Vector2(0, 0)
 
+def ToLevel_2_2():
+    Constants.currentScene = "Level_2_2"
+    Constants.currentLevel = "Level_2_2"
+    player.position = Object.Vector2(0, 0)
+
 def EndLevel():
     Constants.currentScene = "World_Selection"
     Level.ResetScene(Constants.currentLevel)

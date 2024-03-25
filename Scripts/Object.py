@@ -95,7 +95,7 @@ class GameObject:
         self.size = Vector2(_size[0], _size[1])
 
         # We fetch the object's texture if needed.
-        if _type == "Real":
+        if _type == "Real" or _type == "Coin" :
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
         elif _type == "Door":
@@ -104,7 +104,7 @@ class GameObject:
             self.surface = pygame.image.load("Sprites/button.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
-        if _type == "Real" or _type == "Door" or _type == "Button":
+        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin":
             self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.type = _type
