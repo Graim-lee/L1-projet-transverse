@@ -17,28 +17,14 @@ def AnimatePlayer(player: Object.GameObject):
     """
     global playerWalkFrame, playerWalkSprite, playerSpriteFlipped, playerPreviousDirection
 
-    # Flying moving animation.
-    if not Constants.playerGrounded:
-        playerPreviousDirection = Constants.playerFlyingDirection
-        playerWalkFrame += 1
-
-        # Changes the animation frame.
-        if playerWalkFrame > Constants.playerWalkDuration:
-            playerWalkFrame = 0
-            playerWalkSprite += 1
-            playerWalkSprite %= 2
-            if not Constants.playerSquishing:
-                player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_" + str(playerWalkSprite + 1) + ".png",True)
-            else:
-                player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_" + str(playerWalkSprite + 1) + ".png",True)
-    elif Constants.playerMovingDirection == 0 and Constants.playerGrounded:
+    if Constants.playerMovingDirection == 0 and Constants.playerGrounded:
         # Idle animation.
         if not Constants.playerSquishing:
-            player.SetSprite("Sprites/Player/"+Constants.skin+"/idle.png", True)
+            player.SetSprite("Sprites/Player/" + Constants.skin + "/idle.png", True)
 
         # Squishing animation.
         else:
-            player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_1.png", True)
+            player.SetSprite("Sprites/Player/" + Constants.skin + "/squish_1.png", True)
 
     # Walk animation.
     else:
@@ -50,10 +36,11 @@ def AnimatePlayer(player: Object.GameObject):
             playerWalkFrame = 0
             playerWalkSprite += 1
             playerWalkSprite %= 2
-            if not Constants.playerSquishing: player.SetSprite("Sprites/Player/"+Constants.skin+"/move_" + str(playerWalkSprite + 1)+".png", True)
-            else: player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_" + str(playerWalkSprite + 1)+".png", True)
+            animType = "/fly_" if not Constants.playerGrounded else "/squish_" if Constants.playerSquishing else "/move_"
+            player.SetSprite("Sprites/Player/" + Constants.skin + animType + str(playerWalkSprite + 1) + ".png", True)
 
     # Makes the player face the right direction.
+    print(playerPreviousDirection)
     if playerPreviousDirection == -1 and not Constants.playerSpriteFlipped:
         player.surface = pygame.transform.flip(player.surface, True, False)
         Constants.playerSpriteFlipped = True

@@ -163,12 +163,12 @@ def CheckInputs():
 
 def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
-    global jumpBufferTimer, slingshotArmed
+    global slingshotArmed
     if player.grounded:
         if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
         if pressingD: MovePlayer(1)     # 'D'
 
-    if not pressingQA and not pressingD: Constants.playerMovingDirection = 0
+    if player.grounded and not pressingQA and not pressingD: Constants.playerMovingDirection = 0
 
     if slingshotArmed: ShowSlingshotTrajectory()
 
@@ -193,13 +193,6 @@ def PressEscape():
 
     elif Constants.currentScene == "Pause_Menu":
         Constants.currentScene = Constants.currentLevel
-
-def JumpPlayer():
-    """ Applies an upward velocity to the player for it to jump. """
-    global jumpBufferTimer
-    if player.grounded:
-        player.instantVelocity += Object.Vector2(0, Constants.playerJumpForce) * Constants.deltaTime
-        jumpBufferTimer = 0
 
 def Sign(x: float) -> int:
     """ Computes the sign of x.
@@ -226,9 +219,9 @@ def UseSlingshot():
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
     if mousePos.x < slingshotStart.x:
-        Constants.playerFlyingDirection = 1
+        Constants.playerMovingDirection = 1
     else:
-        Constants.playerFlyingDirection = -1
+        Constants.playerMovingDirection = -1
 
     # We limit the force of the slingshot for it not to be too strong.
     if propulsionForce.x ** 2 + propulsionForce.y ** 2 > Constants.maxSlingshotForce ** 2:

@@ -156,7 +156,8 @@ def PhysicsCalculations(body: Object.GameObject):
     """
     # Gravity.
     grounded = CheckIfGrounded(body)
-    Constants.playerGrounded = grounded
+    if body == player: Constants.playerGrounded = grounded
+
     if body.grounded and not grounded and body.velocity.y >= 0:
         body.gravity = Constants.fallInitialGravity
         body.fallingFromGround = True
@@ -225,14 +226,12 @@ def ApplyGravity(body: Object.GameObject):
         Args:
             - body (GameObject): GameObject for which we want to compute the gravity.
     """
-    global G
-
     addVelocity = body.gravity * deltaTime  # The formula is given by (Vx1, Vy1) = (Vx0, Vy0) + Dt * g.
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
     # is located towards increasing y coordinates, so we must add up the gravity value instead of subtracting it.
     body.instantVelocity += Object.Vector2(0, addVelocity)
-    body.gravity += Constants.G
+    body.gravity += Constants.G * body.mass
 
 def ApplyFriction(body: Object.GameObject, grounded: bool):
     """ Slows down the body's instantVelocity and continuousVelocity by the frictionCoeff constant (see Constants.py).

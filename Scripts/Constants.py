@@ -63,10 +63,6 @@ playerUsedSlingshot = False
 maxPlayerJumpCount = 2
 playerJumpCount = 2
 
-# Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
-# example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
-maxJumpBufferTimer = 50
-
 # References the object the player is holding (when dealing with throwable objects).
 heldItem = None
 # Timer to prevent the player from picking an item instantly after throwing it (in frames).
@@ -125,7 +121,6 @@ playerSpriteFlipped = False
 # These variables track the actions of the player throughout the scripts to animate it properly.
 playerMovingDirection = 0
 playerSquishing = False
-playerFlyingDirection = 1
 
 # Constants for how many frames each sprite must stay in the animations.
 playerWalkDuration = 5
