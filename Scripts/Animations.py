@@ -40,7 +40,6 @@ def AnimatePlayer(player: Object.GameObject):
             player.SetSprite("Sprites/Player/" + Constants.skin + animType + str(playerWalkSprite + 1) + ".png", True)
 
     # Makes the player face the right direction.
-    print(playerPreviousDirection)
     if playerPreviousDirection == -1 and not Constants.playerSpriteFlipped:
         player.surface = pygame.transform.flip(player.surface, True, False)
         Constants.playerSpriteFlipped = True
