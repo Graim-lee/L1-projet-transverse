@@ -64,7 +64,7 @@ def All():
     # Player.
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/blue/idle.png"
-    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3], True, True, True)
+    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3, 5], True, True, True)
     result["Player"].append(gameObject)
 
     # Trajectory dots.
@@ -650,7 +650,7 @@ def Level_3_1():
     # Football.
     objectPos = (200, -100)
     objectSize = (32, 32)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 1, 2, [0], _png=True)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 1, 5, [0, 1], _png=True)
     result["Throwable"].append(gameObject)
 
     return result

@@ -67,6 +67,12 @@ playerJumpCount = 2
 # example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
 maxJumpBufferTimer = 50
 
+# References the object the player is holding (when dealing with throwable objects).
+heldItem = None
+# Timer to prevent the player from picking an item instantly after throwing it (in frames).
+itemThrowCooldown = 20
+itemThrowTimer = 0
+
 """" Camera constants ============================================================================================== """
 
 # The x coordinates between which the player can move without moving the camera.

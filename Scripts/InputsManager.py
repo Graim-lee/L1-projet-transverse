@@ -34,6 +34,19 @@ def SetPlayer(playerChar: Object.GameObject):
     global player
     player = playerChar
 
+def ObjectsOverlap(object1: Object.GameObject, object2: Object.GameObject) -> bool:
+    """ Returns True if the two objects collide (or overlap), False otherwise. Useful for detecting when the player is at
+    a door or on a coin.
+        Args:
+            - object1 (GameObject): the first object.
+            - object2 (GameObject): the second object.
+        Returns:
+            - (bool): whether the two objects overlap.
+    """
+    if object2.position.x + object2.size.x < object1.position.x or object2.position.x > object1.position.x + object1.size.x: return False
+    if object2.position.y + object2.size.y < object1.position.y or object2.position.y > object1.position.y + object1.size.y: return False
+    return True
+
 def CheckInputs():
     """ Main function, checks every input. If you want to detect an input, place the code here. """
     global pressingQA, pressingD, slingshotArmed, slingshotStart
@@ -50,10 +63,9 @@ def CheckInputs():
             if event.key == pygame.K_BACKSPACE: Constants.gameRunning = False   # Backspace = quit game (for debug).
             elif event.key == pygame.K_ESCAPE: PressEscape()              # 'Escape' = different menu.
             elif event.key == pygame.K_z:          # 'Enter' = interact with a door.
-                for door in mainPooler.main[Constants.currentScene]["Door"]:
+                for door in Constants.objectsInScene["Door"]:
                     if not door.active: continue
-                    if door.position.x + door.size.x < player.position.x or door.position.x > player.position.x + player.size.x: continue
-                    if door.position.y + door.size.y < player.position.y or door.position.y > player.position.y + player.size.y: continue
+                    if not ObjectsOverlap(player, door): continue
                     door.data[1]()
                     Constants.groundedFrictionCoeff = 0.7
                     break
@@ -100,7 +112,7 @@ def CheckInputs():
                 # If we are in a menu, we click on a button.
                 else:
                     mouseX, mouseY = pygame.mouse.get_pos()
-                    for button in mainPooler.main[Constants.currentScene]["Button"]:
+                    for button in Constants.objectsInScene["Button"]:
                         # We check for each button if it is in the desired range.
                         if not button.active: continue
                         if button.position.x - 0.5 * button.size.x > mouseX or button.position.x + 0.5 * button.size.x < mouseX: continue
@@ -116,11 +128,32 @@ def CheckInputs():
         When the user lets go of left-click ======================================================================== """
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if slingshotArmed:
-                UseSlingshot()
+                if Constants.heldItem is None: UseSlingshot()
+                else: ThrowObject()
                 HideDots()
             slingshotArmed = False
 
         if event.type == pygame.K_z: continue
+
+    """ ANYTIME ========================================================================================================
+    The code here executes on each frame, no matter the inputs ===================================================== """
+
+    # Throwable object detection.
+    if Constants.heldItem is None and Constants.itemThrowTimer <= 0:
+        for throwable in Constants.objectsInScene["Throwable"]:
+            if not throwable.active: continue
+            if not ObjectsOverlap(player, throwable): continue
+            Constants.heldItem = throwable
+            break
+
+    if Constants.heldItem is not None:
+        itemPos = player.position + 0.5 * Object.Vector2(player.size.x, 0) - 0.5 * Constants.heldItem.size
+        Constants.heldItem.position = itemPos
+        Constants.heldItem.gravity = 0
+        Constants.heldItem.instantVelocity = Object.Vector2(0, 0)
+
+    if Constants.itemThrowTimer > 0: Constants.itemThrowTimer -= 1
+
 
     ApplyInputs()   # We apply the inputs' effects.
 
@@ -192,7 +225,7 @@ def UseSlingshot():
     mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
-    if mousePos.x < player.position.x:
+    if mousePos.x < slingshotStart.x:
         Constants.playerFlyingDirection = 1
     else:
         Constants.playerFlyingDirection = -1
@@ -246,3 +279,23 @@ def HideDots():
     global mainPooler
     for dot in mainPooler.main["Level_All"]["Trajectory"]:
         dot.active = False
+
+def ThrowObject():
+    global slingshotStart
+
+    # Computes the force of propulsion.
+    mousePos = Object.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+    propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
+
+    # We limit the force of the slingshot for it not to be too strong.
+    if propulsionForce.x ** 2 + propulsionForce.y ** 2 > Constants.maxSlingshotForce ** 2:
+        reductionCoeff = Constants.maxSlingshotForce / math.sqrt(propulsionForce.x ** 2 + propulsionForce.y ** 2)
+        propulsionForce *= reductionCoeff
+
+    # Application of the force.
+    Constants.heldItem.instantVelocity = propulsionForce
+    Constants.heldItem.gravity = 0
+    Constants.heldItem = None
+
+    # We reset the cooldown to prevent the player from picking up the item directly after throwing it.
+    Constants.itemThrowTimer = Constants.itemThrowCooldown

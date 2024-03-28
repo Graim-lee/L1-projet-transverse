@@ -32,6 +32,7 @@ buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
 # Initializing the pooler and the player.
 pooler = Level.GetPooler()
+Constants.objectsInScene = pooler.main["Main_Menu"]
 player = pooler.main["Level_All"]["Player"][0]
 
 # We link different objects to different scripts.
@@ -99,7 +100,8 @@ while Constants.gameRunning:
         # We play the animations of the objects.
         for category in Constants.objectsInScene:
             if category == "Water": Animations.AnimateWater(Constants.objectsInScene[category])
-            if category == "Player": Animations.AnimatePlayer(Constants.objectsInScene[category][0])
+            if category == "Player":
+                Animations.AnimatePlayer(Constants.objectsInScene[category][0])
 
     # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
