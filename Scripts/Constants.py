@@ -29,7 +29,7 @@ fallInitialGravity = 1500
 maxGroundedDistance = 3
 # A little distance to avoid the player from considering walls as floor (so that the grounded hitbox isn't exactly the
 # size of the player).
-groundedHitboxBorder = 2
+groundedHitboxBorder = 0
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 1
 groundedFrictionCoeff = 0.7
@@ -129,4 +129,4 @@ waterAnimDuration = 20
 """ Skin constants ================================================================================================= """
 
 skin = "blue"
-skinList = ["blue","black", "Iren"]
+skinList = ["blue", "black", "iren"]
