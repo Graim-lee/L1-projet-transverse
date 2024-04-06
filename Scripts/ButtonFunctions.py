@@ -100,7 +100,6 @@ def ToLevel_WorldSelection():
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_1():
-    Constants.groundedFrictionCoeff = 0.7
     Constants.currentScene = "World_1"
 
 def ToLevel_World1():

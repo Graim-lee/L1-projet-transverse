@@ -203,6 +203,7 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
 
             if CheckGroundedCollision(groundedLeft, groundedRight, gameObject):
                 body.fallingFromGround = False
+                body.onIce = gameObject.slippery
                 return True
     return False
 
@@ -245,8 +246,9 @@ def ApplyFriction(body: Object.GameObject, grounded: bool):
     instantHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
     continuousHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
     if grounded and not Constants.playerUsedSlingshot:  # We do not apply the friction on the first frame of the slingshot.
-        instantHorizontal *= Constants.groundedFrictionCoeff
-        continuousHorizontal *= Constants.groundedFrictionCoeff
+        trueFrictionCoeff = Constants.groundedFrictionCoeff if body.onIce else Constants.iceFrictionCoeff
+        instantHorizontal *= trueFrictionCoeff
+        continuousHorizontal *= trueFrictionCoeff
 
     Constants.playerUsedSlingshot = False   # To reset the 1-frame variable.
 

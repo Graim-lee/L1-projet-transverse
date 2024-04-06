@@ -33,6 +33,7 @@ groundedHitboxBorder = 0
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 1
 groundedFrictionCoeff = 0.7
+iceFrictionCoeff = 1
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 

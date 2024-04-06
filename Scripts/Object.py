@@ -64,6 +64,8 @@ class GameObject:
         - notCollidable (list[int]): list of every layers the object should not collide
                                     (i.e.: if notCollidable = [1,2], then the object will not 
                                     touch objects from layer 1 are 2 and will go through them).
+        - slippery (bool): True if the object has ice-like properties (that is, objects slide on top of it).
+        - onIce (bool): True if the object is currently on ice (and is subject to the ice effects such as sliding etc.)
 
         - previousRepelForce (Vector2): stores the previous repel force exerted on the object during a collision (allows
                                     to avoid bouncing off walls and floor).
@@ -71,7 +73,7 @@ class GameObject:
                                     conjunction with previousRepelForce to prevent bouncing.
     """
 
-    def __init__(self, _position: (int, int), _size: (int, int), _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False):
+    def __init__(self, _position: (int, int), _size: (int, int), _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False, _slippery = False):
         """ __init__ is called to create an object
             Args :
                 - self: mandatory for methods (objects' functions).
@@ -85,6 +87,7 @@ class GameObject:
                 - _alwaysLoaded (bool): whether the object will always be loaded or not.
                 - _png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
                 - _hasAnimation (bool): whether the object has animations or not.
+                - _slippery (bool): whether the object has ice properties (players slides and can only jump).
         """
         self.active = True
         self.visible = True
@@ -132,6 +135,8 @@ class GameObject:
         self.png = _png
 
         self.fallingFromGround = False
+        self.slippery = _slippery
+        self.onIce = False
 
     def Resize(self, size: (int, int)):
         """ Modify objects size.

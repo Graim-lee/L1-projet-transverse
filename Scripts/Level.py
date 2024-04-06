@@ -790,7 +790,7 @@ def Level_3_1():
     # Football.
     objectPos = (200, -100)
     objectSize = (32, 32)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 1, 5, [0, 1], _png=True)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 10, 5, [0, 1], _png=True)
     result["Throwable"].append(gameObject)
 
     return result
