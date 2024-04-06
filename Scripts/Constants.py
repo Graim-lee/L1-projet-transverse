@@ -64,6 +64,9 @@ playerUsedSlingshot = False
 maxPlayerJumpCount = 2
 playerJumpCount = 2
 
+# 1 if the player presses on D, -1 if the player presses on A/Q, 0 if the player doesn't move.
+playerInputDirection = 0
+
 # References the object the player is holding (when dealing with throwable objects).
 heldItem = None
 # Timer to prevent the player from picking an item instantly after throwing it (in frames).
@@ -83,15 +86,6 @@ maxYCameraMoveThreshold = 800
 cameraUnloadDistance = 500
 
 """ Scene & game state constants =================================================================================== """
-
-# keybind to be changed if needed in setting
-keyLeft = "q"
-keyRight = "d"
-keyDown = "s"
-keyUp = "z"
-
-# Enable/able key movement
-key = True
 
 # Go at the end of Level.py for a list of every scene so far.
 
@@ -126,14 +120,12 @@ buttonScrewColor = (150, 150, 150)
 buttonPressed = False
 
 """ Animation constants ============================================================================================ """
-# To know the direction precisely
-playerDirection = 0
 
 # To keep track of whether the sprite of the player is flipped or not.
 playerSpriteFlipped = False
 
 # These variables track the actions of the player throughout the scripts to animate it properly.
-playerMovingDirection = 0
+playerDirection = 0
 playerSquishing = False
 
 # Constants for how many frames each sprite must stay in the animations.

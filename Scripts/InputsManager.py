@@ -73,22 +73,19 @@ def CheckInputs():
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
             # to True, and put it back to False when we detect that the user released the key.
-        if event.type == pygame.KEYDOWN and Constants.key:
+        if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 pressingQA = True  # 'A'
-                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_q:
                 pressingQA = True  # 'Q'
-                Constants.playerMovingDirection = -1
             elif event.key == pygame.K_d:
                 pressingD = True  # 'D'
-                Constants.playerMovingDirection = 1
             elif event.key == pygame.K_s:
                 Constants.playerSquishing = True
 
         """ KEYUP ======================================================================================================
         The user just released a key (only happens on the first frame after releasing the key) ===================== """
-        if event.type == pygame.KEYUP and  Constants.key:
+        if event.type == pygame.KEYUP:
 
             if event.key == pygame.K_a:
                 pressingQA = False   # 'A'
@@ -165,10 +162,11 @@ def ApplyInputs():
     """ After retrieving every input, this function applies the inputs' effects, such as moving the character. """
     global slingshotArmed
     if player.grounded:
-        if pressingQA: MovePlayer(-1)    # 'A' or 'Q'
-        if pressingD: MovePlayer(1)     # 'D'
-
-    if player.grounded and not pressingQA and not pressingD: Constants.playerMovingDirection = 0
+        Constants.playerInputDirection = 0
+        if pressingQA: Constants.playerInputDirection -= 1    # 'A' or 'Q'
+        if pressingD: Constants.playerInputDirection += 1     # 'D'
+        if Constants.playerInputDirection != 0: MovePlayer(Constants.playerInputDirection)
+        Constants.playerDirection = Constants.playerInputDirection
 
     if slingshotArmed: ShowSlingshotTrajectory()
 
@@ -180,9 +178,9 @@ def MovePlayer(direction: int):
             - direction (int): only takes in 1 or -1. Determines whether the player should move right or left.
     """
     # Prevents the player from exceeding the maximum speed.
-    if Sign(direction * Constants.maxPlayerSpeed - player.continuousVelocity.x) != Sign(direction): return True
+    if Sign(direction * Constants.maxPlayerSpeed - player.velocity.x) != Sign(direction): return True
     # Increases the velocity of the player.
-    player.continuousVelocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
+    player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
 
 def PressEscape():
     """ Is executed when the player pressing 'Escape'. """
@@ -219,9 +217,9 @@ def UseSlingshot():
     propulsionForce = (slingshotStart - mousePos) * Constants.slingshotForce
 
     if mousePos.x < slingshotStart.x:
-        Constants.playerMovingDirection = 1
+        Constants.playerDirection = 1
     else:
-        Constants.playerMovingDirection = -1
+        Constants.playerDirection = -1
 
     # We limit the force of the slingshot for it not to be too strong.
     if propulsionForce.x ** 2 + propulsionForce.y ** 2 > Constants.maxSlingshotForce ** 2:
@@ -229,7 +227,7 @@ def UseSlingshot():
         propulsionForce *= reductionCoeff
 
     # Application of the force.
-    player.instantVelocity = propulsionForce
+    player.velocity = propulsionForce
     player.gravity = 0
     Constants.playerUsedSlingshot = True
     Constants.playerJumpCount -= 1

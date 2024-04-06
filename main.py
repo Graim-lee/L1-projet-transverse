@@ -85,6 +85,8 @@ while Constants.gameRunning:
                     if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
                         Physics.ApplyPhysics(gameObject, timeDiv)
 
+        # We move the player after calculating the collisions etc.
+        InputsManager.MovePlayer(Constants.playerInputDirection)
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.
         Physics.MoveCamera()
 

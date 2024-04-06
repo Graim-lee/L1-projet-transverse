@@ -4,7 +4,6 @@ import Scripts.Constants as Constants
 
 playerWalkFrame = 0
 playerWalkSprite = 0
-playerSpriteFlipped = False
 playerPreviousDirection = 1
 
 waterFrame = 0
@@ -15,14 +14,11 @@ def AnimatePlayer(player: Object.GameObject):
         Args:
             - player (GameObject): the player.
     """
-    global playerWalkFrame, playerWalkSprite, playerSpriteFlipped, playerPreviousDirection
+    global playerWalkFrame, playerWalkSprite, playerPreviousDirection
 
-    if Constants.playerMovingDirection == 0 and Constants.playerGrounded:
-        if Constants.currentWorld == "World_2":
-            player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_1.png", True)
-
+    if Constants.playerDirection == 0 and Constants.playerGrounded:
         # Idle animation.
-        elif not Constants.playerSquishing:
+        if not Constants.playerSquishing:
             player.SetSprite("Sprites/Player/" + Constants.skin + "/idle.png", True)
 
         # Squishing animation.
@@ -31,7 +27,7 @@ def AnimatePlayer(player: Object.GameObject):
 
     # Walk animation.
     else:
-        playerPreviousDirection = Constants.playerMovingDirection
+        playerPreviousDirection = Constants.playerDirection
         playerWalkFrame += 1
 
         # Changes the animation frame.
@@ -39,7 +35,7 @@ def AnimatePlayer(player: Object.GameObject):
             playerWalkFrame = 0
             playerWalkSprite += 1
             playerWalkSprite %= 2
-            animType = "/fly_" if not Constants.playerGrounded else "/squish_" if Constants.playerSquishing else "/move_"
+            animType = "/fly_" if (Constants.playerUsedSlingshot or not Constants.playerGrounded) else "/squish_" if Constants.playerSquishing else "/move_"
             player.SetSprite("Sprites/Player/" + Constants.skin + animType + str(playerWalkSprite + 1) + ".png", True)
 
     # Makes the player face the right direction.

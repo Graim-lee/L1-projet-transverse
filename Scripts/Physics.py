@@ -80,12 +80,8 @@ def CancelCollision(body: Object.GameObject, other: Object.GameObject):
     # We check which axis of the repelForce is greater, and cancel it from our original velocity.
     if repelForce.x > repelForce.y:
         body.velocity.x = 0
-        body.instantVelocity.x = 0
-        body.continuousVelocity.x = 0
     else:
         body.velocity.y = 0
-        body.instantVelocity.y = 0
-        body.continuousVelocity.y = 0
 
 def GetCollisionCenter(body: Object.GameObject, other: Object.GameObject) -> Object.Vector2:
     """ Returns the coordinates of the 'center' of the collision, that is average of every vertex concerned by the
@@ -166,20 +162,11 @@ def PhysicsCalculations(body: Object.GameObject):
     if grounded:
         # To stop the gravity's acceleration.
         body.gravity = 0
-        if body.instantVelocity.y > 0: body.instantVelocity.y = 0
-        if body.continuousVelocity.y > 0: body.continuousVelocity.y = 0
     else:
         # To apply the gravity.
         ApplyGravity(body)
 
     ManageCollisions(body)  # Collisions.
-
-    if not body.fallingFromGround and (body.instantVelocity.x ** 2 > 36 or body.instantVelocity.y ** 2 > 36):
-        body.velocity = body.instantVelocity
-    elif not body.fallingFromGround:
-        body.velocity = body.continuousVelocity
-    else:
-        body.velocity = body.instantVelocity + body.continuousVelocity
     ApplyFriction(body, grounded)   # Friction.
 
 def CheckIfGrounded(body: Object.GameObject) -> bool:
@@ -231,7 +218,7 @@ def ApplyGravity(body: Object.GameObject):
 
     # As pygame's coordinates system goes from top-left to bottom-right, 'downward' (the orientation of gravity)
     # is located towards increasing y coordinates, so we must add up the gravity value instead of subtracting it.
-    body.instantVelocity += Object.Vector2(0, addVelocity)
+    body.velocity += Object.Vector2(0, addVelocity)
     body.gravity += Constants.G * body.mass
 
 def ApplyFriction(body: Object.GameObject, grounded: bool):
@@ -242,22 +229,16 @@ def ApplyFriction(body: Object.GameObject, grounded: bool):
             - body (GameObject): the object to apply the friction to.
             - grounded (bool): whether the object is currently grounded or not.
     """
-    instantHorizontal, continuousHorizontal = body.instantVelocity.x, body.continuousVelocity.x
-    instantHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
-    continuousHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
+    body.velocity *= Constants.frictionCoeff  # Application of the coefficients of friction.
     if grounded and not Constants.playerUsedSlingshot:  # We do not apply the friction on the first frame of the slingshot.
         trueFrictionCoeff = Constants.groundedFrictionCoeff if not body.onIce else Constants.iceFrictionCoeff
-        instantHorizontal *= trueFrictionCoeff
-        continuousHorizontal *= trueFrictionCoeff
+        body.velocity *= trueFrictionCoeff
 
     Constants.playerUsedSlingshot = False   # To reset the 1-frame variable.
 
     # Completely nullifies the velocity if it is too low.
-    if -0.1 <= instantHorizontal <= 0.1: instantHorizontal = 0
-    if -0.1 <= continuousHorizontal <= 0.1: continuousHorizontal = 0
-
-    body.instantVelocity.x = instantHorizontal
-    body.continuousVelocity.x = continuousHorizontal
+    if -0.1 <= body.velocity.x <= 0.1: body.velocity.x = 0
+    if -0.1 <= body.velocity.y <= 0.1: body.velocity.y = 0
 
 def ManageCollisions(body: Object.GameObject):
     """ Checks, computes and manages the collisions of the given object.
@@ -300,15 +281,13 @@ def ManageCollisions(body: Object.GameObject):
             applyForce = True
 
     if applyForce:
-        body.instantVelocity += repelForce  # Applying the anti-collision force.
         # We cancel the continuous velocity if the collision counters it.
-        if Sign(repelForce.x) != 0 and Sign(body.continuousVelocity.x) != Sign(repelForce.x): body.continuousVelocity.x = 0
-        if Sign(repelForce.y) != 0 and Sign(body.continuousVelocity.y) != Sign(repelForce.y): body.continuousVelocity.y = 0
+        if Sign(repelForce.x) != 0 and Sign(Constants.playerInputDirection) != Sign(repelForce.x): Constants.playerInputDirection = 0
         body.collisionDuration += Constants.deltaTime   # Keeping track of the duration of the collision.
     else:
         # Preventing the anti-collision to still affect the object after the end of the collision.
-        if body.previousRepelForce.y > 0: body.instantVelocity -= body.previousRepelForce * body.collisionDuration * 0.5
-        else: body.instantVelocity -= body.previousRepelForce * body.collisionDuration
+        if body.previousRepelForce.y > 0: body.velocity -= body.previousRepelForce * body.collisionDuration * 0.5
+        else: body.velocity -= body.previousRepelForce * body.collisionDuration
         body.collisionDuration = 0
 
     body.previousRepelForce = repelForce

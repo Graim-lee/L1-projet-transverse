@@ -120,8 +120,6 @@ class GameObject:
 
         self.mass = _mass
         self.velocity = Vector2(0, 0)
-        self.instantVelocity = Vector2(0, 0)
-        self.continuousVelocity = Vector2(0, 0)
         self.grounded = False
         self.gravity = 0
         self.layer = _layer
