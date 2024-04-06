@@ -83,6 +83,15 @@ cameraUnloadDistance = 500
 
 """ Scene & game state constants =================================================================================== """
 
+# keybind to be changed if needed in setting
+keyLeft = "q"
+keyRight = "d"
+keyDown = "s"
+keyUp = "z"
+
+# Enable/able key movement
+key = True
+
 # Go at the end of Level.py for a list of every scene so far.
 
 # Dictionary of the form {name_of_category: list_of_objects} containing every object to compute at a specific moment in
@@ -96,6 +105,8 @@ objectsInScene: {str: []}
 currentScene = "Main_Menu"
 # To remember which level the player is in even when the game is paused.
 currentLevel = "Level_0"
+# To have the specificity of world for the animation 1 for the ice world
+currentWorld = 1
 # True whenever the game is in a Menu (main menu or pause menu), False when the game is in a level.
 inMenu = False
 
@@ -114,6 +125,8 @@ buttonScrewColor = (150, 150, 150)
 buttonPressed = False
 
 """ Animation constants ============================================================================================ """
+# To know the direction precisely
+playerDirection = 0
 
 # To keep track of whether the sprite of the player is flipped or not.
 playerSpriteFlipped = False
@@ -130,4 +143,4 @@ waterAnimDuration = 20
 """ Skin constants ================================================================================================= """
 
 skin = "blue"
-skinList = ["blue", "black", "iren"]
+skinList = ["blue", "black", "Iren"]

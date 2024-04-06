@@ -16,16 +16,27 @@ def SetPlayer(setPlayer: Object.GameObject):
 
 def PauseToMainMenu():
     Level.ResetScene(Constants.currentLevel)
+    Constants.key = True
+    Constants.currentWorld = "Main_World"
     Constants.currentScene = "Main_Menu"
 
+def Continue():
+    Constants.currentScene = Constants.currentLevel
+
+def Restart():
+    Level.ResetScene(Constants.currentLevel)
+    Constants.currentScene = Constants.currentLevel
+    player.position = Object.Vector2(0, 0)
+
 def ToMainMenu():
+    Constants.currentWorld = "Main_World"
     Constants.currentScene = "Main_Menu"
 
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
-def ToSkinMenu():
-    Constants.currentScene = "Skin_Menu"
+def ToExtraMenu():
+    Constants.currentScene = "Extra_Menu"
 
 def ToCloset():
     Constants.currentScene = "Closet_Menu"
@@ -80,6 +91,9 @@ def ToLootBox():
     """
     Constants.currentScene = "Loot_Box"
 
+def ToCredit():
+    Constants.currentScene = "Credit_Menu"
+
 def ToLevel_WorldSelection():
     Constants.currentScene = "Level_World_Selection"
     Constants.currentLevel = "Level_World_Selection"
@@ -92,6 +106,7 @@ def ToWorld_1():
 def ToLevel_World1():
     Constants.currentScene = "Level_World_1"
     Constants.currentLevel = "Level_World_1"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_1():
@@ -102,7 +117,7 @@ def ToLevel_1_1():
 def ToLevel_1_2():
     Constants.currentScene = "Level_1_2"
     Constants.currentLevel = "Level_1_2"
-    player.position = Object.Vector2(0, 135)
+    player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
@@ -115,7 +130,11 @@ def ToLevel_1_4():
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_2():
-    Constants.groundedFrictionCoeff = 0.92
+    Constants.groundedFrictionCoeff = 0.98
+    Constants.key = False
+    Constants.maxPlayerJumpCount = 1
+    Constants.maxPlayerJumpCount = 1
+    Constants.currentWorld = "World_2"
     Constants.currentScene = "World_2"
 
 def ToLevel_2_1():
@@ -123,7 +142,13 @@ def ToLevel_2_1():
     Constants.currentLevel = "Level_2_1"
     player.position = Object.Vector2(0, 0)
 
+def ToLevel_2_2():
+    Constants.currentScene = "Level_2_2"
+    Constants.currentLevel = "Level_2_2"
+
 def ToWorld_3():
+    Constants.groundedFrictionCoeff = 0.7
+    Constants.currentWorld = "World_3"
     Constants.currentScene = "World_3"
 
 def ToLevel_3_1():

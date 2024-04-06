@@ -73,8 +73,8 @@ def CheckInputs():
             # For most of the inputs, we want to know if they are being pressed continuously, and not only on the exact
             # frame they were pressed. To achieve that, when a key is pressed, we switch its bool value (i.e.: pressingA)
             # to True, and put it back to False when we detect that the user released the key.
-
-            elif event.key == pygame.K_a:
+        if event.type == pygame.KEYDOWN and Constants.key:
+            if event.key == pygame.K_a:
                 pressingQA = True  # 'A'
                 Constants.playerMovingDirection = -1
             elif event.key == pygame.K_q:
@@ -88,7 +88,7 @@ def CheckInputs():
 
         """ KEYUP ======================================================================================================
         The user just released a key (only happens on the first frame after releasing the key) ===================== """
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.KEYUP and  Constants.key:
 
             if event.key == pygame.K_a:
                 pressingQA = False   # 'A'

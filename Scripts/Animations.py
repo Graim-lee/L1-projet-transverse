@@ -18,8 +18,11 @@ def AnimatePlayer(player: Object.GameObject):
     global playerWalkFrame, playerWalkSprite, playerSpriteFlipped, playerPreviousDirection
 
     if Constants.playerMovingDirection == 0 and Constants.playerGrounded:
+        if Constants.currentWorld == "World_2":
+            player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_1.png", True)
+
         # Idle animation.
-        if not Constants.playerSquishing:
+        elif not Constants.playerSquishing:
             player.SetSprite("Sprites/Player/" + Constants.skin + "/idle.png", True)
 
         # Squishing animation.
