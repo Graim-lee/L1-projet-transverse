@@ -16,7 +16,6 @@ def SetPlayer(setPlayer: Object.GameObject):
 
 def PauseToMainMenu():
     Level.ResetScene(Constants.currentLevel)
-    Constants.key = True
     Constants.currentWorld = "Main_World"
     Constants.currentScene = "Main_Menu"
 
@@ -129,10 +128,6 @@ def ToLevel_1_4():
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_2():
-    Constants.groundedFrictionCoeff = 0.98
-    Constants.key = False
-    Constants.maxPlayerJumpCount = 1
-    Constants.maxPlayerJumpCount = 1
     Constants.currentWorld = "World_2"
     Constants.currentScene = "World_2"
 

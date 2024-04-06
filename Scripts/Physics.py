@@ -246,7 +246,7 @@ def ApplyFriction(body: Object.GameObject, grounded: bool):
     instantHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
     continuousHorizontal *= Constants.frictionCoeff  # Application of the coefficients of friction.
     if grounded and not Constants.playerUsedSlingshot:  # We do not apply the friction on the first frame of the slingshot.
-        trueFrictionCoeff = Constants.groundedFrictionCoeff if body.onIce else Constants.iceFrictionCoeff
+        trueFrictionCoeff = Constants.groundedFrictionCoeff if not body.onIce else Constants.iceFrictionCoeff
         instantHorizontal *= trueFrictionCoeff
         continuousHorizontal *= trueFrictionCoeff
 

@@ -599,122 +599,122 @@ def Level_2_1():
     # Floor.
     objectPos = (-1800, 200)
     objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Left border.
     objectPos = (-1200, -2700)
     objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Bloc 1 platform.
     objectPos = (400, 100)
     objectSize = (800, 100)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Bloc 2 platform.
     objectPos = (1000, 0)
     objectSize = (400, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Right platform.
     objectPos = (1600, -2000)
     objectSize = (500, 2000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Right top.
     objectPos = (-200, -500)
     objectSize = (1800, 100)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Transition section.
     # Block 1
     objectPos = (2200, 100)
     objectSize = (600, 100)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block 2
     objectPos = (2650,  0)
     objectSize = (500, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block Small border
     objectPos = (3150, -300)
     objectSize = (50, 500)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block up left.
     objectPos = (2100, -200)
     objectSize = (600, 75)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block up right
     objectPos = (2900, -350)
     objectSize = (600, 75)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Floor.
     objectPos = (3100, 300)
     objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block on floor.
     objectPos = (3200, 100)
     objectSize = (300, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block up right
     objectPos = (3700, -150)
     objectSize = (400, 100)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block Small border
     objectPos = (3900, -50)
     objectSize = (100, 350)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block up right
     objectPos = (4200, 0)
     objectSize = (900, 100)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block Small wall1.
     objectPos = (4300, 100)
     objectSize = (100, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block Small wall2.
     objectPos = (4900, 100)
     objectSize = (100, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Block floor.
     objectPos = (5000, 150)
     objectSize = (900, 150)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # Right border.
     objectPos = (5900, -2700)
     objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
     # End door.
