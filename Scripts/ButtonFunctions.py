@@ -16,24 +16,82 @@ def SetPlayer(setPlayer: Object.GameObject):
 
 def PauseToMainMenu():
     Level.ResetScene(Constants.currentLevel)
+    Constants.currentWorld = "Main_World"
     Constants.currentScene = "Main_Menu"
 
+def Continue():
+    Constants.currentScene = Constants.currentLevel
+
+def Restart():
+    Level.ResetScene(Constants.currentLevel)
+    Constants.currentScene = Constants.currentLevel
+    player.position = Object.Vector2(0, 0)
+
 def ToMainMenu():
+    Constants.currentWorld = "Main_World"
     Constants.currentScene = "Main_Menu"
 
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
-def ToSkinMenu():
-    Constants.currentScene = "Skin_Menu"
+def ToExtraMenu():
+    Constants.currentScene = "Extra_Menu"
 
-def ToChangeSkin():
-    skin_list = ["default", "black"]
-    index = skin_list.index(Constants.skin)
-    if index + 1 == len(skin_list):
-        Constants.skin = skin_list[0]
+def ToCloset():
+    Constants.currentScene = "Closet_Menu"
+
+def ToChangeSkinRight():
+    """
+        This function find the next Skin to his right (in list and display), update the skin display in the menu with UpdateDisplaySkin()
+        Finally change the skin with his next skin on his right side
+    """
+    index = Constants.skinList.index(Constants.skin)
+    if index + 1 == len(Constants.skinList):
+        newSkin = Constants.skinList[0]
     else:
-        Constants.skin = skin_list[index + 1]
+        newSkin = Constants.skinList[index + 1]
+    UpdateDisplaySkin(newSkin)
+    Constants.skin = newSkin
+
+def ToChangeSkinLeft():
+    """
+        This function find the next Skin to his left (in list and display), update the skin display in the menu with UpdateDisplaySkin()
+        Finally change the skin with his next skin on his left side
+    """
+    index = Constants.skinList.index(Constants.skin)
+    if index - 1 == -1:
+        newSkin = Constants.skinList[len(Constants.skinList) - 1]
+    else:
+        newSkin = Constants.skinList[index - 1]
+    UpdateDisplaySkin(newSkin)
+    Constants.skin = newSkin
+
+def UpdateDisplaySkin(skin : (str)):
+    """
+        This function update the skin display on the menu by looking at every sprite in the pooler (to reduce the range we only look in Text where there is all the skin only
+        Then we compare his data to the value of the new skin and update the skin to selected.png otherwise, we update the skin to idle.png so we see what we have selected
+        We resize to fit well on the screen otherwise size = (44,44)
+        Args:
+            - skin : (str) the new skin find thanks to ToChangeSkinLeft/Right()
+    """
+    for gameObject in Constants.objectsInScene["Text"]:
+        if gameObject.data == "Sprites/Player/" + skin + "/idle.png" or gameObject.data == "Sprites/Player/" + skin + "/selected.png":
+            gameObject.SetSprite("Sprites/Player/" + skin + "/selected.png")
+            gameObject.Resize((201,201))
+        else:
+            listData = gameObject.data.split("/")
+            gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png")
+            gameObject.Resize((201, 201))
+
+def ToLootBox():
+    """
+        This function Should display on a new scene the animation of an box opening, for example like brawl star with the background color of the player color
+        But I still don't figured out how to do it
+    """
+    Constants.currentScene = "Loot_Box"
+
+def ToCredit():
+    Constants.currentScene = "Credit_Menu"
 
 def ToLevel_WorldSelection():
     Constants.currentScene = "Level_World_Selection"
@@ -46,6 +104,7 @@ def ToWorld_1():
 def ToLevel_World1():
     Constants.currentScene = "Level_World_1"
     Constants.currentLevel = "Level_World_1"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_1():
@@ -56,7 +115,7 @@ def ToLevel_1_1():
 def ToLevel_1_2():
     Constants.currentScene = "Level_1_2"
     Constants.currentLevel = "Level_1_2"
-    player.position = Object.Vector2(0, 135)
+    player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
@@ -69,6 +128,7 @@ def ToLevel_1_4():
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_2():
+    Constants.currentWorld = "World_2"
     Constants.currentScene = "World_2"
 
 def ToLevel_2_1():
@@ -79,6 +139,30 @@ def ToLevel_2_1():
 def ToLevel_2_2():
     Constants.currentScene = "Level_2_2"
     Constants.currentLevel = "Level_2_2"
+    
+def ToWorld_3():
+    Constants.groundedFrictionCoeff = 0.7
+    Constants.currentWorld = "World_3"
+    Constants.currentScene = "World_3"
+
+def ToLevel_3_1():
+    Constants.currentScene = "Level_3_1"
+    Constants.currentLevel = "Level_3_1"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_3_2():
+    Constants.currentScene = "Level_3_2"
+    Constants.currentLevel = "Level_3_2"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_3_3():
+    Constants.currentScene = "Level_3_3"
+    Constants.currentLevel = "Level_3_3"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_3_4():
+    Constants.currentScene = "Level_3_4"
+    Constants.currentLevel = "Level_3_4"
     player.position = Object.Vector2(0, 0)
 
 def EndLevel():

@@ -4,7 +4,6 @@ import Scripts.Constants as Constants
 
 playerWalkFrame = 0
 playerWalkSprite = 0
-playerSpriteFlipped = False
 playerPreviousDirection = 1
 
 waterFrame = 0
@@ -15,21 +14,20 @@ def AnimatePlayer(player: Object.GameObject):
         Args:
             - player (GameObject): the player.
     """
-    global playerWalkFrame, playerWalkSprite, playerSpriteFlipped, playerPreviousDirection
+    global playerWalkFrame, playerWalkSprite, playerPreviousDirection
 
-    if Constants.playerMovingDirection == 0:
-
+    if Constants.playerDirection == 0 and Constants.playerGrounded:
         # Idle animation.
         if not Constants.playerSquishing:
-            player.SetSprite("Sprites/Player/"+Constants.skin+"/idle.png", True)
+            player.SetSprite("Sprites/Player/" + Constants.skin + "/idle.png", True)
 
         # Squishing animation.
         else:
-            player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_1.png", True)
+            player.SetSprite("Sprites/Player/" + Constants.skin + "/squish_1.png", True)
 
     # Walk animation.
     else:
-        playerPreviousDirection = Constants.playerMovingDirection
+        playerPreviousDirection = Constants.playerDirection
         playerWalkFrame += 1
 
         # Changes the animation frame.
@@ -37,8 +35,8 @@ def AnimatePlayer(player: Object.GameObject):
             playerWalkFrame = 0
             playerWalkSprite += 1
             playerWalkSprite %= 2
-            if not Constants.playerSquishing: player.SetSprite("Sprites/Player/"+Constants.skin+"/move_" + str(playerWalkSprite + 1)+".png", True)
-            else: player.SetSprite("Sprites/Player/"+Constants.skin+"/squish_" + str(playerWalkSprite + 1)+".png", True)
+            animType = "/fly_" if (Constants.playerUsedSlingshot or not Constants.playerGrounded) else "/squish_" if Constants.playerSquishing else "/move_"
+            player.SetSprite("Sprites/Player/" + Constants.skin + animType + str(playerWalkSprite + 1) + ".png", True)
 
     # Makes the player face the right direction.
     if playerPreviousDirection == -1 and not Constants.playerSpriteFlipped:

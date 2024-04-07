@@ -29,10 +29,11 @@ fallInitialGravity = 1500
 maxGroundedDistance = 3
 # A little distance to avoid the player from considering walls as floor (so that the grounded hitbox isn't exactly the
 # size of the player).
-groundedHitboxBorder = 2
+groundedHitboxBorder = 0
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 1
 groundedFrictionCoeff = 0.7
+iceFrictionCoeff = 1
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 
@@ -60,12 +61,18 @@ slGravityPower = 2.5
 playerUsedSlingshot = False
 # Counts the number of jumps (= uses of slingshot) the player can perform without touching the ground. playerJumpCount is
 # modified throughout the script, but maxPlayerJumpCount isn't.
-maxPlayerJumpCount = 2
-playerJumpCount = 2
+#maxPlayerJumpCount is equal to 1 but in reality you can jum twice. The grounded on and 1 in the air. It represents the number of jumps in the air
+maxPlayerJumpCount = 1
+playerJumpCount = 1
 
-# Every buffer timer (a buffer timer is a timer that allows the input of the user to be executed for a little while. For
-# example, if the player presses 'Space' right before landing, the timer will let him jump just after landing).
-maxJumpBufferTimer = 50
+# 1 if the player presses on D, -1 if the player presses on A/Q, 0 if the player doesn't move.
+playerInputDirection = 0
+
+# References the object the player is holding (when dealing with throwable objects).
+heldItem = None
+# Timer to prevent the player from picking an item instantly after throwing it (in frames).
+itemThrowCooldown = 20
+itemThrowTimer = 0
 
 # Collectables
 
@@ -99,6 +106,8 @@ objectsInScene: {str: []}
 currentScene = "Main_Menu"
 # To remember which level the player is in even when the game is paused.
 currentLevel = "Level_0"
+# To have the specificity of world for the animation 1 for the ice world
+currentWorld = 1
 # True whenever the game is in a Menu (main menu or pause menu), False when the game is in a level.
 inMenu = False
 
@@ -122,11 +131,15 @@ buttonPressed = False
 playerSpriteFlipped = False
 
 # These variables track the actions of the player throughout the scripts to animate it properly.
-playerMovingDirection = 0
+playerDirection = 0
 playerSquishing = False
 
 # Constants for how many frames each sprite must stay in the animations.
 playerWalkDuration = 5
+playerGrounded = True
 waterAnimDuration = 20
 
-skin = "default"
+""" Skin constants ================================================================================================= """
+
+skin = "blue"
+skinList = ["blue", "black", "Iren"]
