@@ -190,6 +190,8 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
 
             if CheckGroundedCollision(groundedLeft, groundedRight, gameObject):
                 body.fallingFromGround = False
+                # Resets the jump count of the player.
+                Constants.playerJumpCount = Constants.maxPlayerJumpCount
                 body.onIce = gameObject.slippery
                 return True
     return False

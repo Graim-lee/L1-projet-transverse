@@ -207,9 +207,6 @@ def Sign(x: float) -> int:
 def UseSlingshot():
     global slingshotStart
 
-    # Resets the jump (= slingshot) count of the player.
-    if player.grounded: Constants.playerJumpCount = Constants.maxPlayerJumpCount
-
     # Prevents the player from jumping midair.
     if Constants.playerJumpCount <= 0: return
 
