@@ -74,6 +74,11 @@ heldItem = None
 itemThrowCooldown = 20
 itemThrowTimer = 0
 
+# Collectables
+
+#number of coin
+coin_counter = 0
+
 """" Camera constants ============================================================================================== """
 
 # The x coordinates between which the player can move without moving the camera.

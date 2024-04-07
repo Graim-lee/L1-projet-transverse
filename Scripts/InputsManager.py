@@ -134,6 +134,13 @@ def CheckInputs():
 
     """ ANYTIME ========================================================================================================
     The code here executes on each frame, no matter the inputs ===================================================== """
+    """ Coin detection """
+
+    for coin in mainPooler.main[Constants.currentScene]["Coin"]:
+        if coin.position.x - 0.5 * coin.size.x > player.position.x or coin.position.x + 0.5 * coin.size.x < player.position.x: continue
+        if coin.position.y - 0.5 * coin.size.y > player.position.y or coin.position.y + coin.size.y < player.position.y: continue
+        Constants.coin_counter += 1
+        coin.active = False
 
     # Throwable object detection.
     if Constants.heldItem is None and Constants.itemThrowTimer <= 0:
@@ -150,7 +157,6 @@ def CheckInputs():
         Constants.heldItem.instantVelocity = Object.Vector2(0, 0)
 
     if Constants.itemThrowTimer > 0: Constants.itemThrowTimer -= 1
-
 
     ApplyInputs()   # We apply the inputs' effects.
 

@@ -139,7 +139,7 @@ def ToLevel_2_1():
 def ToLevel_2_2():
     Constants.currentScene = "Level_2_2"
     Constants.currentLevel = "Level_2_2"
-
+    
 def ToWorld_3():
     Constants.groundedFrictionCoeff = 0.7
     Constants.currentWorld = "World_3"
