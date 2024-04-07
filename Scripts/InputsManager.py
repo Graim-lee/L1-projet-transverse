@@ -180,7 +180,8 @@ def MovePlayer(direction: int):
     # Prevents the player from exceeding the maximum speed.
     if Sign(direction * Constants.maxPlayerSpeed - player.velocity.x) != Sign(direction): return True
     # Increases the velocity of the player.
-    player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
+    if not player.velocity.y:
+        player.velocity += Object.Vector2(direction * Constants.playerSpeed, 0) * Constants.deltaTime
 
 def PressEscape():
     """ Is executed when the player pressing 'Escape'. """
