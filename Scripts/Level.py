@@ -59,6 +59,10 @@ def ResetScene(scene: str):
     for category in mainPooler.main[scene]:
         for gameObject in mainPooler.main[scene][category]:
             gameObject.position = gameObject.initialPosition
+            if gameObject.type == "Coin":
+                gameObject.active = True
+    mainPooler.main["Level_All"]["Player"][0].velocity = Object.Vector2(0, 0)
+    Constants.coin_counter = 0
 
 def All():
     """ Adds the objects that are always loaded to the pooler. """
@@ -731,154 +735,6 @@ def Level_2_2():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
-    return result
-
-def World_3():
-    """ Adds the World 1 level selection menu pooler to the main pooler. """
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    # Title "World 3".
-    objectPos = (Constants.screenDimensions[0] / 2, 240)
-    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("World 3", True), 0, 0, [0])
-    result["Text"].append(gameObject)
-
-    # "Level 1" button.
-    objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 1", ButtonFunctions.ToLevel_3_1), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    # "Level 2" button.
-    objectPos = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 2", ButtonFunctions.ToLevel_3_2), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    # "Level 3" button.
-    objectPos = (3 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 3", ButtonFunctions.ToLevel_3_3), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    # "Level 4" Button.
-    objectPos = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 4", ButtonFunctions.ToLevel_3_4), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    return result
-
-def Level_3_1():
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    wallTexture = "Sprites/wall.png"
-
-    # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Left border.
-    objectPos = (-1200, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Football.
-    objectPos = (200, -100)
-    objectSize = (32, 32)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 10, 5, [0, 1], _png=True)
-    result["Throwable"].append(gameObject)
-
-    return result
-
-def Level_3_2():
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    wallTexture = "Sprites/wall.png"
-
-    # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Left border.
-    objectPos = (-1200, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    return result
-
-def Level_3_3():
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    wallTexture = "Sprites/wall.png"
-
-    # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Left border.
-    objectPos = (-1200, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    return result
-
-def Level_3_4():
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    wallTexture = "Sprites/wall.png"
-
-    # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Left border.
-    objectPos = (-1200, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    return result
-
-def Level_2_2():
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
     #Constants.groundedFrictionCoeff = 0.95
 
     coinSize = (32, 32)
@@ -1172,6 +1028,148 @@ def Level_2_2():
     # Right Border
     objectPos = (6600, -4000)
     objectSize = (300, 4200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def World_3():
+    """ Adds the World 1 level selection menu pooler to the main pooler. """
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    # Title "World 3".
+    objectPos = (Constants.screenDimensions[0] / 2, 240)
+    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("World 3", True), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    # "Level 1" button.
+    objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 1", ButtonFunctions.ToLevel_3_1), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 2" button.
+    objectPos = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 2", ButtonFunctions.ToLevel_3_2), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 3" button.
+    objectPos = (3 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 3", ButtonFunctions.ToLevel_3_3), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # "Level 4" Button.
+    objectPos = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 4", ButtonFunctions.ToLevel_3_4), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    return result
+
+def Level_3_1():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right platform.
+    objectPos = (725, 100)
+    objectSize = (200, 10)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Football.
+    objectPos = (200, -100)
+    objectSize = (32, 32)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 10, 5, [0, 1], _png=True)
+    result["Throwable"].append(gameObject)
+
+    return result
+
+def Level_3_2():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right platform.
+    objectPos = (725, 100)
+    objectSize = (200, 10)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def Level_3_3():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right platform.
+    objectPos = (725, 100)
+    objectSize = (200, 10)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    return result
+
+def Level_3_4():
+    global initDictionary
+    result = CopyEmptyDict(initDictionary)
+
+    wallTexture = "Sprites/wall.png"
+
+    # Floor.
+    objectPos = (-1800, 180)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1200, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Right platform.
+    objectPos = (725, 100)
+    objectSize = (200, 10)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 

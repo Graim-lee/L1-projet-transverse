@@ -137,8 +137,8 @@ def CheckInputs():
     """ Coin detection """
 
     for coin in mainPooler.main[Constants.currentScene]["Coin"]:
-        if coin.position.x - 0.5 * coin.size.x > player.position.x or coin.position.x + 0.5 * coin.size.x < player.position.x: continue
-        if coin.position.y - 0.5 * coin.size.y > player.position.y or coin.position.y + coin.size.y < player.position.y: continue
+        if coin.position.x - 1.4 * coin.size.x > player.position.x or coin.position.x + 0.9 * coin.size.x < player.position.x: continue
+        if coin.position.y - coin.size.y > player.position.y or coin.position.y + coin.size.y < player.position.y: continue
         Constants.coin_counter += 1
         coin.active = False
 
