@@ -144,6 +144,10 @@ def MoveCamera():
         for gameObject in Constants.objectsInScene[category]:
             if not gameObject.active: continue
             gameObject.position -= displacement
+            if category == "MovingPlatform":
+                gameObject.xStart -= displacement.x
+                gameObject.xEnd -= displacement.x
+
 
 def PhysicsCalculations(body: Object.GameObject):
     """ Main function from Physics.py. Proceeds with every physics calculations.
@@ -193,6 +197,10 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
                 # Resets the jump count of the player.
                 Constants.playerJumpCount = Constants.maxPlayerJumpCount
                 body.onIce = gameObject.slippery
+                if category == "MovingPlatform" :
+                    body.OnPlatform = gameObject
+                else:
+                    body.OnPlatform = False
                 return True
     return False
 
@@ -316,3 +324,18 @@ def Sign(x: float) -> int:
     if x < 0: return -1
     if x > 0: return 1
     return 0
+
+def VelocityBackgroundObject(Category : str, body: Object.GameObject):
+    if Category == "MovingPlatform":
+        if body.direction == 1 and body.position.x > body.xEnd:
+            body.direction = -1
+        elif body.direction == -1 and body.position.x < body.xStart:
+            body.direction = 1
+        body.velocity = Object.Vector2(body.direction * 50, 0)
+    
+def ApplyVelocityBackgroundObject(Category : str, body: Object.GameObject):
+    if Category == "MovingPlatform":
+        body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
+
+def MovingBodyWithPlatform(body: Object.GameObject, platform):
+    body.position += Object.Vector2(platform.direction * 50, 0) * deltaTime * Constants.inverseTimeDivision

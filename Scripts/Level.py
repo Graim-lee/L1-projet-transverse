@@ -8,7 +8,7 @@ import random
 
 initPooler = Object.Pooler()
 
-initDictionary = {"Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": [], "Throwable": []}
+initDictionary = {"Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": [], "Throwable": [], "MovingPlatform":[]}
 
 mainPooler: Object.Pooler
 
@@ -1115,9 +1115,16 @@ def Level_3_2():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    # Right platform.
+    # Moving platform.
     objectPos = (725, 100)
     objectSize = (200, 10)
+    MovingPlatform = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    MovingPlatform.xStart, MovingPlatform.xEnd = 725, 800
+    MovingPlatform.direction = 1
+    result["MovingPlatform"].append(MovingPlatform)
+    
+    objectPos = (1100, 100)
+    objectSize = (100, 200)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 

@@ -72,9 +72,11 @@ while Constants.gameRunning:
         # object to prepare it for the collision detection.
         for category in Constants.objectsInScene:
             for gameObject in Constants.objectsInScene[category]:
+                Physics.VelocityBackgroundObject(category, gameObject)
                 if ComputeObject(gameObject) and gameObject.mass != 0:
                     Physics.PhysicsCalculations(gameObject)
                     gameObject.collidedDuringFrame = False
+                    
 
         # Updates every object's position after the calculations (updating it after every calculation is useful for
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
@@ -82,7 +84,10 @@ while Constants.gameRunning:
         for timeDiv in range(Constants.physicsTimeDivision):
             for category in Constants.objectsInScene:
                 for gameObject in Constants.objectsInScene[category]:
+                    Physics.ApplyVelocityBackgroundObject(category, gameObject)
                     if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
+                        if gameObject.OnPlatform:
+                            Physics.MovingBodyWithPlatform(gameObject, gameObject.OnPlatform)
                         Physics.ApplyPhysics(gameObject, timeDiv)
 
         # We move the player after calculating the collisions etc.
