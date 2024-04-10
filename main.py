@@ -69,7 +69,7 @@ while Constants.gameRunning:
     if not Constants.inMenu:
 
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
-        # object to prepare it for the collision detection.
+        # object to prepare it for the collision detection. Moreover we apply velocity when needed for the background object.
         for category in Constants.objectsInScene:
             for gameObject in Constants.objectsInScene[category]:
                 Physics.VelocityBackgroundObject(category, gameObject)
@@ -80,7 +80,7 @@ while Constants.gameRunning:
 
         # Updates every object's position after the calculations (updating it after every calculation is useful for
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
-        # (see in Constants.py, physicsTimeDivision).
+        # (see in Constants.py, physicsTimeDivision). 
         for timeDiv in range(Constants.physicsTimeDivision):
             for category in Constants.objectsInScene:
                 for gameObject in Constants.objectsInScene[category]:

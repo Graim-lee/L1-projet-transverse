@@ -326,6 +326,12 @@ def Sign(x: float) -> int:
     return 0
 
 def VelocityBackgroundObject(Category : str, body: Object.GameObject):
+    """Changes the velocity of the platform
+
+    Args:
+        - Category (str): the category in the pooler to check it is a MovingPlatform 
+        body (Object.GameObject): the platform itself
+    """
     if Category == "MovingPlatform":
         if body.direction == 1 and body.position.x > body.xEnd:
             body.direction = -1
@@ -334,8 +340,19 @@ def VelocityBackgroundObject(Category : str, body: Object.GameObject):
         body.velocity = Object.Vector2(body.direction * 50, 0)
     
 def ApplyVelocityBackgroundObject(Category : str, body: Object.GameObject):
+    """moves the platform based on its velocity
+    Args:
+        Category (str): category in the pooler to check it is a MovingPlatform 
+        body (Object.GameObject): the moving platform itself
+    """
     if Category == "MovingPlatform":
         body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
 def MovingBodyWithPlatform(body: Object.GameObject, platform):
-    body.position += Object.Vector2(platform.direction * 50, 0) * deltaTime * Constants.inverseTimeDivision
+    """Moves any object on the platform based on the platform velocity
+
+    Args:
+        body (Object.GameObject): the body being moved
+        platform (_type_): the platform the body is on
+    """
+    body.position += platform.velocity * deltaTime * Constants.inverseTimeDivision
