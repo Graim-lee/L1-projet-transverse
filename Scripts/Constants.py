@@ -33,7 +33,7 @@ groundedHitboxBorder = 0
 # The friction coefficients when the player is airborne and when the player is grounded.
 frictionCoeff = 1
 groundedFrictionCoeff = 0.7
-iceFrictionCoeff = 1
+iceFrictionCoeff = 0.98
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 
@@ -126,12 +126,17 @@ buttonScrewColor = (150, 150, 150)
 buttonPressed = False
 
 """ Animation constants ============================================================================================ """
+# To know the direction precisely
+playerDirection = 0
 
 # To keep track of whether the sprite of the player is flipped or not.
 playerSpriteFlipped = False
 
+# To keep track if the player have a special animation (ex: sliding).
+playerSpecial = False
+
 # These variables track the actions of the player throughout the scripts to animate it properly.
-playerDirection = 0
+playerMovingDirection = 0
 playerSquishing = False
 
 # Constants for how many frames each sprite must stay in the animations.
@@ -143,3 +148,7 @@ waterAnimDuration = 20
 
 skin = "blue"
 skinList = ["blue", "black", "Iren"]
+
+""" Loot Box Animation ============================================================================================= """
+
+playerSize = 1

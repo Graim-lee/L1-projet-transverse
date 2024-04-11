@@ -6,6 +6,7 @@
 import Scripts.Constants as Constants
 import Scripts.Object as Object
 import Scripts.Level as Level
+import Scripts.Animations as Animations
 
 player: Object.GameObject
 
@@ -89,6 +90,7 @@ def ToLootBox():
         But I still don't figured out how to do it
     """
     Constants.currentScene = "Loot_Box"
+    Constants.inMenu = False
 
 def ToCredit():
     Constants.currentScene = "Credit_Menu"
@@ -140,7 +142,7 @@ def ToLevel_2_2():
     Constants.currentScene = "Level_2_2"
     Constants.currentLevel = "Level_2_2"
     player.position = Object.Vector2(0, 0)
-    
+
 def ToWorld_3():
     Constants.groundedFrictionCoeff = 0.7
     Constants.currentWorld = "World_3"

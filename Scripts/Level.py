@@ -1331,6 +1331,12 @@ def LootBox():
     gameObject = Object.GameObject(objectPos, (350, 500), "Real", "Sprites/Chest_open.png", 0, 0, [0], True, True, False)
     result["Text"].append(gameObject)
 
+    # New skin on the screen.
+    objectPos = (Constants.screenDimensions[0] / 2 - 150, 450)
+    gameObject = Object.GameObject(objectPos, (350, 500), "Real", "Sprites/Player/"+Constants.skinList[random.randint(0,2)]+"/idle.png", 0, 0, [0], True, True,True)
+    result["Text"].append(gameObject)
+    gameObject.Resize((0, 0))
+
 
     return result
 

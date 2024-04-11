@@ -145,7 +145,7 @@ class GameObject:
         self.size = Vector2(size[0], size[1])
         self.surface = pygame.transform.scale(self.surface, size)
 
-    def SetSprite(self, path: str, isPlayer: bool = False):
+    def SetSprite(self, path: str, isPlayer: bool):
         """ Changes the object's sprite located at the given path. Changes either by a png if the object has the _png
         tag activated or a normal image otherwise.
             Args := pygame
@@ -156,7 +156,10 @@ class GameObject:
         """
         if self.png: self.surface = pygame.image.load(path)
         else: self.surface = pygame.image.load(path).convert()
-        if isPlayer: Constants.playerSpriteFlipped = False
+        if isPlayer:
+            self.surface = pygame.transform.flip(self.surface, True, False)
+            Constants.playerSpriteFlipped = True
+        else: Constants.playerSpriteFlipped = False
 
     def __repr__(self) -> str:
         """ __repr__ returns what should be displayed when printing the object.
