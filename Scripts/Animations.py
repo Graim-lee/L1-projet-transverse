@@ -1,6 +1,7 @@
 import pygame
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import Scripts.Level as Level
 
 playerWalkFrame = 0
 playerWalkSprite = 0
@@ -21,7 +22,11 @@ def AnimatePlayer(player: Object.GameObject):
     else: playerDirection = False
 
     # Find if we have a special animation because of the world.
+    # if Object.GameObject(_slippery=True): Constants.playerSpecial = True
     if Constants.currentWorld == "World_2": Constants.playerSpecial = True
+
+    # Useful test if the player goes from World_2 to another. Else the animations glitches
+    if Constants.currentWorld != "World_2": Constants.playerSpecial = False
 
     # Animation not moving.
     if player.velocity.x == 0 and Constants.playerGrounded:

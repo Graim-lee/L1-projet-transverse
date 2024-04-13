@@ -8,7 +8,7 @@ import Scripts.Constants as Constants
 import Scripts.Physics as Physics
 
 mainPooler = Object.Pooler()
-player: Object.GameObject
+
 
 pressingQA = False
 pressingD = False
@@ -141,6 +141,7 @@ def CheckInputs():
         if coin.position.y - coin.size.y > player.position.y or coin.position.y + coin.size.y < player.position.y: continue
         Constants.coin_counter += 1
         coin.active = False
+        print(Constants.coin_counter)
 
     # Throwable object detection.
     if Constants.heldItem is None and Constants.itemThrowTimer <= 0:

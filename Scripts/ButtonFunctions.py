@@ -95,7 +95,7 @@ def ToLootBox():
 def ToCredit():
     Constants.currentScene = "Credit_Menu"
 
-def ToLevel_WorldSelection():
+def to_level_world_selection():
     Constants.currentScene = "Level_World_Selection"
     Constants.currentLevel = "Level_World_Selection"
     player.position = Object.Vector2(0, 0)
@@ -141,6 +141,11 @@ def ToLevel_2_1():
 def ToLevel_2_2():
     Constants.currentScene = "Level_2_2"
     Constants.currentLevel = "Level_2_2"
+    player.position = Object.Vector2(0, 0)
+
+def ToLevel_2_3():
+    Constants.currentScene = "Level_2_3"
+    Constants.currentLevel = "Level_2_3"
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_3():
