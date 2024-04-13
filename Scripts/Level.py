@@ -144,7 +144,7 @@ def PauseMenu():
 
     # "Back to world select" button.
     objectPos = (Constants.screenDimensions[0] / 2 + 250, 650)
-    gameObject = Object.GameObject(objectPos, (500, 80), "Button", ("Back to World Select", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (500, 80), "Button", ("Back to World Select", ButtonFunctions.ToWorldSelectionMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Continue" button.

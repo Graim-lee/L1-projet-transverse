@@ -35,6 +35,10 @@ def ToMainMenu():
 def ToWorldSelection():
     Constants.currentScene = "World_Selection"
 
+def ToWorldSelectionMenu():
+    Constants.currentScene = "World_Selection"
+    Level.ResetScene(Constants.currentScene)
+
 def ToExtraMenu():
     Constants.currentScene = "Extra_Menu"
 
