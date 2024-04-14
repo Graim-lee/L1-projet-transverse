@@ -85,11 +85,14 @@ while Constants.gameRunning:
             for category in Constants.objectsInScene:
                 for gameObject in Constants.objectsInScene[category]:
                     Physics.ApplyVelocityBackgroundObject(category, gameObject)
-                    if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:
-                        if gameObject.OnPlatform:
-                            Physics.MovingBodyWithPlatform(gameObject, gameObject.OnPlatform)
+                    if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:   
+                        if gameObject.touchingPlatform:
+                            Physics.TouchingPlatform(gameObject, gameObject.touchingPlatform)
+                            Physics.MovingBodyWithPlatform(gameObject, gameObject.touchingPlatform)
+                        elif gameObject.onPlatform:
+                            Physics.MovingBodyWithPlatform(gameObject, gameObject.onPlatform)
                         Physics.ApplyPhysics(gameObject, timeDiv)
-
+                        
         # We move the player after calculating the collisions etc.
         InputsManager.MovePlayer(Constants.playerInputDirection)
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.
