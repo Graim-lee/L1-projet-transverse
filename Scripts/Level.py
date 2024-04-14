@@ -377,8 +377,7 @@ def Level_1_1():
 
     objectPos = (5600, -60)
     objectSize = (2, 2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("so collect all of them ! ", False), 0, 0,
-                                   [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("so collect all of them ! ", False), 0, 0,[0])
     result["Text"].append(gameObject)
 
     #Coins
