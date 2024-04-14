@@ -10,6 +10,10 @@ waterFrame = 0
 waterSprite = 0
 playerSize = 0
 
+coinFlippe = False
+coinSprite = 1
+coinFrame = 0
+
 def AnimatePlayer(player: Object.GameObject):
     """ Sets the right sprite for the player and manages its animations.
         Args:
@@ -20,13 +24,6 @@ def AnimatePlayer(player: Object.GameObject):
     # Direction.
     if (player.velocity.x <0) or (Constants.playerSpriteFlipped and player.velocity.x == 0): playerDirection = True
     else: playerDirection = False
-
-    # Find if we have a special animation because of the world.
-    # if Object.GameObject(_slippery=True): Constants.playerSpecial = True
-    if Constants.currentWorld == "World_2": Constants.playerSpecial = True
-
-    # Useful test if the player goes from World_2 to another. Else the animations glitches
-    if Constants.currentWorld != "World_2": Constants.playerSpecial = False
 
     # Animation not moving.
     if player.velocity.x == 0 and Constants.playerGrounded:
@@ -45,18 +42,17 @@ def AnimatePlayer(player: Object.GameObject):
 
     # Walk animation.
     else :
-        playerPreviousDirection = Constants.playerDirection
         playerWalkFrame += 1
 
         # Changes the animation frame.
-        if playerWalkFrame > Constants.playerWalkDuration and abs(player.velocity.x) >= 10 and not Constants.playerSpecial:
+        if playerWalkFrame > Constants.playerWalkDuration and abs(player.velocity.x) >= 10 and not player.onIce:
             playerWalkFrame = 0
             playerWalkSprite += 1
             playerWalkSprite %= 2
             animType = "/squish_" if Constants.playerSquishing else "/move_"
             player.SetSprite("Sprites/Player/" + Constants.skin + animType + str(playerWalkSprite + 1) + ".png", playerDirection)
 
-        elif Constants.currentWorld == "World_2":
+        elif player.onIce:
             player.SetSprite("Sprites/Player/" + Constants.skin + "/fly_1.png",playerDirection)
 
     player.Resize((44, 44))
@@ -76,6 +72,22 @@ def AnimateWater(water: [Object.GameObject]):
         for wat in water:
             wat.SetSprite("Sprites/Water/water_" + str(waterSprite + 1) + ".png", True)
             wat.Resize(wat.size.Tuple())
+
+def AnimateCoin(coins: [Object.GameObject]):
+    """ Sets the right sprite for every coins object and manages their animations.
+            Args:
+                - coins ([GameObject]): the coins game object.
+    """
+    global coinFrame, coinSprite
+
+    coinFrame += 1
+    if coinFrame >= Constants.coinAnimDuration:
+        coinFrame = 0
+        coinSprite += 1
+        coinSprite %= 4
+        for coin in coins:
+            coin.SetSprite("Sprites/Coins/coins_" + str(coinSprite + 1) + ".png", True)
+            coin.Resize(coin.size.Tuple())
 
 def AnimeLootBox(player: [Object.GameObject]):
 

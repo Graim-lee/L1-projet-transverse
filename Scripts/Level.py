@@ -292,7 +292,7 @@ def Level_1_1():
     #Text on how to moove
     objectPos = (150,-50)
     objectSize = (2,2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("To moove you can use Q and D", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("To move you can use Q and D", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     objectPos = (150,-10)
@@ -335,8 +335,8 @@ def Level_1_1():
     result["Text"].append(gameObject)
 
     #Higher jump
-    objectPos = (2400, -300)
-    objectSize = (200,700)
+    objectPos = (2400, -250)
+    objectSize = (200,650)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
@@ -383,9 +383,8 @@ def Level_1_1():
 
     #Coins
     coinSize = (32, 32)
-    coinTexture = "Sprites/coins.png"
-    gameObject = Object.GameObject((5600,80), coinSize,
-                                   "Coin", (coinTexture), 0, 3, [0], _png=True)
+    coinTexture = "Sprites/Coins/coins_1.png"
+    gameObject = Object.GameObject((5600,80), coinSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
 
@@ -861,7 +860,7 @@ def Level_2_2():
     #Constants.groundedFrictionCoeff = 0.95
 
     coinSize = (32, 32)
-    coinTexture = "Sprites/coins.png"
+    coinTexture = "Sprites/coins/coins_1.png"
     wallTexture = "Sprites/wall.png"
 
     # Floor.

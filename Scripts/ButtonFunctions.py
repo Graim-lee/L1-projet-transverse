@@ -81,11 +81,11 @@ def UpdateDisplaySkin(skin : (str)):
     """
     for gameObject in Constants.objectsInScene["Text"]:
         if gameObject.data == "Sprites/Player/" + skin + "/idle.png" or gameObject.data == "Sprites/Player/" + skin + "/selected.png":
-            gameObject.SetSprite("Sprites/Player/" + skin + "/selected.png")
+            gameObject.SetSprite("Sprites/Player/" + skin + "/selected.png", False)
             gameObject.Resize((201,201))
         else:
             listData = gameObject.data.split("/")
-            gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png")
+            gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png", False)
             gameObject.Resize((201, 201))
 
 def ToLootBox():

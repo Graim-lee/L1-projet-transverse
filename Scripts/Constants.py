@@ -143,6 +143,7 @@ playerSquishing = False
 playerWalkDuration = 5
 playerGrounded = True
 waterAnimDuration = 20
+coinAnimDuration = 10
 
 """ Skin constants ================================================================================================= """
 
