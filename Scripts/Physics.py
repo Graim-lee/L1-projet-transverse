@@ -198,9 +198,9 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
                 Constants.playerJumpCount = Constants.maxPlayerJumpCount
                 body.onIce = gameObject.slippery
                 if category == "MovingPlatform" :
-                    body.OnPlatform = gameObject
+                    body.onPlatform = gameObject
                 else:
-                    body.OnPlatform = False
+                    body.onPlatform = False
                 return True
     return False
 
@@ -267,7 +267,15 @@ def ManageCollisions(body: Object.GameObject):
             if gameObject == body: continue                         # When it's the same object.
             if not gameObject.active: continue                      # Deactivated objects.
             if gameObject.layer in body.notCollidable: continue     # Objects that don't collide.
+            if category == "MovingPlatform" :
+                if CheckCollision(body, gameObject):
+                    body.touchingPlatform = gameObject
+                else:
+                    body.touchingPlatform = False
+            else: continue
             if not CheckCollision(body, gameObject): continue
+            #little update if the body touches a platform
+
 
             collisionCenter = GetCollisionCenter(body, gameObject)
 
@@ -348,11 +356,17 @@ def ApplyVelocityBackgroundObject(Category : str, body: Object.GameObject):
     if Category == "MovingPlatform":
         body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
-def MovingBodyWithPlatform(body: Object.GameObject, platform):
+def MovingBodyWithPlatform(body: Object.GameObject, platform: Object.GameObject):
     """Moves any object on the platform based on the platform velocity
 
     Args:
         body (Object.GameObject): the body being moved
-        platform (_type_): the platform the body is on
+        platform (Object.GameObject): the platform the body is touching
     """
     body.position += platform.velocity * deltaTime * Constants.inverseTimeDivision
+
+def TouchingPlatform(body:Object.GameObject, platform:Object.GameObject):
+    if body.position.x >= platform.position.x + (platform.size.x/2):
+        body.position.x = platform.position.x + platform.size.x
+    elif body.position.x <= platform.position.x + (platform.size.x/2):
+        body.position.x = platform.position.x - body.size.x

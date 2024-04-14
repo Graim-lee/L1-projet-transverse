@@ -135,7 +135,8 @@ class GameObject:
         self.fallingFromGround = False
         self.slippery = _slippery
         self.onIce = False
-        self.OnPlatform = False
+        self.touchingPlatform = False
+        self.onPlatform = False
 
     def Resize(self, size: (int, int)):
         """ Modify objects size.

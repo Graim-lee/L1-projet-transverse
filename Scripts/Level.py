@@ -1269,7 +1269,7 @@ def Level_3_2():
     MovingPlatform.direction = 1
     result["MovingPlatform"].append(MovingPlatform)
     
-    objectPos = (1100, 100)
+    objectPos = (1000, 140)
     objectSize = (100, 200)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
