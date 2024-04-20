@@ -8,7 +8,7 @@ import random
 
 initPooler = Object.Pooler()
 
-initDictionary = {"Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": [], "Throwable": [], "MovingPlatform":[]}
+initDictionary = {"Background" : [], "Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": [], "Throwable": [], "MovingPlatform":[]}
 
 mainPooler: Object.Pooler
 
@@ -90,6 +90,14 @@ def MainMenu():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
+    # Background.
+    objectPos = (0,0)
+    objectSize = (200, 100)
+    backgroundTexture = "Sprites/Background/Menu.png"
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", backgroundTexture, 0, 3, [0])
+    result["Background"].append(gameObject)
+
+
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
     gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Penguin Run", True), 0, 0, [0])
@@ -114,11 +122,6 @@ def MainMenu():
     objectPos = (Constants.screenDimensions[0] / 2, 770)
     gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
     result["Button"].append(gameObject)
-
-    # Penguin sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
-    gameObject = Object.GameObject(objectPos, (200,200),"Real", "Sprites/Player/"+Constants.skin+"/idle.png", 0, 0, [0],True,True,False)
-    result["Text"].append(gameObject)
 
     # Penguin sprite on the right of the screen
     objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
@@ -282,6 +285,13 @@ def Level_1_1():
 
     iceTexture = "Sprites/ice.png"
     wallTexture = "Sprites/wall.png"
+
+    # Background.
+    objectPos = (Constants.screenDimensions[0]/2, -Constants.screenDimensions[1]/2)
+    objectSize = (Constants.screenDimensions[0]/2, Constants.screenDimensions[1]/2)
+    backgroundTexture = "Sprites/Background/Mountain.png"
+    gameObject = Object.GameObject(objectPos, objectSize, "Background",backgroundTexture, 0,3,[0])
+    result["Background"].append(gameObject)
 
     # Welcome title
     objectPos = (150,-100)
