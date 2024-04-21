@@ -63,6 +63,9 @@ def ResetScene(scene: str):
             gameObject.position = gameObject.initialPosition
             if gameObject.type == "Coin":
                 gameObject.active = True
+            if category == "MovingPlatform":
+                gameObject.xStart = gameObject.xStart_reset
+                gameObject.xEnd = gameObject.xEnd_reset
     mainPooler.main["Level_All"]["Player"][0].velocity = Object.Vector2(0, 0)
     Constants.coin_counter = 0
 
@@ -1275,6 +1278,7 @@ def Level_3_2():
     objectSize = (200, 10)
     MovingPlatform = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     MovingPlatform.xStart, MovingPlatform.xEnd = 725, 800
+    MovingPlatform.xStart_reset, MovingPlatform.xEnd_reset = MovingPlatform.xStart, MovingPlatform.xEnd
     MovingPlatform.direction = 1
     result["MovingPlatform"].append(MovingPlatform)
     
