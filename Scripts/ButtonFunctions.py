@@ -89,6 +89,15 @@ def UpdateDisplaySkin(skin : (str)):
             gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png", False)
             gameObject.Resize((201, 201))
 
+def UpdateCoin():
+    """
+    This function update the text of coin counter
+    :return:
+    """
+    for gameObject in Constants.objectsInScene["Text"]:
+        if gameObject.data[0] == str(Constants.coin_counter -1):
+            gameObject.data = (str(Constants.coin_counter), True)
+
 def ToLootBox():
     """
         This function Should display on a new scene the animation of an box opening, for example like brawl star with the background color of the player color

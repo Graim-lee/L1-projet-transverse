@@ -1189,6 +1189,10 @@ def Level_2_2():
     gameObject = Object.GameObject((6400, -2200), (100, 200), "Door", ("Sprites/doorIce.png", ButtonFunctions.EndLevel), 0, 3, [0], _png=True)
     result["Door"].append(gameObject)
 
+    # Coin Counter
+    gameObject = Object.GameObject((6400, -2300), (2,2), "Text", ("0", False), 0, 0, [0])
+    result["Text"].append(gameObject)
+
     # Right Border
     objectPos = (6600, -4000)
     objectSize = (300, 4200)
