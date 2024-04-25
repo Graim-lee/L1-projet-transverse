@@ -1178,10 +1178,16 @@ def Level_2_2():
     objectSize = (300, 2200)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
-    """    #D
-    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2, objectPos[1]-30), objectSize, "Door", ("Sprites/doorIce.png", ButtonFunctions.ToLevel_World1), 0, 3, [0], _png=True)
+
+    # Text to inform you need coins
+    gameObject = Object.GameObject((6400, -2400), (300, 150), "Text", ("Make sure to have", False), 0, 0, [0])
+    result["Text"].append(gameObject)
+    gameObject = Object.GameObject((6400, -2370), (300, 150), "Text", ("enough coins !", False), 0, 0, [0])
+    result["Text"].append(gameObject)
+
+    #Final Door
+    gameObject = Object.GameObject((6400, -2200), (100, 200), "Door", ("Sprites/doorIce.png", ButtonFunctions.EndLevel), 0, 3, [0], _png=True)
     result["Door"].append(gameObject)
-    """
 
     # Right Border
     objectPos = (6600, -4000)
