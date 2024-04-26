@@ -43,12 +43,12 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_3_3", Level_3_3())
     pooler.SetScene("Level_3_4", Level_3_4())
 
-    pooler.SetScene("Extra_Menu", ExtraMenu())
+    #pooler.SetScene("Extra_Menu", ExtraMenu())
     pooler.SetScene("Closet_Menu", ClosetMenu())
-    pooler.SetScene("Loot_Box", LootBox())
+    #pooler.SetScene("Loot_Box", LootBox())
     pooler.SetScene("Credit_Menu", CreditMenu())
 
-    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
+    #pooler.SetScene("Level_World_Selection", LevelWorldSelection())
 
 
 
@@ -97,7 +97,6 @@ def MainMenu():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", backgroundTexture, 0, 3, [0])
     result["Background"].append(gameObject)
 
-
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
     gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Penguin Run", True), 0, 0, [0])
@@ -105,22 +104,32 @@ def MainMenu():
 
     # "Play game" button.
     objectPos = (Constants.screenDimensions[0] / 2, 500)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (200, 90), "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Change skin button.
+    objectPos = (Constants.screenDimensions[0] / 2, 650)
+    gameObject = Object.GameObject(objectPos, (140, 60), "Button", ("Skin", ButtonFunctions.ToCloset), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Credit skin button.
+    objectPos = (Constants.screenDimensions[0] / 2, 740)
+    gameObject = Object.GameObject(objectPos, (200, 60), "Button", ("Credits", ButtonFunctions.ToCredit), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "World selection test menu" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 625)
+    """objectPos = (Constants.screenDimensions[0] / 2, 625)
     gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("World select", ButtonFunctions.to_level_world_selection), 0, 0, [0])
-    result["Button"].append(gameObject)
+    result["Button"].append(gameObject)"""
 
     # "ExtraMenu" button.
-    objectPos = (Constants.screenDimensions[0] / 2 + 400, 700)
+    """objectPos = (Constants.screenDimensions[0] / 2 + 400, 700)
     gameObject = Object.GameObject(objectPos, (160, 70), "Button",("Extra", ButtonFunctions.ToExtraMenu), 0, 0, [0])
-    result["Button"].append(gameObject)
+    result["Button"].append(gameObject)"""
 
     # "Quit game" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 770)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    objectPos = (Constants.screenDimensions[0] / 2, 830)
+    gameObject = Object.GameObject(objectPos, (140, 60), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # Penguin sprite on the right of the screen
@@ -866,27 +875,15 @@ def Level_2_2():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
-    #Constants.groundedFrictionCoeff = 0.95
-
     coinSize = (32, 32)
     coinTexture = "Sprites/coins/coins_1.png"
     wallTexture = "Sprites/wall.png"
-
-    # Floor.
-    objectPos = (-1000, 200)
-    objectSize = (7900, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
 
     # Left border.
     objectPos = (-1900, -2700)
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-
-    #TestCoin
-    gameObject = Object.GameObject((0, 150), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
-    result["Coin"].append(gameObject)
 
     # Tricky Left platform.
     objectPos = (-900, -250)
@@ -897,38 +894,29 @@ def Level_2_2():
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    #Stair 1
+    # Stair 1.
     objectPos = (500, 0)
-    objectSize = (30, 200)
+    objectSize = (600, 300)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-    objectPos = (500, 0)
-    objectSize = (600, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-    #Coin
+
+    # Stair 1 coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
-    #Stair 2
+
+    # Stair 2.
     objectPos = (1070, -170)
-    objectSize = (30, 200)
+    objectSize = (200, 400)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-    objectPos = (1070, -170)
-    objectSize = (200, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-    # Coin
+
+    # Stair 2 coin.
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
     #Stair 3
     objectPos = (1240, -340)
-    objectSize = (30, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-    objectPos = (1240, -340)
-    objectSize = (200, 30)
+    objectSize = (30, 600)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
@@ -1161,6 +1149,12 @@ def Level_2_2():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    # Floor.
+    objectPos = (-1000, 200)
+    objectSize = (7900, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
     return result
 
 def Level_2_3():
@@ -1350,8 +1344,8 @@ def CopyEmptyDict(dictionary: {}) -> {}:
         result[category] = []
     return result
 
-def ExtraMenu():
-    """ Adds the Skin Menu Selection lobby to the main pooler. """
+"""def ExtraMenu():
+    Adds the Skin Menu Selection lobby to the main pooler.
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
@@ -1391,7 +1385,7 @@ def ExtraMenu():
     gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
-    return result
+    return result"""
 
 def ClosetMenu():
     """ Adds the Skin Menu Selection lobby to the main pooler. """
@@ -1420,12 +1414,12 @@ def ClosetMenu():
 
     # Penguin Iren sprite on the left of the screen
     objectPos = (Constants.screenDimensions[0] / 2 - 100, 450)
-    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/Iren/idle.png", 0, 0, [0],True, True, False)
+    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/iren/idle.png", 0, 0, [0],True, True, False)
     result["Text"].append(gameObject)
 
     # "Select skin button.
     objectPos = (Constants.screenDimensions[0] / 2, 900)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToExtraMenu), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     return result
@@ -1471,13 +1465,14 @@ def CreditMenu():
 
     # "Return" button.
     objectPos = (Constants.screenDimensions[0] / 2, 900)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToExtraMenu), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     return result
-def LootBox():
+
+"""def LootBox():
     # scene not finish at all
-    """ Adds the LootBox Menu Selection lobby to the main pooler. """
+    Adds the LootBox Menu Selection lobby to the main pooler.
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
@@ -1492,8 +1487,7 @@ def LootBox():
     result["Text"].append(gameObject)
     gameObject.Resize((0, 0))
 
-
-    return result
+    return result"""
 
 def CopyFullDict(dictionary: {}) -> {}:
     """ Same as the last function, but with a filled dictionary, that is, a dictionary of the form
