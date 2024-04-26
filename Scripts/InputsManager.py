@@ -5,6 +5,7 @@ import pygame
 import math
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import Scripts.ButtonFunctions as ButtonFunctions
 import Scripts.Physics as Physics
 
 mainPooler = Object.Pooler()
@@ -66,6 +67,7 @@ def CheckInputs():
                 for door in Constants.objectsInScene["Door"]:
                     if not door.active: continue
                     if not ObjectsOverlap(player, door): continue
+                    if Constants.currentLevel == "Level_2_2" and Constants.coin_counter < 15 : continue
                     door.data[1]()
                     Constants.groundedFrictionCoeff = 0.7
                     break
@@ -135,12 +137,12 @@ def CheckInputs():
     """ ANYTIME ========================================================================================================
     The code here executes on each frame, no matter the inputs ===================================================== """
     """ Coin detection """
-
     for coin in mainPooler.main[Constants.currentScene]["Coin"]:
         if not coin.active : continue
         if coin.position.x - 1.4 * coin.size.x > player.position.x or coin.position.x + 0.9 * coin.size.x < player.position.x: continue
         if coin.position.y - coin.size.y > player.position.y or coin.position.y + coin.size.y < player.position.y: continue
         Constants.coin_counter += 1
+        ButtonFunctions.UpdateCoin()
         coin.active = False
 
     # Throwable object detection.
