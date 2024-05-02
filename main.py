@@ -7,6 +7,7 @@ import Scripts.Level as Level
 import Scripts.ButtonFunctions as ButtonFunctions
 import Scripts.Shaders as Shaders
 import Scripts.Animations as Animations
+import Sprites.Background as Background
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -17,10 +18,8 @@ pygame.init()
 # Creating the game's window.
 screenDimensions = Constants.screenDimensions
 screen = pygame.display.set_mode(screenDimensions)
-screen.fill((255, 255, 255))
 
 frame = 0
-
 # Storing pygame's clock (to have a fixed framerate).
 gameClock = pygame.time.Clock()
 
@@ -41,6 +40,7 @@ InputsManager.SetPlayer(player)
 Physics.SetPlayer(player)
 ButtonFunctions.SetPlayer(player)
 
+
 """ End of START =================================================================================================== """
 
 """ ================================================================================================================ """
@@ -60,6 +60,7 @@ def ComputeObject(gameObject: Object.GameObject) -> bool:
 while Constants.gameRunning:
     # Manages user inputs.
     InputsManager.CheckInputs()
+
 
     # We retrieve every object and category that we want to access during the frame.
     concatScene = [Constants.currentScene] if Constants.inMenu else [Constants.currentScene, "Level_All"]
@@ -115,7 +116,7 @@ while Constants.gameRunning:
 
     # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
     screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
-
+    #screen.blit(bg, (0, 0))
     for category in Constants.objectsInScene:
         for gameObject in Constants.objectsInScene[category]:
             if ComputeObject(gameObject):

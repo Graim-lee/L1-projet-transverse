@@ -293,6 +293,7 @@ def Level_1_1():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
+
     Constants.groundedFrictionCoeff = 0.7
 
     iceTexture = "Sprites/ice.png"
@@ -302,13 +303,14 @@ def Level_1_1():
     objectPos = (Constants.screenDimensions[0]/2, -Constants.screenDimensions[1]/2)
     objectSize = (Constants.screenDimensions[0]/2, Constants.screenDimensions[1]/2)
     backgroundTexture = "Sprites/Background/Mountain.png"
-    gameObject = Object.GameObject(objectPos, objectSize, "Background",backgroundTexture, 0,3,[0])
+    gameObject = Object.GameObject((0,0), objectSize, "Background",backgroundTexture, 0,3,[0], _alwaysLoaded=True, _png=True)
+    gameObject.Resize((1000,1000))
     result["Background"].append(gameObject)
 
     # Welcome title
     objectPos = (150,-100)
     objectSize = (2,2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Penguin RACE !", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Penguin RUN !", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     #Text on how to moove
@@ -431,8 +433,8 @@ def Level_1_1():
     objectSize = (2, 2)
     gameObject = Object.GameObject(objectPos, objectSize, "Text",("Press Z to interact",False),0 ,0, [0])
     result["Text"].append(gameObject)
-    #End door
 
+    #End door
     objectPos = (7800, -20)
     objectSize = (100, 200)
     gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
@@ -450,6 +452,7 @@ def Level_1_1():
     return result
 
 def Level_1_2():
+    """DONE"""
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
     result = CopyEmptyDict(initDictionary)
@@ -628,22 +631,24 @@ def Level_1_3():
     result["Wall"].append(gameObject)
 
     # Final platform.
-    objectPos = (-20, -600)
-    objectSize = (600, 50)
+    objectPos = (-600, -600)
+    objectSize = (1000, 50)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper left wall, layer = 0 <=> can go through it
+    objectPos = (-700, -2000)
+    objectSize = (800, 810)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 0, [0])
     result["Wall"].append(gameObject)
 
     # Ceiling.
-    objectPos = (-1800, -2700)
+    """objectPos = (-1800, -2700)
     objectSize = (5000, 1750)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+    """
 
-    # Upper left wall.
-    objectPos = (-700, -2700)
-    objectSize = (800, 2149)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
 
     # Right border.
     objectPos = (960, -2700)
@@ -1301,9 +1306,18 @@ def Level_3_2():
     objectPos = (725, 100)
     objectSize = (200, 10)
     MovingPlatform = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    MovingPlatform.xStart, MovingPlatform.xEnd = 725, 800
+    MovingPlatform.xStart, MovingPlatform.xEnd = 725, 1000
+    MovingPlatform.yStart, MovingPlatform.yEnd = 100, 100
+
+
     MovingPlatform.xStart_reset, MovingPlatform.xEnd_reset = MovingPlatform.xStart, MovingPlatform.xEnd
-    MovingPlatform.direction = 1
+    MovingPlatform.yStart_reset, MovingPlatform.yEnd_reset = MovingPlatform.yStart, MovingPlatform.yEnd
+
+    MovingPlatform.direction_x = 1
+    MovingPlatform.direction_y = 1
+
+    MovingPlatform.initialVelocity = 50
+
     result["MovingPlatform"].append(MovingPlatform)
     
     objectPos = (1000, 140)
@@ -1427,32 +1441,32 @@ def ClosetMenu():
     result = CopyEmptyDict(initDictionary)
 
     # Change skin to the right button.
-    objectPos = (Constants.screenDimensions[0] / 2 + 50, 725)
+    objectPos = (Constants.screenDimensions[0] / 2 + 50, 625)
     gameObject = Object.GameObject(objectPos, (70, 70), "Button", (">", ButtonFunctions.ToChangeSkinRight), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # Change skin to the left button.
-    objectPos = (Constants.screenDimensions[0] / 2 - 50, 725)
+    objectPos = (Constants.screenDimensions[0] / 2 - 50, 625)
     gameObject = Object.GameObject(objectPos, (70, 70), "Button", ("<", ButtonFunctions.ToChangeSkinLeft), 0, 0,[0])
     result["Button"].append(gameObject)
 
     # Penguin black sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
+    objectPos = (Constants.screenDimensions[0] / 2 - 500, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/black/idle.png", 0, 0, [0], True,True, False)
     result["Text"].append(gameObject)
 
     # Penguin blue sprite on the right of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
+    objectPos = (Constants.screenDimensions[0] / 2 + 300, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/blue/selected.png", 0,0, [0], True, True, False)
     result["Text"].append(gameObject)
 
     # Penguin Iren sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 100, 450)
+    objectPos = (Constants.screenDimensions[0] / 2 - 100, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/iren/idle.png", 0, 0, [0],True, True, False)
     result["Text"].append(gameObject)
 
     # "Select skin button.
-    objectPos = (Constants.screenDimensions[0] / 2, 900)
+    objectPos = (Constants.screenDimensions[0] / 2, 830)
     gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
