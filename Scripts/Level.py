@@ -8,7 +8,7 @@ import random
 
 initPooler = Object.Pooler()
 
-initDictionary = {"Background" : [], "Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Player": [], "Throwable": [], "MovingPlatform":[]}
+initDictionary = {"Background" : [], "Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Signe":[], "Player": [], "Throwable": [], "MovingPlatform":[]}
 
 mainPooler: Object.Pooler
 
@@ -293,7 +293,7 @@ def Level_1_1():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
-
+    signTexture = "Sprites/Sign/Down/signRight.png"
     Constants.groundedFrictionCoeff = 0.7
 
     iceTexture = "Sprites/ice.png"
@@ -330,10 +330,16 @@ def Level_1_1():
     gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Here is your first obstacle !", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
+    #Sign
+    objectPos = (1200, 90)
+    objectSize = (90, 90)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", signTexture, 0, 0, [0], _png = True)
+    result["Signe"].append(gameObject)
+
     #Text jump
     objectPos = (1200, -120)
     objectSize = (2,2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("To jump, left click and",False),0,0,[0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("To jump, maintain left click and",False),0,0,[0])
     result["Text"].append(gameObject)
 
     objectPos = (1200, -70)
@@ -383,7 +389,7 @@ def Level_1_1():
 
     #Ice floor
     objectPos = (3600,180)
-    objectSize = (2000,180)
+    objectSize = (2000,400)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture,0,2,[0],_slippery= True)
     result["Wall"].append(gameObject)
 
