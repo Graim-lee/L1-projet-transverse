@@ -43,12 +43,12 @@ def GetPooler() -> Object.Pooler:
     pooler.SetScene("Level_3_3", Level_3_3())
     pooler.SetScene("Level_3_4", Level_3_4())
 
-    pooler.SetScene("Extra_Menu", ExtraMenu())
+    #pooler.SetScene("Extra_Menu", ExtraMenu())
     pooler.SetScene("Closet_Menu", ClosetMenu())
-    pooler.SetScene("Loot_Box", LootBox())
+    #pooler.SetScene("Loot_Box", LootBox())
     pooler.SetScene("Credit_Menu", CreditMenu())
 
-    pooler.SetScene("Level_World_Selection", LevelWorldSelection())
+    #pooler.SetScene("Level_World_Selection", LevelWorldSelection())
 
 
 
@@ -100,7 +100,6 @@ def MainMenu():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", backgroundTexture, 0, 3, [0])
     result["Background"].append(gameObject)
 
-
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
     gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Penguin Run", True), 0, 0, [0])
@@ -108,22 +107,32 @@ def MainMenu():
 
     # "Play game" button.
     objectPos = (Constants.screenDimensions[0] / 2, 500)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (200, 90), "Button", ("Play", ButtonFunctions.ToWorldSelection), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Change skin button.
+    objectPos = (Constants.screenDimensions[0] / 2, 650)
+    gameObject = Object.GameObject(objectPos, (140, 60), "Button", ("Skin", ButtonFunctions.ToCloset), 0, 0, [0])
+    result["Button"].append(gameObject)
+
+    # Credit skin button.
+    objectPos = (Constants.screenDimensions[0] / 2, 740)
+    gameObject = Object.GameObject(objectPos, (200, 60), "Button", ("Credits", ButtonFunctions.ToCredit), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "World selection test menu" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 625)
+    """objectPos = (Constants.screenDimensions[0] / 2, 625)
     gameObject = Object.GameObject(objectPos, (340, 70), "Button", ("World select", ButtonFunctions.to_level_world_selection), 0, 0, [0])
-    result["Button"].append(gameObject)
+    result["Button"].append(gameObject)"""
 
     # "ExtraMenu" button.
-    objectPos = (Constants.screenDimensions[0] / 2 + 400, 700)
+    """objectPos = (Constants.screenDimensions[0] / 2 + 400, 700)
     gameObject = Object.GameObject(objectPos, (160, 70), "Button",("Extra", ButtonFunctions.ToExtraMenu), 0, 0, [0])
-    result["Button"].append(gameObject)
+    result["Button"].append(gameObject)"""
 
     # "Quit game" button.
-    objectPos = (Constants.screenDimensions[0] / 2, 770)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
+    objectPos = (Constants.screenDimensions[0] / 2, 830)
+    gameObject = Object.GameObject(objectPos, (140, 60), "Button", ("Quit", ButtonFunctions.QuitGame), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # Penguin sprite on the right of the screen
@@ -284,6 +293,7 @@ def Level_1_1():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
+
     Constants.groundedFrictionCoeff = 0.7
 
     iceTexture = "Sprites/ice.png"
@@ -293,13 +303,14 @@ def Level_1_1():
     objectPos = (Constants.screenDimensions[0]/2, -Constants.screenDimensions[1]/2)
     objectSize = (Constants.screenDimensions[0]/2, Constants.screenDimensions[1]/2)
     backgroundTexture = "Sprites/Background/Mountain.png"
-    gameObject = Object.GameObject(objectPos, objectSize, "Background",backgroundTexture, 0,3,[0])
+    gameObject = Object.GameObject((0,0), objectSize, "Background",backgroundTexture, 0,3,[0], _alwaysLoaded=True, _png=True)
+    gameObject.Resize((1000,1000))
     result["Background"].append(gameObject)
 
     # Welcome title
     objectPos = (150,-100)
     objectSize = (2,2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Penguin RACE !", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Penguin RUN !", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     #Text on how to moove
@@ -422,8 +433,8 @@ def Level_1_1():
     objectSize = (2, 2)
     gameObject = Object.GameObject(objectPos, objectSize, "Text",("Press Z to interact",False),0 ,0, [0])
     result["Text"].append(gameObject)
-    #End door
 
+    #End door
     objectPos = (7800, -20)
     objectSize = (100, 200)
     gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
@@ -441,6 +452,7 @@ def Level_1_1():
     return result
 
 def Level_1_2():
+    """DONE"""
     """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
     global initDictionary
     result = CopyEmptyDict(initDictionary)
@@ -619,22 +631,24 @@ def Level_1_3():
     result["Wall"].append(gameObject)
 
     # Final platform.
-    objectPos = (-20, -600)
-    objectSize = (600, 50)
+    objectPos = (-600, -600)
+    objectSize = (1000, 50)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Upper left wall, layer = 0 <=> can go through it
+    objectPos = (-700, -2000)
+    objectSize = (800, 810)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 0, [0])
     result["Wall"].append(gameObject)
 
     # Ceiling.
-    objectPos = (-1800, -2700)
+    """objectPos = (-1800, -2700)
     objectSize = (5000, 1750)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+    """
 
-    # Upper left wall.
-    objectPos = (-700, -2700)
-    objectSize = (800, 2149)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
 
     # Right border.
     objectPos = (960, -2700)
@@ -890,162 +904,130 @@ def Level_2_2():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
-    #Constants.groundedFrictionCoeff = 0.95
-
     coinSize = (32, 32)
     coinTexture = "Sprites/coins/coins_1.png"
     wallTexture = "Sprites/wall.png"
     iceWallTexture = "Sprites/iceWall.png"
     iceTexture = "Sprites/ice.png"
-    # Floor.
-    objectPos = (-1000, 200)
-    objectSize = (7900, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture , 0, 2, [0], _slippery= True)
+
+    # Tricky left platform.
+    objectPos = (-1000, -250)
+    objectSize = (200, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
-    # Left border.
-    objectPos = (-1900, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    #TestCoin
-    gameObject = Object.GameObject((0, 150), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    # Tricky coin.
+    gameObject = Object.GameObject((-866, -290), coinSize, "Coin", coinTexture, 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    # Tricky Left platform.
-    objectPos = (-900, -250)
-    objectSize = (100, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery= True)
+    # Stair 1.
+    objectPos = (500, 0)
+    objectSize = (600, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
-    #Coin
+
+    # Stair 1 coin.
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    #Stair 1
-    objectPos = (500, 0)
-    objectSize = (30, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    # Stair 2.
+    objectPos = (1070, -170)
+    objectSize = (200, 400)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
-    objectPos = (500, 0)
-    objectSize = (600, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery = True)
-    result["Wall"].append(gameObject)
+
     #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
-
-    #Stair 2
-    objectPos = (1070, -170)
-    objectSize = (30, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery = True)
-    result["Wall"].append(gameObject)
-    objectPos = (1070, -170)
-    objectSize = (200, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery = True)
-    result["Wall"].append(gameObject)
 
     # Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    #Stair 3
-    objectPos = (1240, -340)
-    objectSize = (30, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0],_slippery= True)
+    #Under Platform
+    objectPos = (1410, -100)
+    objectSize = (200, 400)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery = True)
     result["Wall"].append(gameObject)
-    objectPos = (1240, -340)
-    objectSize = (200, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
-    result["Wall"].append(gameObject)
+
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
 
     #Big Step
     objectPos = (1410, -660)
-    objectSize = (30, 350)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
-    result["Wall"].append(gameObject)
-    objectPos = (1410, -660)
-    objectSize = (200, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
-    result["Wall"].append(gameObject)
-    #Coin
-    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
-    result["Coin"].append(gameObject)
-
-    #Left Platform
-    objectPos = (1000, -860)
-    objectSize = (100, 30)
+    objectSize = (200, 400)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery= True)
     result["Wall"].append(gameObject)
+
     #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    #Big Step Wall
-    objectPos = (1580, -660)
-    objectSize = (30, 350)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
-    result["Wall"].append(gameObject)
-
-    #Under Platform
-    objectPos = (1410, -100)
-    objectSize = (200, 300)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery = True)
-    result["Wall"].append(gameObject)
-    #Coin
-    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
-    result["Coin"].append(gameObject)
-
-    #Platform after big stair
-    objectPos = (2000, -470)
-    objectSize = (200, 670)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery = True)
-    result["Wall"].append(gameObject)
-    #Coin
-    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
-    result["Coin"].append(gameObject)
-
-    #2nd Platfrom after big stair
-    objectPos = (1800, -200)
-    objectSize = (200, 400)
+    #Stair 3
+    objectPos = (1240, -340)
+    objectSize = (220, 600)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
+
+    # Left floating platform
+    objectPos = (1000, -860)
+    objectSize = (100, 100)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(gameObject)
+
     #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    #Big hole in wall
+    # Platform after big stair.
+    objectPos = (1800, -200)
+    objectSize = (300, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
+    result["Wall"].append(gameObject)
+
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # 2nd platform after big stair.
+    objectPos = (2000, -470)
+    objectSize = (200, 700)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery = True)
+    result["Wall"].append(gameObject)
+
+    #Coin
+    gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Hole in wall 1 upper wall.
     objectPos = (2400, -2000)
     objectSize = (80, 1800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
-    objectPos = (2400, -100)
-    objectSize = (80, 300)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
-    result["Wall"].append(gameObject)
-    #Platform
+
+    # Hole in wall 1 lower wall.
     objectPos = (2360, -100)
-    objectSize = (160, 30)
+    objectSize = (160, 400)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
+
     #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    # Big hole in wall 2
+    # Hole in wall 2 upper wall.
     objectPos = (2800, -2000)
     objectSize = (80, 1500)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
-    objectPos = (2800, -400)
-    objectSize = (80, 600)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
-    result["Wall"].append(gameObject)
-    #Platform
+
+    # Hole in wall 2 lower wall.
     objectPos = (2760, -400)
-    objectSize = (160, 30)
+    objectSize = (160, 700)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
+
     #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
@@ -1196,7 +1178,19 @@ def Level_2_2():
     # Right Border
     objectPos = (6600, -4000)
     objectSize = (300, 4200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Left border.
+    objectPos = (-1900, -2700)
+    objectSize = (1000, 4000)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor.
+    objectPos = (-2000, 200)
+    objectSize = (8900, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery= True)
     result["Wall"].append(gameObject)
 
     return result
@@ -1312,9 +1306,18 @@ def Level_3_2():
     objectPos = (725, 100)
     objectSize = (200, 10)
     MovingPlatform = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    MovingPlatform.xStart, MovingPlatform.xEnd = 725, 800
+    MovingPlatform.xStart, MovingPlatform.xEnd = 725, 1000
+    MovingPlatform.yStart, MovingPlatform.yEnd = 100, 100
+
+
     MovingPlatform.xStart_reset, MovingPlatform.xEnd_reset = MovingPlatform.xStart, MovingPlatform.xEnd
-    MovingPlatform.direction = 1
+    MovingPlatform.yStart_reset, MovingPlatform.yEnd_reset = MovingPlatform.yStart, MovingPlatform.yEnd
+
+    MovingPlatform.direction_x = 1
+    MovingPlatform.direction_y = 1
+
+    MovingPlatform.initialVelocity = 50
+
     result["MovingPlatform"].append(MovingPlatform)
     
     objectPos = (1000, 140)
@@ -1389,8 +1392,8 @@ def CopyEmptyDict(dictionary: {}) -> {}:
         result[category] = []
     return result
 
-def ExtraMenu():
-    """ Adds the Skin Menu Selection lobby to the main pooler. """
+"""def ExtraMenu():
+    Adds the Skin Menu Selection lobby to the main pooler.
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
@@ -1430,7 +1433,7 @@ def ExtraMenu():
     gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
-    return result
+    return result"""
 
 def ClosetMenu():
     """ Adds the Skin Menu Selection lobby to the main pooler. """
@@ -1438,33 +1441,33 @@ def ClosetMenu():
     result = CopyEmptyDict(initDictionary)
 
     # Change skin to the right button.
-    objectPos = (Constants.screenDimensions[0] / 2 + 50, 725)
+    objectPos = (Constants.screenDimensions[0] / 2 + 50, 625)
     gameObject = Object.GameObject(objectPos, (70, 70), "Button", (">", ButtonFunctions.ToChangeSkinRight), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # Change skin to the left button.
-    objectPos = (Constants.screenDimensions[0] / 2 - 50, 725)
+    objectPos = (Constants.screenDimensions[0] / 2 - 50, 625)
     gameObject = Object.GameObject(objectPos, (70, 70), "Button", ("<", ButtonFunctions.ToChangeSkinLeft), 0, 0,[0])
     result["Button"].append(gameObject)
 
     # Penguin black sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 500, 450)
+    objectPos = (Constants.screenDimensions[0] / 2 - 500, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/black/idle.png", 0, 0, [0], True,True, False)
     result["Text"].append(gameObject)
 
     # Penguin blue sprite on the right of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 + 300, 450)
+    objectPos = (Constants.screenDimensions[0] / 2 + 300, 350)
     gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/blue/selected.png", 0,0, [0], True, True, False)
     result["Text"].append(gameObject)
 
     # Penguin Iren sprite on the left of the screen
-    objectPos = (Constants.screenDimensions[0] / 2 - 100, 450)
-    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/Iren/idle.png", 0, 0, [0],True, True, False)
+    objectPos = (Constants.screenDimensions[0] / 2 - 100, 350)
+    gameObject = Object.GameObject(objectPos, (200, 200), "Real", "Sprites/Player/iren/idle.png", 0, 0, [0],True, True, False)
     result["Text"].append(gameObject)
 
     # "Select skin button.
-    objectPos = (Constants.screenDimensions[0] / 2, 900)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToExtraMenu), 0, 0, [0])
+    objectPos = (Constants.screenDimensions[0] / 2, 830)
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Select", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     return result
@@ -1510,13 +1513,14 @@ def CreditMenu():
 
     # "Return" button.
     objectPos = (Constants.screenDimensions[0] / 2, 900)
-    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToExtraMenu), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (160, 70), "Button", ("Return", ButtonFunctions.ToMainMenu), 0, 0, [0])
     result["Button"].append(gameObject)
 
     return result
-def LootBox():
+
+"""def LootBox():
     # scene not finish at all
-    """ Adds the LootBox Menu Selection lobby to the main pooler. """
+    Adds the LootBox Menu Selection lobby to the main pooler.
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
@@ -1531,8 +1535,7 @@ def LootBox():
     result["Text"].append(gameObject)
     gameObject.Resize((0, 0))
 
-
-    return result
+    return result"""
 
 def CopyFullDict(dictionary: {}) -> {}:
     """ Same as the last function, but with a filled dictionary, that is, a dictionary of the form

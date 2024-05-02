@@ -147,6 +147,8 @@ def MoveCamera():
             if category == "MovingPlatform":
                 gameObject.xStart -= displacement.x
                 gameObject.xEnd -= displacement.x
+                gameObject.yStart -= displacement.y
+                gameObject.yEnd -= displacement.y
 
 
 def PhysicsCalculations(body: Object.GameObject):
@@ -341,11 +343,15 @@ def VelocityBackgroundObject(Category : str, body: Object.GameObject):
         body (Object.GameObject): the platform itself
     """
     if Category == "MovingPlatform":
-        if body.direction == 1 and body.position.x > body.xEnd:
-            body.direction = -1
-        elif body.direction == -1 and body.position.x < body.xStart:
-            body.direction = 1
-        body.velocity = Object.Vector2(body.direction * 50, 0)
+        if body.direction_x == 1 and body.position.x > body.xEnd:
+            body.direction_x = -1
+        elif body.direction_x == -1 and body.position.x < body.xStart:
+            body.direction_x = 1
+        if body.direction_y == 1 and body.position.y > body.yEnd:
+            body.direction_y = -1
+        elif body.direction_y == -1 and body.position.y < body.yStart:
+            body.direction_y = 1
+        body.velocity = Object.Vector2(body.direction_x * body.initialVelocity, body.direction_y * body.initialVelocity)
     
 def ApplyVelocityBackgroundObject(Category : str, body: Object.GameObject):
     """moves the platform based on its velocity

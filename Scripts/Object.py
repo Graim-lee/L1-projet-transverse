@@ -71,6 +71,21 @@ class GameObject:
                                     to avoid bouncing off walls and floor).
         - collisionDuration (float): stores for how long the object has been colliding with another object. Works in
                                     conjunction with previousRepelForce to prevent bouncing.
+        - surface (str) : path of the object's sprite. 
+        - collidedDuringFrame (bool) : A variable used to detect if in the next frame the object encounter another object.
+                                        This way we can cancel the movement to avoid overlap. 
+        - hasAnimation (bool) : True if we need to annimate the object, false if we don't.
+        - png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
+        - fallingFromGround (bool) : Represent the moment when we fall not after a jump but from a high floor. 
+                                    True if we fall from high ground, false if not. 
+        - slippery (bool) : True if the object is a slippery object. Ice ground are slippery for example. 
+                            Any object on this one if slippery is true will have "onIce = True" and thus its frictions greatly reduced.
+        - onIce (bool) : True if the object (for example the player) is on a object with slippery == True. 
+                        If True, friction are greatly reduced. 
+        - touchingPlatform (GameObject) : It is equal to the GameObject "platform" if the object (for example the player) touches it (except from above). 
+                                         False if the object does not touche a platform.
+        - onPlatform (GameObject) : It is equal to the GameObject "platform" if the object is on a platform. 
+                                    False if it is not on a platform 
     """
 
     def __init__(self, _position: (int, int), _size: (int, int), _type: str, _data, _mass: float, _layer: int, _notCollidable: [int], _alwaysLoaded: bool = False, _png: bool = False, _hasAnimation: bool = False, _slippery = False):
