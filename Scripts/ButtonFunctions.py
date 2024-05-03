@@ -16,12 +16,12 @@ def SetPlayer(setPlayer: Object.GameObject):
     player = setPlayer
 
 def ToMainMenu():
-    Constants.currentWorld = "Main_World"
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "Main_Menu"
 
 def PauseToMainMenu():
     Level.ResetScene(Constants.currentLevel)
-    Constants.currentWorld = "Main_World"
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "Main_Menu"
 
 def Continue():
@@ -33,17 +33,21 @@ def Restart():
     player.position = Object.Vector2(0, 0)
 
 def ToWorldSelection():
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "World_Selection"
 
 def ToWorldSelectionMenu():
     Level.ResetScene(Constants.currentLevel)
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "World_Selection"
     Level.ResetScene(Constants.currentScene)
 
 def ToExtraMenu():
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "Extra_Menu"
 
 def ToCloset():
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "Closet_Menu"
 
 def ToChangeSkinRight():
@@ -56,6 +60,7 @@ def ToChangeSkinRight():
         newSkin = Constants.skinList[0]
     else:
         newSkin = Constants.skinList[index + 1]
+    Constants.currentWorld = "Main_Menu"
     UpdateDisplaySkin(newSkin)
     Constants.skin = newSkin
 
@@ -69,6 +74,7 @@ def ToChangeSkinLeft():
         newSkin = Constants.skinList[len(Constants.skinList) - 1]
     else:
         newSkin = Constants.skinList[index - 1]
+    Constants.currentWorld = "Main_Menu"
     UpdateDisplaySkin(newSkin)
     Constants.skin = newSkin
 
@@ -88,6 +94,7 @@ def UpdateDisplaySkin(skin : (str)):
             listData = gameObject.data.split("/")
             gameObject.SetSprite("Sprites/Player/" + listData[2] + "/idle.png", False)
             gameObject.Resize((201, 201))
+    Constants.currentWorld = "Main_Menu"
 
 def UpdateCoin():
     """
@@ -105,16 +112,14 @@ def ToLootBox():
     """
     Constants.currentScene = "Loot_Box"
     Constants.inMenu = False
+    Constants.currentWorld = "Main_Menu"
 
 def ToCredit():
+    Constants.currentWorld = "Main_Menu"
     Constants.currentScene = "Credit_Menu"
 
-def to_level_world_selection():
-    Constants.currentScene = "Level_World_Selection"
-    Constants.currentLevel = "Level_World_Selection"
-    player.position = Object.Vector2(0, 0)
-
 def ToWorld_1():
+    Constants.currentScene = "Main_Menu"
     Constants.currentScene = "World_1"
 
 def ToLevel_World1():
@@ -126,69 +131,81 @@ def ToLevel_World1():
 def ToLevel_1_1():
     Constants.currentScene = "Level_1_1"
     Constants.currentLevel = "Level_1_1"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_2():
     Constants.currentScene = "Level_1_2"
     Constants.currentLevel = "Level_1_2"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_3():
     Constants.currentScene = "Level_1_3"
     Constants.currentLevel = "Level_1_3"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_1_4():
     Constants.currentScene = "Level_1_4"
     Constants.currentLevel = "Level_1_4"
+    Constants.currentWorld = "World_1"
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_2():
-    Constants.currentWorld = "World_2"
+    Constants.currentScene = "Main_Menu"
     Constants.currentScene = "World_2"
 
 def ToLevel_2_1():
     Constants.currentScene = "Level_2_1"
     Constants.currentLevel = "Level_2_1"
+    Constants.currentWorld = "World_2"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_2_2():
     Constants.currentScene = "Level_2_2"
     Constants.currentLevel = "Level_2_2"
+    Constants.currentWorld = "World_2"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_2_3():
     Constants.currentScene = "Level_2_3"
     Constants.currentLevel = "Level_2_3"
+    Constants.currentWorld = "World_2"
     player.position = Object.Vector2(0, 0)
 
 def ToWorld_3():
     Constants.groundedFrictionCoeff = 0.7
-    Constants.currentWorld = "World_3"
+    Constants.currentScene = "Main_Menu"
     Constants.currentScene = "World_3"
 
 def ToLevel_3_1():
     Constants.currentScene = "Level_3_1"
     Constants.currentLevel = "Level_3_1"
+    Constants.currentWorld = "World_3"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_3_2():
     Constants.currentScene = "Level_3_2"
     Constants.currentLevel = "Level_3_2"
+    Constants.currentWorld = "World_3"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_3_3():
     Constants.currentScene = "Level_3_3"
     Constants.currentLevel = "Level_3_3"
+    Constants.currentWorld = "World_3"
     player.position = Object.Vector2(0, 0)
 
 def ToLevel_3_4():
     Constants.currentScene = "Level_3_4"
     Constants.currentLevel = "Level_3_4"
+    Constants.currentWorld = "World_3"
     player.position = Object.Vector2(0, 0)
 
 def EndLevel():
     Constants.currentScene = "World_Selection"
+    Constants.currentScene = "Main_Menu"
     Level.ResetScene(Constants.currentLevel)
     ToWorldSelection()
 

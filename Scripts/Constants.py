@@ -62,7 +62,7 @@ playerUsedSlingshot = False
 # Counts the number of jumps (= uses of slingshot) the player can perform without touching the ground. playerJumpCount is
 # modified throughout the script, but maxPlayerJumpCount isn't.
 #maxPlayerJumpCount is equal to 1 but in reality you can jum twice. The grounded on and 1 in the air. It represents the number of jumps in the air
-maxPlayerJumpCount = 1
+maxPlayerJumpCount = 10
 playerJumpCount = 1
 
 # 1 if the player presses on D, -1 if the player presses on A/Q, 0 if the player doesn't move.
@@ -107,7 +107,7 @@ currentScene = "Main_Menu"
 # To remember which level the player is in even when the game is paused.
 currentLevel = "Level_0"
 # To have the specificity of world for the animation 1 for the ice world
-currentWorld = 1
+currentWorld = "Main_Menu"
 # True whenever the game is in a Menu (main menu or pause menu), False when the game is in a level.
 inMenu = False
 

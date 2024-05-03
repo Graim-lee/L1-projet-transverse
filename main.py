@@ -29,6 +29,12 @@ Constants.titleFont = pygame.font.Font("Fonts/hardpixel.otf", 120)
 
 buttonSurface = pygame.image.load("Sprites/button.png").convert()
 
+# Initializing the backgrounds.
+background = {"Main_Menu": None, "World_1": None, "World_2": None, "World_3": None}
+for world in background:
+    background[world] = pygame.transform.scale(pygame.image.load("Sprites/Background/" + world + ".png"), screenDimensions)
+
+
 # Initializing the pooler and the player.
 pooler = Level.GetPooler()
 Constants.objectsInScene = pooler.main["Main_Menu"]
@@ -115,8 +121,8 @@ while Constants.gameRunning:
             if category == "Coin": Animations.AnimateCoin(Constants.objectsInScene[category])
 
     # Displays every object on the screen (two loops for objects in the scene and objects in "Level_All").
-    screen.fill((255, 255, 255))    # Overwrites (erases) the last frame.
-    #screen.blit(bg, (0, 0))
+    screen.blit(background[Constants.currentWorld], (0, 0))    # Overwrites (erases) the last frame.
+
     for category in Constants.objectsInScene:
         for gameObject in Constants.objectsInScene[category]:
             if ComputeObject(gameObject):
