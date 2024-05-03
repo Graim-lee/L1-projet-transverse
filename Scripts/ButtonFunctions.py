@@ -95,8 +95,8 @@ def UpdateCoin():
     :return:
     """
     for gameObject in Constants.objectsInScene["Text"]:
-        if gameObject.data[0] == str(Constants.coin_counter -1):
-            gameObject.data = (str(Constants.coin_counter), True)
+        if gameObject.data[0] == str(Constants.coin_counter -1)+" /20":
+            gameObject.data = (str(Constants.coin_counter)+" /20", True)
 
 def ToLootBox():
     """

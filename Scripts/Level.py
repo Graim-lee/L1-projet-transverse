@@ -333,8 +333,8 @@ def Level_1_1():
     #Sign
     objectPos = (1200, 90)
     objectSize = (90, 90)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", signTexture, 0, 0, [0], _png = True)
-    result["Signe"].append(gameObject)
+#    gameObject = Object.GameObject(objectPos, objectSize, "Real", signTexture, 0, 0, [0], _png = True)
+#    result["Signe"].append(gameObject)
 
     #Text jump
     objectPos = (1200, -120)
@@ -946,7 +946,7 @@ def Level_2_2():
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-    # Coin
+    #Coin
     gameObject = Object.GameObject((objectPos[0]+objectSize[0]/2-coinSize[0]/2, objectPos[1]-40), coinSize, "Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
@@ -1168,9 +1168,9 @@ def Level_2_2():
     result["Wall"].append(gameObject)
 
     # Text to inform you need coins
-    gameObject = Object.GameObject((6400, -2400), (300, 150), "Text", ("Make sure to have", False), 0, 0, [0])
+    gameObject = Object.GameObject((6400, -2400), (300, 150), "Text", ("Make sure to have enough", False), 0, 0, [0])
     result["Text"].append(gameObject)
-    gameObject = Object.GameObject((6400, -2370), (300, 150), "Text", ("enough coins !", False), 0, 0, [0])
+    gameObject = Object.GameObject((6400, -2370), (300, 150), "Text", ("coins (15 needed)!", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     #Final Door
@@ -1178,7 +1178,7 @@ def Level_2_2():
     result["Door"].append(gameObject)
 
     # Coin Counter
-    gameObject = Object.GameObject((6400, -2300), (2,2), "Text", ("0", False), 0, 0, [0])
+    gameObject = Object.GameObject((6400, -2300), (2,2), "Text", ("0 /20", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     # Right Border
