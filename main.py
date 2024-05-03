@@ -32,7 +32,7 @@ buttonSurface = pygame.image.load("Sprites/button.png").convert()
 # Initializing the backgrounds.
 background = {"Main_Menu": None, "World_1": None, "World_2": None, "World_3": None}
 for world in background:
-    background[world] = pygame.transform.scale(pygame.image.load("Sprites/Background/" + world + ".png"), screenDimensions)
+    background[world] = pygame.transform.scale(pygame.image.load("Sprites/Background/" + world + ".png").convert(), screenDimensions)
 
 
 # Initializing the pooler and the player.
