@@ -38,6 +38,8 @@ class GameObject:
                         the button is clicked.
                     A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
                         'Button' object, and the last str is the path to the image inside the button.
+                    A 'PressurePlate' object takes a function to execute when the plate is pressed, its initial y position
+                        and the pressed y position.
 
         - position (Vector2): object's current coordinates.
         - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).
@@ -94,7 +96,7 @@ class GameObject:
                 - self: mandatory for methods (objects' functions).
                 - _position (tuple (int, int)): object's position.
                 - _size (tuple (int, int)): object's size.
-                - _type (str): the type of the object (a Real, a Text, or a Button...).
+                - _type (str): the type of the object (a Real, a Text, a Button, a PressurePlate...).
                 - _data (): the object's data (depends on its type). See the description above.
                 - _mass (float): object's mass.
                 - _layer (int): objet's layer (for collisions).
@@ -113,16 +115,18 @@ class GameObject:
         self.size = Vector2(_size[0], _size[1])
 
         # We fetch the object's texture if needed.
-        if _type == "Real" or _type == "Coin" or _type == "Sign" or _type == "Background":
+        if _type == "Real" or _type == "Coin" or _type == "Sign":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
         elif _type == "Door":
             self.surface = pygame.image.load(_data[0]).convert()
         elif _type == "Button" or _type == "WorldButton":
             self.surface = pygame.image.load("Sprites/button.png").convert()
+        elif _type == "PressurePlate":
+            self.surface = pygame.image.load("Sprites/pressure_plate.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
-        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "Background" :
+        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "PressurePlate":
             self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.type = _type

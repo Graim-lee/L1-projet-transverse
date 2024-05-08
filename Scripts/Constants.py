@@ -37,6 +37,11 @@ iceFrictionCoeff = 0.98
 # The magnitude of the force applied to overlapping objects to manage collisions.
 collisionForce = 5
 
+# Pressure plates hitbox (detection) size.
+platesDetectionSize = 5
+# The amount the pressure plates will go down when pressed.
+platesSinkDistance = 25
+
 """ Player controller constants ==================================================================================== """
 
 # The horizontal speed of the player.

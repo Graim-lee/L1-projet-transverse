@@ -7,7 +7,6 @@ import Scripts.Level as Level
 import Scripts.ButtonFunctions as ButtonFunctions
 import Scripts.Shaders as Shaders
 import Scripts.Animations as Animations
-import Sprites.Background as Background
 
 """ ================================================================================================================ """
 """ ==> START : put here the code that shall only run at the start of the game (i.e.: variable init., etc.). <====== """
@@ -16,10 +15,11 @@ import Sprites.Background as Background
 pygame.init()
 
 # Creating the game's window.
-screenDimensions = Constants.screenDimensions
+screenInfos = pygame.display.Info()
+screenDimensions = (screenInfos.current_w, screenInfos.current_h)
+Constants.screenDimensions = screenDimensions
 screen = pygame.display.set_mode(screenDimensions)
 
-frame = 0
 # Storing pygame's clock (to have a fixed framerate).
 gameClock = pygame.time.Clock()
 
@@ -99,9 +99,11 @@ while Constants.gameRunning:
                         elif gameObject.onPlatform:
                             Physics.MovingBodyWithPlatform(gameObject, gameObject.onPlatform)
                         Physics.ApplyPhysics(gameObject, timeDiv)
-                        
+
         # We move the player after calculating the collisions etc.
         InputsManager.MovePlayer(Constants.playerInputDirection)
+        # We update the pressure plates.
+        Physics.UpdatePressurePlates()
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.
         Physics.MoveCamera()
 
@@ -129,7 +131,6 @@ while Constants.gameRunning:
                 Shaders.RenderObject(screen, gameObject, category)
 
     pygame.display.flip()   # Updates the screen's visuals.
-    frame += 1
 
     # We wait a bit before running the next frame.
     gameClock.tick(Constants.framerate)

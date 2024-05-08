@@ -99,10 +99,9 @@ def UpdateDisplaySkin(skin : (str)):
 def UpdateCoin():
     """
     This function update the text of coin counter
-    :return:
     """
     for gameObject in Constants.objectsInScene["Text"]:
-        if gameObject.data[0] == str(Constants.coin_counter -1)+" /20":
+        if gameObject.data[0] == str(Constants.coin_counter - 1) + " /20":
             gameObject.data = (str(Constants.coin_counter)+" /20", True)
 
 def ToLootBox():

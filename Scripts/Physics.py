@@ -149,6 +149,8 @@ def MoveCamera():
                 gameObject.xEnd -= displacement.x
                 gameObject.yStart -= displacement.y
                 gameObject.yEnd -= displacement.y
+            if category == "PressurePlate":
+                gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[1] - displacement.y)
 
 
 def PhysicsCalculations(body: Object.GameObject):
@@ -376,3 +378,24 @@ def TouchingPlatform(body:Object.GameObject, platform:Object.GameObject):
         body.position.x = platform.position.x + platform.size.x
     elif body.position.x <= platform.position.x + (platform.size.x/2):
         body.position.x = platform.position.x - body.size.x
+
+def UpdatePressurePlates():
+    """ Updates the position and action of the pressure plates. """
+    for plate in Constants.objectsInScene["PressurePlate"]:
+        somethingOn = False
+        for throwable in Constants.objectsInScene["Throwable"]:
+            somethingOn = CheckPressurePlates(plate, throwable)
+            if somethingOn: break
+        if not somethingOn: somethingOn = CheckPressurePlates(plate, player)
+        if not somethingOn:
+            if plate.position.y < plate.data[1]: plate.position.y += 1
+            continue
+
+        if plate.position.y > plate.data[2]: plate.position.y -= 1
+        plate.data[0]()
+
+def CheckPressurePlates(plate: Object.GameObject, body: Object.GameObject) -> bool:
+    if ((body.position.x + body.size.x) < plate.position.x) or (body.position.x > (plate.position.x + plate.size.x)): return False
+    if (body.position.y + body.size.y) > (plate.position.y - Constants.platesDetectionSize): return False
+    if (body.position.y + body.size.y) < (plate.position.y + plate.size.y): return False
+    return True

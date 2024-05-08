@@ -8,7 +8,7 @@ import random
 
 initPooler = Object.Pooler()
 
-initDictionary = {"Background" : [], "Door": [], "Water": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Sign":[], "Player": [], "Throwable": [], "MovingPlatform":[]}
+initDictionary = {"Background" : [], "Door": [], "Water": [], "PressurePlate": [], "MovingPlatform": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Sign":[], "Player": [], "Throwable": []}
 
 mainPooler: Object.Pooler
 
@@ -411,13 +411,11 @@ def Level_1_1():
     gameObject = Object.GameObject((5600,80), coinSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
     result["Coin"].append(gameObject)
 
-
     #End text
     objectPos = (6700, -100)
     objectSize = (2,2)
     gameObject = Object.GameObject(objectPos, objectSize, "Text", ("The tutorial is now over ! Have fun !",False), 0, 0, [0])
     result["Text"].append(gameObject)
-
 
     #Text door
     objectPos = (7800, -120)
@@ -446,9 +444,6 @@ def Level_1_1():
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-
-
-
 
     return result
 
@@ -1277,13 +1272,22 @@ def Level_3_1():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    # Football.
+    # Crate.
     objectPos = (200, -100)
     objectSize = (32, 32)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/football.png", 10, 5, [0, 1], _png=True)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/crate.png", 2, 5, [0, 1])
     result["Throwable"].append(gameObject)
 
+    # Pressure plate.
+    objectPos = (400, 150)
+    objectSize = (120, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PrintHello, objectPos[1], objectPos[1] - Constants.platesSinkDistance), 0, 2, [0, 1])
+    result["PressurePlate"].append(gameObject)
+
     return result
+
+def PrintHello():
+    print("hello uwu")
 
 def Level_3_2():
     global initDictionary

@@ -9,7 +9,7 @@ import Scripts.ButtonFunctions as ButtonFunctions
 import Scripts.Physics as Physics
 
 mainPooler = Object.Pooler()
-
+player: Object.GameObject
 
 pressingQA = False
 pressingD = False
@@ -254,12 +254,13 @@ def ShowSlingshotTrajectory():
 
     # The three magical constants to display the trajectory (found by trial and error).
     sV, sG, sGP = Constants.slVelocityFactor, Constants.slGravityFactor, Constants.slGravityPower
+    m = player.mass if Constants.heldItem is None else Constants.heldItem.mass
 
     # The trajectory equation is x(t) = x0 + v0*t*sV - sG*g*t^sGP.
     dotsPosition = []
     for t in range(1, 6):
-        timeSplit = t * 0.8     # Time between two dots.
-        pos = x0 + timeSplit * v0 * sV + sG * Constants.G * Object.Vector2(0, timeSplit ** sGP)
+        timeSplit = t * 0.8 / m     # Time between two dots.
+        pos = x0 + timeSplit * v0 * sV + m * sG * Constants.G * Object.Vector2(0, timeSplit ** sGP)
         dotsPosition.append(pos)
 
     # Showing the dots.
@@ -291,7 +292,7 @@ def ThrowObject():
         propulsionForce *= reductionCoeff
 
     # Application of the force.
-    Constants.heldItem.instantVelocity = propulsionForce
+    Constants.heldItem.velocity = propulsionForce
     Constants.heldItem.gravity = 0
     Constants.heldItem = None
 
