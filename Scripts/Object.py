@@ -39,7 +39,7 @@ class GameObject:
                     A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
                         'Button' object, and the last str is the path to the image inside the button.
                     A 'PressurePlate' object takes a function to execute when the plate is pressed, its initial y position
-                        and the pressed y position.
+                        and the displacement amount (how far it sinks) when pressed.
 
         - position (Vector2): object's current coordinates.
         - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).

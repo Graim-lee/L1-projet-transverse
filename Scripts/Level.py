@@ -1281,7 +1281,7 @@ def Level_3_1():
     # Pressure plate.
     objectPos = (400, 150)
     objectSize = (120, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PrintHello, objectPos[1], objectPos[1] - Constants.platesSinkDistance), 0, 2, [0, 1])
+    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PrintHello, objectPos[1], Constants.platesSinkDistance), 0, 2, [0, 1])
     result["PressurePlate"].append(gameObject)
 
     return result
