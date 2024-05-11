@@ -1,6 +1,7 @@
 import pygame
 import Scripts.Object as Object
 import Scripts.Constants as Constants
+import math
 
 deltaTime = Constants.deltaTime
 mainPooler = Object.Pooler()
@@ -150,7 +151,10 @@ def MoveCamera():
                 gameObject.yStart -= displacement.y
                 gameObject.yEnd -= displacement.y
             if category == "PressurePlate":
-                gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[2])
+                if len(gameObject.data) == 3: gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[2])
+                else: gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[2], gameObject.data[3])
+            if category == "MechanicalDoor":
+                gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement, gameObject.data[2])
 
 
 def PhysicsCalculations(body: Object.GameObject):
@@ -393,10 +397,33 @@ def UpdatePressurePlates():
             continue
 
         if plate.position.y < plate.data[1] + plate.data[2]: plate.position.y += 1
-        plate.data[0]()
+
+        if len(plate.data) == 3: plate.data[0]()
+        else: plate.data[0](plate.data[3])
 
 def CheckPressurePlates(plate: Object.GameObject, body: Object.GameObject) -> bool:
     if ((body.position.x + body.size.x) < plate.position.x) or (body.position.x > (plate.position.x + plate.size.x)): return False
     if (body.position.y + body.size.y) < (plate.position.y - Constants.platesDetectionSize): return False
     if (body.position.y + body.size.y) > (plate.position.y + plate.size.y): return False
     return True
+
+def UpdateMechanicalDoors():
+    """ Updates the position of every mechanical door. """
+    for door in Constants.objectsInScene["MechanicalDoor"]:
+        if door.data[0]:
+            distance = door.position - door.data[1]
+            if distance.x ** 2 + distance.y ** 2 < door.data[2].x ** 2 + door.data[2].y ** 2:
+                trueDisplacement = door.data[2]
+                normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
+                trueDisplacement = normCoeff * trueDisplacement
+                door.position += trueDisplacement
+        else:
+            distance = door.position - door.data[1] - door.data[2]
+            if distance.x ** 2 + distance.y ** 2 < door.data[2].x ** 2 + door.data[2].y ** 2:
+                trueDisplacement = door.data[2]
+                normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
+                trueDisplacement = -normCoeff * trueDisplacement
+                door.position += trueDisplacement
+
+        # We reset the door each frame. If the pressure plate is still pressed, the door will still open on the next frame.
+        door.data = (False, door.data[1], door.data[2])

@@ -4,11 +4,12 @@ import Scripts.Physics as Physics
 import Scripts.InputsManager as InputsManager
 import Scripts.Object as Object
 import Scripts.ButtonFunctions as ButtonFunctions
+import Scripts.PlateFunctions as PlateFunctions
 import random
 
 initPooler = Object.Pooler()
 
-initDictionary = {"Background" : [], "Door": [], "Water": [], "PressurePlate": [], "MovingPlatform": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Sign":[], "Player": [], "Throwable": []}
+initDictionary = {"Background" : [], "Door": [], "Water": [], "MechanicalDoor": [], "PressurePlate": [], "MovingPlatform": [], "Wall": [], "Coin": [], "Text": [], "Trajectory": [], "Button": [], "Sign":[], "Player": [], "Throwable": []}
 
 mainPooler: Object.Pooler
 
@@ -1281,13 +1282,10 @@ def Level_3_1():
     # Pressure plate.
     objectPos = (400, 150)
     objectSize = (120, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PrintHello, objectPos[1], Constants.platesSinkDistance), 0, 2, [0, 1])
+    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PlateFunctions.OpenDoor, objectPos[1], Constants.platesSinkDistance), 0, 2, [0, 1])
     result["PressurePlate"].append(gameObject)
 
     return result
-
-def PrintHello():
-    print("hello uwu")
 
 def Level_3_2():
     global initDictionary
@@ -1370,17 +1368,42 @@ def Level_3_4():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    # Wall over door.
+    objectPos = (450, -400)
+    objectSize = (200, 320)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Ceiling.
+    objectPos = (-1800, -1100)
+    objectSize = (5000, 800)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
     # Left border.
     objectPos = (-1200, -2700)
     objectSize = (1000, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
+    # Crate.
+    objectPos = (100, -100)
+    objectSize = (32, 32)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/crate.png", 2, 5, [0, 1])
+    result["Throwable"].append(gameObject)
+
+    # Mechanical door.
+    objectPos = (500, -100)
+    objectSize = (100, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "MechanicalDoor", (False, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(0, -300)), 0, 2, [0, 1])
+    result["MechanicalDoor"].append(gameObject)
+    currentDoor = gameObject
+
+    # Pressure plate.
+    objectPos = (200, 150)
+    objectSize = (120, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PlateFunctions.OpenDoor, objectPos[1], Constants.platesSinkDistance, currentDoor), 0, 2, [0, 1])
+    result["PressurePlate"].append(gameObject)
 
     return result
 

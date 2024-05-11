@@ -102,8 +102,9 @@ while Constants.gameRunning:
 
         # We move the player after calculating the collisions etc.
         InputsManager.MovePlayer(Constants.playerInputDirection)
-        # We update the pressure plates.
+        # We update the pressure plates and the mechanical doors.
         Physics.UpdatePressurePlates()
+        Physics.UpdateMechanicalDoors()
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.
         Physics.MoveCamera()
 

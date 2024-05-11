@@ -22,9 +22,9 @@ class GameObject:
         - type (str): the type of the GameObject. A 'Real' object is a rendered object in the scene, such as a wall, the
                         player or an enemy. A 'Door' object is like a 'Real' object, but it has a function associated to
                         it that activates when the player interacts with the door. A 'Text' object doesn't have any
-                        texture, but displays text. A 'Button' object
-                        is only used in UI, it is linked to a specific function to execute when pressed. A 'WorldButton'
-                        object is like a 'Button' object, but with an image inside.
+                        texture, but displays text. A 'Button' object is only used in UI, it is linked to a specific
+                        function to execute when pressed. A 'WorldButton' object is like a 'Button' object, but with an
+                        image inside.
         - data (): this parameter can take different types for every type of object. For a 'Real' GameObject, this is the
                         path of its texture in the files (it replaces texturePath).
                     For a 'Door' object, it is a tuple of the form (str, function), where the first string is the path to
@@ -39,7 +39,12 @@ class GameObject:
                     A 'WorldButton' object takes a tuple of type (str, function, str). The first two are the same as a
                         'Button' object, and the last str is the path to the image inside the button.
                     A 'PressurePlate' object takes a function to execute when the plate is pressed, its initial y position
-                        and the displacement amount (how far it sinks) when pressed.
+                        and the displacement amount (how far it sinks) when pressed. An optional 4th element is the
+                        argument to pass to the function to execute when the pressure plate is pressed (for example, if
+                        the pressure plate opens a mechanical door, put the door as the 4th element of data).
+                    A 'MechanicalDoor' object takes a bool telling whether it should be open or close (False = close), a
+                        Vector2 describing its initial position (close position), and a Vector2 giving the displacement
+                        of the door once open (that is, initialPosition + displacementPosition = openPosition).
 
         - position (Vector2): object's current coordinates.
         - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).
@@ -124,9 +129,11 @@ class GameObject:
             self.surface = pygame.image.load("Sprites/button.png").convert()
         elif _type == "PressurePlate":
             self.surface = pygame.image.load("Sprites/pressure_plate.png").convert()
+        elif _type == "MechanicalDoor":
+            self.surface = pygame.image.load("Sprites/mechanical_door.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
-        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "PressurePlate":
+        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "PressurePlate" or _type == "MechanicalDoor":
             self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.type = _type
