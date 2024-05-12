@@ -201,7 +201,7 @@ def WorldSelection():
 
     # "World 3" button.
     objectPos = (3 * Constants.screenDimensions[0] / 4, Constants.screenDimensions[1] / 2 - 100)
-    gameObject = Object.GameObject(objectPos, (200, 200), "WorldButton",("WORLD 3", ButtonFunctions.ToWorld_3, "Sprites/Worlds/world1.png"), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (200, 200), "WorldButton",("WORLD 3", ButtonFunctions.ToWorld_3, "Sprites/Worlds/world3.png"), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Back to menu" button.
