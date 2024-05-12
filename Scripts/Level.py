@@ -67,6 +67,12 @@ def ResetScene(scene: str):
             if category == "MovingPlatform":
                 gameObject.xStart = gameObject.xStart_reset
                 gameObject.xEnd = gameObject.xEnd_reset
+            if category == "PressurePlate":
+                if len(gameObject.data) == 3: gameObject.data = (gameObject.data[0], gameObject.initialPosition.y, gameObject.data[2])
+                else: gameObject.data = (gameObject.data[0], gameObject.initialPosition.y, gameObject.data[2], gameObject.data[3])
+            if category == "MechanicalDoor":
+                gameObject.data = (False, gameObject.initialPosition, gameObject.data[2])
+
     mainPooler.main["Level_All"]["Player"][0].velocity = Object.Vector2(0, 0)
     Constants.coin_counter = 0
 

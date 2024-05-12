@@ -15,7 +15,6 @@ import Scripts.Animations as Animations
 pygame.init()
 
 # Creating the game's window.
-screenInfos = pygame.display.Info()
 screenDimensions = (1920, 1080)
 Constants.screenDimensions = screenDimensions
 screen = pygame.display.set_mode(screenDimensions)
