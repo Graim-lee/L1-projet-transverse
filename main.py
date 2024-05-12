@@ -75,14 +75,12 @@ while Constants.gameRunning:
     if not Constants.inMenu:
 
         # Applies the physics calculations to every object. We also reset the collidedDuringFrame variable of every
-        # object to prepare it for the collision detection. Moreover we apply velocity when needed for the background object.
+        # object to prepare it for the collision detection. Moreover, we apply velocity when needed for the background object.
         for category in Constants.objectsInScene:
             for gameObject in Constants.objectsInScene[category]:
-                Physics.VelocityBackgroundObject(category, gameObject)
                 if ComputeObject(gameObject) and gameObject.mass != 0:
                     Physics.PhysicsCalculations(gameObject)
                     gameObject.collidedDuringFrame = False
-                    
 
         # Updates every object's position after the calculations (updating it after every calculation is useful for
         # detecting every collision, then managing them). It is run multiple times to detect collisions more precisely
@@ -90,12 +88,13 @@ while Constants.gameRunning:
         for timeDiv in range(Constants.physicsTimeDivision):
             for category in Constants.objectsInScene:
                 for gameObject in Constants.objectsInScene[category]:
-                    Physics.ApplyVelocityBackgroundObject(category, gameObject)
+                    if category == "MovingPlatform": Physics.ApplyVelocityToMovingPlatform(gameObject)
                     if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:   
-                        if gameObject.touchingPlatform:
+                        if gameObject.touchingPlatform is not None:
                             Physics.TouchingPlatform(gameObject, gameObject.touchingPlatform)
                             Physics.MovingBodyWithPlatform(gameObject, gameObject.touchingPlatform)
-                        elif gameObject.onPlatform:
+                        elif gameObject.onPlatform is not None:
+                            print("cool")
                             Physics.MovingBodyWithPlatform(gameObject, gameObject.onPlatform)
                         Physics.ApplyPhysics(gameObject, timeDiv)
 
@@ -104,7 +103,8 @@ while Constants.gameRunning:
         # We check if the player is in the water.
         if Physics.CheckPlayerInWater(): ButtonFunctions.Restart()
         
-        # We update the pressure plates and the mechanical doors.
+        # We update the moving platforms, the pressure plates and the mechanical doors.
+        Physics.UpdateMovingPlatforms()
         Physics.UpdatePressurePlates()
         Physics.UpdateMechanicalDoors()
         # Camera movements. We must put that first to prevent it from glitching the physics calculations.

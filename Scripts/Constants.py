@@ -42,6 +42,12 @@ platesDetectionSize = 5
 # The amount the pressure plates will go down when pressed.
 platesSinkDistance = 25
 
+# The speed of mechanical doors.
+mechanicalDoorSpeed = 10
+
+# The speed of moving platforms.
+movingPlatformSpeed = 2
+
 """ Player controller constants ==================================================================================== """
 
 # The horizontal speed of the player.

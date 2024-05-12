@@ -45,6 +45,7 @@ class GameObject:
                     A 'MechanicalDoor' object takes a bool telling whether it should be open or close (False = close), a
                         Vector2 describing its initial position (close position), and a Vector2 giving the displacement
                         of the door once open (that is, initialPosition + displacementPosition = openPosition).
+                    A 'MovingPlatform' object takes the path to its texture, its start position and its displacement.
 
         - position (Vector2): object's current coordinates.
         - initialPosition (Vector2): object's coordinates at the start of the game (used to reset levels).
@@ -81,7 +82,7 @@ class GameObject:
         - surface (str) : path of the object's sprite. 
         - collidedDuringFrame (bool) : A variable used to detect if in the next frame the object encounter another object.
                                         This way we can cancel the movement to avoid overlap. 
-        - hasAnimation (bool) : True if we need to annimate the object, false if we don't.
+        - hasAnimation (bool) : True if we need to animate the object, false if we don't.
         - png (bool): whether we want to account for transparency or not. PNG images are heavier for the game.
         - fallingFromGround (bool) : Represent the moment when we fall not after a jump but from a high floor. 
                                     True if we fall from high ground, false if not. 
@@ -123,6 +124,8 @@ class GameObject:
         if _type == "Real" or _type == "Coin" or _type == "Sign":
             if _png: self.surface = pygame.image.load(_data)
             else: self.surface = pygame.image.load(_data).convert()
+        elif _type == "MovingPlatform":
+            self.surface = pygame.image.load(_data[0]).convert()
         elif _type == "Door":
             self.surface = pygame.image.load(_data[0]).convert()
         elif _type == "Button" or _type == "WorldButton":
@@ -133,7 +136,7 @@ class GameObject:
             self.surface = pygame.image.load("Sprites/mechanical_door.png").convert()
 
         # We modify the size of the "Real" and "Button" game objects.
-        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "PressurePlate" or _type == "MechanicalDoor":
+        if _type == "Real" or _type == "Door" or _type == "Button" or _type == "Coin" or _type == "PressurePlate" or _type == "MechanicalDoor" or _type == "MovingPlatform":
             self.Resize(_size)  # Allows to directly apply the object's new size.
 
         self.type = _type
@@ -161,8 +164,8 @@ class GameObject:
         self.fallingFromGround = False
         self.slippery = _slippery
         self.onIce = False
-        self.touchingPlatform = False
-        self.onPlatform = False
+        self.touchingPlatform = None
+        self.onPlatform = None
 
     def Resize(self, size: (int, int)):
         """ Modify objects size.

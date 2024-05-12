@@ -146,10 +146,7 @@ def MoveCamera():
             if not gameObject.active: continue
             gameObject.position -= displacement
             if category == "MovingPlatform":
-                gameObject.xStart -= displacement.x
-                gameObject.xEnd -= displacement.x
-                gameObject.yStart -= displacement.y
-                gameObject.yEnd -= displacement.y
+                gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement, gameObject.data[2], gameObject.data[3])
             if category == "PressurePlate":
                 if len(gameObject.data) == 3: gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[2])
                 else: gameObject.data = (gameObject.data[0], gameObject.data[1] - displacement.y, gameObject.data[2], gameObject.data[3])
@@ -205,10 +202,10 @@ def CheckIfGrounded(body: Object.GameObject) -> bool:
                 # Resets the jump count of the player.
                 Constants.playerJumpCount = Constants.maxPlayerJumpCount
                 body.onIce = gameObject.slippery
-                if category == "MovingPlatform" :
+                if category == "MovingPlatform":
                     body.onPlatform = gameObject
                 else:
-                    body.onPlatform = False
+                    body.onPlatform = None
                 return True
     return False
 
@@ -275,11 +272,11 @@ def ManageCollisions(body: Object.GameObject):
             if gameObject == body: continue                         # When it's the same object.
             if not gameObject.active: continue                      # Deactivated objects.
             if gameObject.layer in body.notCollidable: continue     # Objects that don't collide.
-            if category == "MovingPlatform" :
+            if category == "MovingPlatform":
                 if CheckCollision(body, gameObject):
                     body.touchingPlatform = gameObject
                 else:
-                    body.touchingPlatform = False
+                    body.touchingPlatform = None
             else: continue
             if not CheckCollision(body, gameObject): continue
             #little update if the body touches a platform
@@ -341,43 +338,48 @@ def Sign(x: float) -> int:
     if x > 0: return 1
     return 0
 
-def VelocityBackgroundObject(Category : str, body: Object.GameObject):
-    """Changes the velocity of the platform
+def UpdateMovingPlatforms():
+    """ Updates the position of every moving platform. """
+    for platform in Constants.objectsInScene["MovingPlatform"]:
+        if platform.data[3]:
+            distance = platform.position - platform.data[1]
+            if distance.x ** 2 + distance.y ** 2 < platform.data[2].x ** 2 + platform.data[2].y ** 2:
+                trueDisplacement = platform.data[2]
+                normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
+                trueDisplacement = Constants.movingPlatformSpeed * normCoeff * trueDisplacement
+                platform.position += trueDisplacement
+                platform.velocity = trueDisplacement    # For objects to move when placed on top of the platform.
+            else:
+                platform.data = (platform.data[0], platform.data[1], platform.data[2], False)
+        else:
+            distance = platform.position - platform.data[1] - platform.data[2]
+            if distance.x ** 2 + distance.y ** 2 < platform.data[2].x ** 2 + platform.data[2].y ** 2:
+                trueDisplacement = platform.data[2]
+                normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
+                trueDisplacement = -Constants.movingPlatformSpeed * normCoeff * trueDisplacement
+                platform.position += trueDisplacement
+                platform.velocity = trueDisplacement    # For objects to move when placed on top of the platform.
+            else:
+                platform.data = (platform.data[0], platform.data[1], platform.data[2], True)
 
-    Args:
-        - Category (str): the category in the pooler to check it is a MovingPlatform 
-        body (Object.GameObject): the platform itself
-    """
-    if Category == "MovingPlatform":
-        if body.direction_x == 1 and body.position.x > body.xEnd:
-            body.direction_x = -1
-        elif body.direction_x == -1 and body.position.x < body.xStart:
-            body.direction_x = 1
-        if body.direction_y == 1 and body.position.y > body.yEnd:
-            body.direction_y = -1
-        elif body.direction_y == -1 and body.position.y < body.yStart:
-            body.direction_y = 1
-        body.velocity = Object.Vector2(body.direction_x * body.initialVelocity, body.direction_y * body.initialVelocity)
-    
-def ApplyVelocityBackgroundObject(Category : str, body: Object.GameObject):
+
+def ApplyVelocityToMovingPlatform(body: Object.GameObject):
     """moves the platform based on its velocity
     Args:
-        Category (str): category in the pooler to check it is a MovingPlatform 
-        body (Object.GameObject): the moving platform itself
+        - category (str): category in the pooler to check it is a MovingPlatform
+        - body (Object.GameObject): the moving platform itself
     """
-    if Category == "MovingPlatform":
-        body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
+    body.position += body.velocity * deltaTime * Constants.inverseTimeDivision
 
 def MovingBodyWithPlatform(body: Object.GameObject, platform: Object.GameObject):
     """Moves any object on the platform based on the platform velocity
-
     Args:
-        body (Object.GameObject): the body being moved
-        platform (Object.GameObject): the platform the body is touching
+        - body (Object.GameObject): the body being moved
+        - platform (Object.GameObject): the platform the body is touching
     """
-    body.position += platform.velocity * deltaTime * Constants.inverseTimeDivision
+    body.position += platform.velocity * Constants.inverseTimeDivision
 
-def TouchingPlatform(body:Object.GameObject, platform:Object.GameObject):
+def TouchingPlatform(body: Object.GameObject, platform: Object.GameObject):
     if body.position.x >= platform.position.x + (platform.size.x/2):
         body.position.x = platform.position.x + platform.size.x
     elif body.position.x <= platform.position.x + (platform.size.x/2):
@@ -415,14 +417,14 @@ def UpdateMechanicalDoors():
             if distance.x ** 2 + distance.y ** 2 < door.data[2].x ** 2 + door.data[2].y ** 2:
                 trueDisplacement = door.data[2]
                 normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
-                trueDisplacement = normCoeff * trueDisplacement
+                trueDisplacement = Constants.mechanicalDoorSpeed * normCoeff * trueDisplacement
                 door.position += trueDisplacement
         else:
             distance = door.position - door.data[1] - door.data[2]
             if distance.x ** 2 + distance.y ** 2 < door.data[2].x ** 2 + door.data[2].y ** 2:
                 trueDisplacement = door.data[2]
                 normCoeff = 1 / math.sqrt(trueDisplacement.x ** 2 + trueDisplacement.y ** 2)
-                trueDisplacement = -normCoeff * trueDisplacement
+                trueDisplacement = -Constants.mechanicalDoorSpeed * normCoeff * trueDisplacement
                 door.position += trueDisplacement
 
         # We reset the door each frame. If the pressure plate is still pressed, the door will still open on the next frame.

@@ -10,10 +10,10 @@ def RenderObject(screen: pygame.surface, gameObject: Object.GameObject, category
             - category (str): the category of the pooler in which the game object is contained.
     """
     # Rendering 'Real'-type and 'Door'-type objects.
-    if gameObject.type == "Real" or gameObject.type == "Door" or gameObject.type == "Coin" or gameObject.type == "PressurePlate" or gameObject.type == "MechanicalDoor":
+    if gameObject.type == "Real" or gameObject.type == "Door" or gameObject.type == "Coin" or gameObject.type == "PressurePlate" or gameObject.type == "MechanicalDoor" or gameObject.type == "MovingPlatform":
         screen.blit(gameObject.surface, gameObject.position.Tuple())
         # Drawing outline.
-        if category == "Wall" or category == "Door" or category == "MechanicalDoor":
+        if category == "Wall" or category == "Door" or category == "MechanicalDoor" or category == "MovingPlatform":
             DrawOutline(screen, gameObject.position, gameObject.size)
 
     # Displaying text for 'Text' objects.
