@@ -101,6 +101,9 @@ while Constants.gameRunning:
 
         # We move the player after calculating the collisions etc.
         InputsManager.MovePlayer(Constants.playerInputDirection)
+        # We check if the player is in the water.
+        if Physics.CheckPlayerInWater(): ButtonFunctions.Restart()
+        
         # We update the pressure plates and the mechanical doors.
         Physics.UpdatePressurePlates()
         Physics.UpdateMechanicalDoors()

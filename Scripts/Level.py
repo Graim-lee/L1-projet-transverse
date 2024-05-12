@@ -84,7 +84,7 @@ def All():
     # Player.
     playerSize = (44, 44)
     playerTexture = "Sprites/Player/blue/idle.png"
-    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3, 5], True, True, True)
+    gameObject = Object.GameObject((0,0), playerSize, "Real", playerTexture, 1, 1, [0, 3, 4, 5], True, True, True)
     result["Player"].append(gameObject)
 
     # Trajectory dots.
@@ -179,33 +179,6 @@ def PauseMenu():
 
     return result
 
-def LevelWorldSelection():
-    """ Adds the World Selection lobby to the main pooler. """
-    global initDictionary
-    result = CopyEmptyDict(initDictionary)
-
-    wallTexture = "Sprites/wall.png"
-    doorTexture = "Sprites/door.png"
-
-    # World 1 door.
-    objectPos = (490, -70)
-    objectSize = (100, 200)
-    gameObject = Object.GameObject(objectPos, objectSize, "Door", (doorTexture, ButtonFunctions.ToLevel_World1), 0, 3, [0])
-    result["Door"].append(gameObject)
-
-    # World 1 door "WORLD 1" text.
-    objectPos = (540, -120)
-    gameObject = Object.GameObject(objectPos, (0, 0), "Text", ("WORLD 1", False), 0, 0, [0])
-    result["Text"].append(gameObject)
-
-    # Floor.
-    objectPos = (-960, 80)
-    objectSize = (Constants.screenDimensions[0] * 5, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    return result
-
 def WorldSelection():
     """ Adds the World Selection pooler to the main pooler. """
     global initDictionary
@@ -289,7 +262,7 @@ def World_1():
 
 def Level_1_1():
     """Tutorial done"""
-    """ Adds the Level_0 pooler (= the playtest level) to the main pooler. """
+    """ Adds the Level_1_1 pooler to the main pooler. """
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
@@ -357,7 +330,6 @@ def Level_1_1():
     objectSize = (2, 2)
     gameObject = Object.GameObject(objectPos, objectSize, "Text", ("you can jump twice !", False), 0, 0, [0])
     result["Text"].append(gameObject)
-
 
     #Sign go up
     signPos = (2280, -110)
@@ -651,7 +623,6 @@ def Level_1_3():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
     """
-
 
     # Right border.
     objectPos = (960, -2700)

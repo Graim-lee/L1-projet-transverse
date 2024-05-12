@@ -427,3 +427,9 @@ def UpdateMechanicalDoors():
 
         # We reset the door each frame. If the pressure plate is still pressed, the door will still open on the next frame.
         door.data = (False, door.data[1], door.data[2])
+
+def CheckPlayerInWater() -> bool:
+    """ Checks if the player is in water or not. """
+    for water in Constants.objectsInScene["Water"]:
+        if CheckCollision(water, player): return True
+    return False
