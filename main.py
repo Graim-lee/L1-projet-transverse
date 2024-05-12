@@ -90,11 +90,10 @@ while Constants.gameRunning:
                 for gameObject in Constants.objectsInScene[category]:
                     if category == "MovingPlatform": Physics.ApplyVelocityToMovingPlatform(gameObject)
                     if ComputeObject(gameObject) and gameObject.mass != 0 and not gameObject.collidedDuringFrame:   
-                        if gameObject.touchingPlatform is not None:
+                        if gameObject.touchingPlatform is not None and gameObject.grounded:
                             Physics.TouchingPlatform(gameObject, gameObject.touchingPlatform)
                             Physics.MovingBodyWithPlatform(gameObject, gameObject.touchingPlatform)
-                        elif gameObject.onPlatform is not None:
-                            print("cool")
+                        elif gameObject.onPlatform is not None and gameObject.grounded:
                             Physics.MovingBodyWithPlatform(gameObject, gameObject.onPlatform)
                         Physics.ApplyPhysics(gameObject, timeDiv)
 
