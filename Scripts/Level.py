@@ -688,6 +688,11 @@ def Level_1_4():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    #floor -> sign go right
+    signPos = (90, 90)
+    signSize = (90, 90)
+    signObject = Object.GameObject(signPos, signSize, "Real", "Sprites/Sign/Basic/Down/signRight.png", 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
     # Floor stage -> Right border
     rightBorderPos = (1425, -1400)
     rightBorderSize = (1025,3000)
@@ -712,6 +717,12 @@ def Level_1_4():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    #Transition stage -> sign go left
+    signPos = (350, -865)
+    signSize = (90, 90)
+    signObject = Object.GameObject(signPos, signSize, "Real", "Sprites/Sign/Basic/Down/signLeft.png", 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
+
     # Transition platform
     platPos = (-775, -775)
     platSize = (1250, 50)
@@ -731,6 +742,12 @@ def Level_1_4():
     floorSize = (2500,50)
     floorObject = Object.GameObject(floorPos, floorSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(floorObject)
+
+    #2nd floor go right sign
+    signPos = (40, -1490)
+    signSize = (90, 90)
+    signObject = Object.GameObject(signPos, signSize, "Real", "Sprites/Sign/Basic/Down/signRight.png", 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
 
     #2nd floor -> midair platform
 
