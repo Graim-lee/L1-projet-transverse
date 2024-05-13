@@ -101,7 +101,7 @@ def MainMenu():
 
     # Title of the game.
     objectPos = (Constants.screenDimensions[0] / 2, 270)
-    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Penguin Run", True), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, (0,0), "Text", ("Super PINGU", True), 0, 0, [0])
     result["Text"].append(gameObject)
 
     # "Play game" button.
@@ -260,7 +260,7 @@ def Level_1_1():
     # Welcome title
     objectPos = (150,-100)
     objectSize = (2,2)
-    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Penguin RUN !", False), 0, 0, [0])
+    gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Welcome to Super PINGU !", False), 0, 0, [0])
     result["Text"].append(gameObject)
 
     #Text on how to move
