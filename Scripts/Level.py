@@ -1352,23 +1352,18 @@ def World_3():
     result["Text"].append(gameObject)
 
     # "Level 1" button.
-    objectPos = (1 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    objectPos = (1 * Constants.screenDimensions[0] / 4 , Constants.screenDimensions[1] / 2)
     gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 1", ButtonFunctions.ToLevel_3_1), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Level 2" button.
-    objectPos = (2 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
+    objectPos = (1.5 * Constants.screenDimensions[0] / 4 + 230, Constants.screenDimensions[1] / 2)
     gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 2", ButtonFunctions.ToLevel_3_2), 0, 0, [0])
     result["Button"].append(gameObject)
 
-    # "Level 3" button.
-    objectPos = (3 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 3", ButtonFunctions.ToLevel_3_3), 0, 0, [0])
-    result["Button"].append(gameObject)
-
-    # "Level 4" Button.
-    objectPos = (4 * Constants.screenDimensions[0] / 5, Constants.screenDimensions[1] / 2)
-    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Level 4", ButtonFunctions.ToLevel_3_4), 0, 0, [0])
+    # "Sandbox" Button.
+    objectPos = (2 * Constants.screenDimensions[0] / 4 + 460, Constants.screenDimensions[1] / 2)
+    gameObject = Object.GameObject(objectPos, (200, 160), "Button", ("Sand box", ButtonFunctions.ToLevel_3_4), 0, 0, [0])
     result["Button"].append(gameObject)
 
     # "Back to world select" button.
