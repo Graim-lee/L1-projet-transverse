@@ -1385,8 +1385,8 @@ def Level_3_1():
     wallTexture = "Sprites/wall.png"
 
     # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
+    objectPos = (-1000, 180)
+    objectSize = (1500, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
@@ -1396,23 +1396,85 @@ def Level_3_1():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    # Right platform.
-    objectPos = (725, 100)
-    objectSize = (200, 10)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
+    #Water
+    waterPos = (500,190)
+    waterSize = (4000, 400)
+    waterObject = Object.GameObject(waterPos, waterSize, "Real", "Sprites/Water/water_1.png", 0, 4, [0,1], _png = True, _hasAnimation= True)
+    result["Water"].append(waterObject)
 
-    # Crate.
-    objectPos = (200, -100)
+    # Starting coin
+    objectPos = (250, 150)
     objectSize = (32, 32)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/crate.png", 2, 5, [0, 1])
-    result["Throwable"].append(gameObject)
+    coinTexture = "Sprites/Coins/coins_1.png"
+    gameObject = Object.GameObject(objectPos, objectSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
 
-    # Pressure plate.
-    objectPos = (400, 150)
-    objectSize = (120, 30)
-    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PlateFunctions.OpenDoor, objectPos[1], Constants.platesSinkDistance), 0, 2, [0, 1])
-    result["PressurePlate"].append(gameObject)
+    # 1st Moving platform left->right
+    objectPos = (500, 170)
+    objectSize = (150, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "MovingPlatform", (
+    wallTexture, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(500, 0), True), 0, 2, [0])
+    result["MovingPlatform"].append(gameObject)
+
+    # 2nd bottom -> up
+    objectPos = (1200, 100)
+    objectSize = (150, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "MovingPlatform", (
+    wallTexture, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(0, -500), True), 0, 2, [0])
+    result["MovingPlatform"].append(gameObject)
+
+    # Coin on 2nd platform
+    objectPos = (1250, -460)
+    objectSize = (32, 32)
+    coinTexture = "Sprites/Coins/coins_1.png"
+    gameObject = Object.GameObject(objectPos, objectSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    #Diagonal platform
+    objectPos = (1500, -400)
+    objectSize = (150, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "MovingPlatform", (
+    wallTexture, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(250, -250), True), 0, 2, [0])
+    result["MovingPlatform"].append(gameObject)
+
+    #Coin on diagonal platform
+    objectPos = (1650, -500)
+    objectSize = (32, 32)
+    coinTexture = "Sprites/Coins/coins_1.png"
+    gameObject = Object.GameObject(objectPos, objectSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # Left to right platform after diagonal
+    objectPos = (1800, -750)
+    objectSize = (150, 50)
+    gameObject = Object.GameObject(objectPos, objectSize, "MovingPlatform", (
+    wallTexture, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(700, 0), True), 0, 2, [0])
+    result["MovingPlatform"].append(gameObject)
+
+    # Obstacle
+    wallPos = (2000, -900)
+    wallSize = (200,400)
+    wallObject = Object.GameObject(wallPos, wallSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(wallObject)
+
+    # Coin
+    objectPos = (2100, -950)
+    objectSize = (32, 32)
+    coinTexture = "Sprites/Coins/coins_1.png"
+    gameObject = Object.GameObject(objectPos, objectSize,"Coin", (coinTexture), 0, 3, [0], _png=True)
+    result["Coin"].append(gameObject)
+
+    # End platform
+    platPos = (2800, -800)
+    platSize = (500,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    # End door
+    objectPos = (3000, -1000)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
 
     return result
 
@@ -1421,6 +1483,12 @@ def Level_3_2():
     result = CopyEmptyDict(initDictionary)
 
     wallTexture = "Sprites/wall.png"
+
+    # Crate
+    objectPos = (100, -100)
+    objectSize = (32, 32)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/crate.png", 2, 5, [0, 1])
+    result["Throwable"].append(gameObject)
 
     # Floor.
     objectPos = (-1800, 180)
@@ -1434,12 +1502,68 @@ def Level_3_2():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
-    objectPos = (1000, 140)
+    #1st platform
+    platPos = (500, -25)
+    platSize = (200,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    #2
+    platPos = (800, -285)
+    platSize = (200,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    # 3
+    platPos = (360, -455)
+    platSize = (150,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    # 4
+    platPos = (500, -725)
+    platSize = (100,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    #double jump crate platform
+    platPos = (900, -1025)
+    platSize = (1700,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+    # block to hide mechanical door
+    blockPos = (1550, -1550)
+    blockSize = (450, 250)
+    blockObject = Object.GameObject(blockPos, blockSize, "Real", wallTexture, 0,2,[0])
+    result["Wall"].append(blockObject)
+
+    # Mechanical door.
+    objectPos = (1700, -1325)
+    objectSize = (100, 300)
+    gameObject = Object.GameObject(objectPos, objectSize, "MechanicalDoor", (False, Object.Vector2(objectPos[0], objectPos[1]), Object.Vector2(0, -300)), 0, 2, [0, 1])
+    result["MechanicalDoor"].append(gameObject)
+    currentDoor = gameObject
+
+    # Pressure plate.
+    objectPos = (1200, -1055)
+    objectSize = (120, 30)
+    gameObject = Object.GameObject(objectPos, objectSize, "PressurePlate", (PlateFunctions.OpenDoor, objectPos[1], Constants.platesSinkDistance, currentDoor), 0, 2, [0, 1])
+    result["PressurePlate"].append(gameObject)
+
+    #Door
+    objectPos = (2300, -1225)
     objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
+
+    # Ceiling.
+    objectPos = (-1800, -2200)
+    objectSize = (5000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-
     return result
+
 
 def Level_3_3():
     global initDictionary

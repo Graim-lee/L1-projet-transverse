@@ -43,7 +43,7 @@ platesDetectionSize = 5
 platesSinkDistance = 25
 
 # The speed of mechanical doors.
-mechanicalDoorSpeed = 10
+mechanicalDoorSpeed = 8
 
 # The speed of moving platforms.
 movingPlatformSpeed = 2

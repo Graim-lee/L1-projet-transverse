@@ -68,6 +68,7 @@ def CheckInputs():
                     if not door.active: continue
                     if not ObjectsOverlap(player, door): continue
                     if Constants.currentLevel == "Level_2_2" and Constants.coin_counter < 15 : continue
+                    if Constants.currentLevel == "Level 3_1" and Constants.coin_counter < 4 : continue
                     door.data[1]()
                     Constants.groundedFrictionCoeff = 0.7
                     break
