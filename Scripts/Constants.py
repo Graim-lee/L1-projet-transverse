@@ -73,7 +73,7 @@ playerUsedSlingshot = False
 # Counts the number of jumps (= uses of slingshot) the player can perform without touching the ground. playerJumpCount is
 # modified throughout the script, but maxPlayerJumpCount isn't.
 #maxPlayerJumpCount is equal to 1 but in reality you can jum twice. The grounded on and 1 in the air. It represents the number of jumps in the air
-maxPlayerJumpCount = 1
+maxPlayerJumpCount = 100
 playerJumpCount = 1
 
 # 1 if the player presses on D, -1 if the player presses on A/Q, 0 if the player doesn't move.

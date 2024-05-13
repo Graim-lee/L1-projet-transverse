@@ -350,6 +350,12 @@ def Level_1_1():
     gameObject = Object.GameObject(objectPos, objectSize, "Text", ("Basic and Ice (it slips)", False), 0, 0,[0])
     result["Text"].append(gameObject)
 
+    #Sign on ice
+    signPos = (4600, 190)
+    signSize = (90,90)
+    signObject = Object.GameObject(signPos, signSize, "Real", signTextureRight, 0, 0, [0], _png=True)
+    result["Sign"].append(signObject)
+
     # Floor after ice.
     objectPos = (5600, 180)
     objectSize = (5500, 800)
@@ -431,6 +437,13 @@ def Level_1_2():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    #Before walljump sign go above
+    signPos = (1100, -290)
+    signSize = (90, 90)
+    signTexture = "Sprites/Sign/Basic/Down/signUp.png"
+    signObject = Object.GameObject(signPos, signSize, "Real", signTexture, 0, 0, [0], _png= True)
+    result["Sign"].append(signObject)
+
     # Walljump platform 1.
     objectPos = (1275, -400)
     objectSize = (100, 50)
@@ -509,6 +522,13 @@ def Level_1_2():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    # Go left floor sign
+    objectPos = (35, 90)
+    objectSize = (90, 90)
+    texture = "Sprites/Sign/Basic/Down/signLeft.png"
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", texture, 0, 0, [0],_png = True)
+    result["Sign"].append(gameObject)
+
     # Parkour platform 1.
     objectPos = (-375, -150)
     objectSize = (200, 50)
@@ -540,6 +560,7 @@ def Level_1_3():
     global initDictionary
     result = CopyEmptyDict(initDictionary)
 
+
     Constants.groundedFrictionCoeff = 0.7
 
     wallTexture = "Sprites/wall.png"
@@ -562,11 +583,26 @@ def Level_1_3():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
 
+    #sign go up right platform
+    signPos = (730,-100)
+    signSize = (120, 90)
+    signTexture = "Sprites/Sign/Basic/Right/signUp.png"
+    signObject = Object.GameObject(signPos, signSize, "Real", signTexture, 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
+
+
     # Midair platform.
     objectPos = (150, -600)
     objectSize = (200, 50)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+
+    # Sign go left on midair platform
+    signPos = (30, -600)
+    signSize = (120,90)
+    signTexture = "Sprites/Sign/Basic/Right/signLeft.png"
+    signObject = Object.GameObject(signPos, signSize, "Real", signTexture, 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
 
     # Water container block.
     objectPos = (-1400, -850)
@@ -638,36 +674,108 @@ def Level_1_4():
 
 
     wallTexture = "Sprites/wall.png"
-
-    # Right border.
-    objectPos = (1660, -2700)
-    objectSize = (1000, 4000)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
+    waterTexture = "Sprites/Water/water_1.png"
 
     # Left border.
-    objectPos = (-1200, -2700)
-    objectSize = (1000, 4000)
+    objectPos = (-2100, -2700)
+    objectSize = (1325, 4000)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
-
-    # Bottom.
-    objectPos = (100, 300)
-    objectSize = (2000, 800)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
-    result["Wall"].append(gameObject)
-
-    # Water.
-    objectPos = (100, 200)
-    objectSize = (500, 250)
-    gameObject = Object.GameObject(objectPos, objectSize, "Real", "Sprites/Water/water_1.png", 0, 4, [0, 1], _png=True, _hasAnimation=True)
-    result["Water"].append(gameObject)
 
     # Floor.
-    objectPos = (-1800, 180)
-    objectSize = (2000, 800)
+    objectPos = (-1835, 180)
+    objectSize = (4000, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
     result["Wall"].append(gameObject)
+
+    # Floor stage -> Right border
+    rightBorderPos = (1425, -1400)
+    rightBorderSize = (1025,3000)
+    rightBorderObject = Object.GameObject(rightBorderPos, rightBorderSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(rightBorderObject)
+
+    # Floor stage -> 2nd box on left
+    objectPos = (-775, -20)
+    objectSize = (200, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # FLoor stage -> 1st box on left
+    objectPos = (-775, 80)
+    objectSize = (300, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Floor stage -> Right platform.
+    objectPos = (725, -300)
+    objectSize = (700, 500)
+    gameObject = Object.GameObject(objectPos, objectSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(gameObject)
+
+    # Transition platform
+    platPos = (-775, -775)
+    platSize = (1250, 50)
+    platObject = Object.GameObject(platPos, platSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(platObject)
+
+
+    # Invisible wall
+    wallPos = (-775, -1400)
+    wallSize = (725, 675)
+    wallObject = Object.GameObject(wallPos, wallSize, "Real", wallTexture, 0, 0, [0])
+    result["Sign"].append(wallObject)
+
+
+    #2nd floor
+    floorPos = (-50, -1400)
+    floorSize = (2500,50)
+    floorObject = Object.GameObject(floorPos, floorSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(floorObject)
+
+    #2nd floor -> midair platform
+
+    platformPos = (2800, -1400)
+    platformSize = (100,50)
+    platformObject = Object.GameObject(platformPos, platformSize, "Real",wallTexture, 0, 2, [0])
+    result["Wall"].append(platformObject)
+
+    #2nd floor -> floor after midair
+    floorPos = (3200, -1400)
+    floorSize = (800,50)
+    floorObject = Object.GameObject(floorPos, floorSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(floorObject)
+
+    # 2nd floor -> Water if jump fail
+    waterPos = (2000, 180)
+    waterSize = (6000,300)
+    waterObject = Object.GameObject(waterPos, waterSize, "Real", "Sprites/Water/water_1.png", 0, 4, [0, 1], _png = True, _hasAnimation = True)
+    result["Water"].append(waterObject)
+
+    # 2nd floor -> small stair case #1
+    stairPos = (3800, -1700)
+    stairSize = (200,50)
+    stairObject = Object.GameObject(stairPos, stairSize, "Real", wallTexture, 0, 2, [0] )
+    result["Wall"].append(stairObject)
+
+    # 2nd floor -> small stair case #2
+    stairPos = (3400, -2000)
+    stairSize = (200,50)
+    stairObject = Object.GameObject(stairPos, stairSize, "Real", wallTexture, 0, 2, [0] )
+    result["Wall"].append(stairObject)
+
+    #end platform
+    endplatPos = (4100, -2400)
+    endplatSize = (500,100)
+    endplatObject = Object.GameObject(endplatPos, endplatSize, "Real", wallTexture, 0, 2, [0])
+    result["Wall"].append(endplatObject)
+
+
+    #end door
+    objectPos = (4300, -2600)
+    objectSize = (100, 200)
+    gameObject = Object.GameObject(objectPos, objectSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3, [0])
+    result["Door"].append(gameObject)
+
 
     return result
 
@@ -1152,10 +1260,84 @@ def Level_2_3():
     iceTexture = "Sprites/ice.png"
     iceWallTexture = "Sprites/iceWall.png"
 
-    objectPos = (-1800, 180)
-    objectSize = (5000, 800)
+    #Floor
+    objectPos = (0, 180)
+    objectSize = (500, 800)
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
     result["Wall"].append(gameObject)
+
+    #Water
+    waterPos = (-1000, 180)
+    waterSize = (6000,300)
+    waterObject = Object.GameObject(waterPos, waterSize, "Real", "Sprites/Water/water_1.png", 0, 4, [0, 1], _png = True, _hasAnimation = True)
+    result["Water"].append(waterObject)
+
+    # 1st platform
+    platPos = (300, 0)
+    platSize = (300,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    #2nd platform
+    platPos = (30, -250)
+    platSize = (250,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    #3rd platform
+    platPos = (350, -500)
+    platSize = (225,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # 4
+    platPos = (-50, -800)
+    platSize = (200,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # 5
+    platPos = (450, -1100)
+    platSize = (175,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # 6
+    platPos = (-550, -1400)
+    platSize = (150,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # 7
+    platPos = (-750, -1700)
+    platSize = (100,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # 8
+    platPos = (-450, -2000)
+    platSize = (75,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    #9
+    platPos = (-950, -2300)
+    platSize = (50,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+    # end platform
+    platPos = (-2000, -2700)
+    platSize = (500,50)
+    platObject = Object.GameObject(platPos, platSize, "Real", iceWallTexture, 0, 2, [0], _slippery= True)
+    result["Wall"].append(platObject)
+
+
+    # end door
+    doorPos = (-1825, -2900)
+    doorSize = (100,200)
+    doorObject = Object.GameObject(doorPos, doorSize, "Door", ("Sprites/door.png", ButtonFunctions.EndLevel), 0, 3,[0])
+    result["Door"].append(doorObject)
 
     return result
 
