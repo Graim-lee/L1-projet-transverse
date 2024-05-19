@@ -851,6 +851,12 @@ def Level_2_1():
     gameObject = Object.GameObject(objectPos, objectSize, "Real", iceTexture, 0, 2, [0], _slippery=True)
     result["Wall"].append(gameObject)
 
+    # Floor stage -> sign go right
+    signPos = (90, 120)
+    signSize = (90, 90)
+    signObject = Object.GameObject(signPos, signSize, "Real", "Sprites/Sign/Ice/Down/signRight.png", 0, 0, [0], _png = True)
+    result["Sign"].append(signObject)
+
     # Left border.
     objectPos = (-1200, -2700)
     objectSize = (1000, 4000)
